@@ -1,32 +1,57 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import admin from 'firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
+import functions from 'firebase-functions/v1';
 
-const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+dotenv.config();
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+// Inicializa Admin SDK
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+const db = admin.firestore();
+// const rtdb = admin.database();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+// App Express
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+// Ping endpoint
+app.get('/ping', (req, res) => {
+  res.json({ message: 'Copark API Online 🚀' });
+});
+
+// Health endpoint
+app.get('/health', async (req, res) => {
+  try {
+    const dateNow = new Date().toISOString();
+    await db.collection('_health').doc('last').set({ dateNow }, { merge: true });
+    const snap = await db.collection('_health').doc('last').get();
+    const data = snap.exists ? snap.data() : null;
+
+    res.json({
+      ok: true,
+      projectId: process.env.GCLOUD_PROJECT || process.env.FUNCTIONS_EMULATOR,
+      firestoreWriteRead: !!data,
+      dateNow,
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+
+// Time endpoint
+app.get('/time', (req, res) => {
+  const timestamp = Timestamp.now();
+  const millis = timestamp.toMillis();
+
+  res.json({
+    serverTime: millis,
+  });
+});
+
+// Exportar función HTTP (región suramérica)
+export const api = functions.region('southamerica-east1').https.onRequest(app);
