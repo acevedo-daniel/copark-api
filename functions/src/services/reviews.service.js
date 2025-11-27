@@ -2,7 +2,7 @@ import reviewRepository from "../repositories/reviews.repository.js";
 import parkingService from "./parkings.service.js";
 
 const addReview = async (authorId, reviewData) => {
-  await parkingService.getDetail(reviewData.parkingId);
+  await parkingService.getParkingById(reviewData.parkingId);
 
   const newReview = {
     ...reviewData,

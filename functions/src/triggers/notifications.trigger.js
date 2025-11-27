@@ -5,6 +5,7 @@ import { db } from "../config/firebase.js";
 export const onBookingCreate = onValueCreated(
     "/bookings/{bookingId}",
     async (event) => {
+      console.log("TRIGGER: onBookingCreate fired!"); // DEBUG LOG
       const snapshot = event.data;
       const booking = snapshot.val();
       const bookingId = event.params.bookingId;

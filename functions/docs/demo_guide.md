@@ -9,6 +9,7 @@ Reseteamos el universo para empezar desde cero.
 ```bash
 curl -X POST http://127.0.0.1:5001/copark-api/us-central1/api/dev/seed
 ```
+**¡IMPORTANTE!** Copia los `parkingId` y `vehicleId` que te devuelve este comando. Los usarás en toda la demo.
 
 ---
 
@@ -21,15 +22,14 @@ Juan tiene una cochera y quiere mejorar su oferta.
 curl http://127.0.0.1:5001/copark-api/us-central1/api/parkings/me \
   -H "Authorization: Bearer owner_1"
 ```
-*(Copia el [id](file:///d:/Users/Daniel/01_Projects/copark/copark-api/functions/src/middlewares/validation.middleware.js#1-17) de la cochera para el siguiente paso)*
 
 **2. Juan actualiza el precio:**
 "Juan ve que hay mucha demanda y decide ajustar el precio."
 ```bash
-curl -X PATCH http://127.0.0.1:5001/copark-api/us-central1/api/parkings/ID_DE_COCHERA \
+curl -X PATCH http://127.0.0.1:5001/copark-api/us-central1/api/parkings/-Of5AV8qf0UOnN_VpTG8\
   -H "Authorization: Bearer owner_1" \
   -H "Content-Type: application/json" \
-  -d '{"pricePerHour": 600, "title": "Cochera Premium Centro"}'
+  -d '{"pricePerHour": 600}'
 ```
 
 ---
@@ -44,23 +44,30 @@ curl http://127.0.0.1:5001/copark-api/us-central1/api/users/me \
   -H "Authorization: Bearer driver_1"
 ```
 
-**4. Pepe busca cochera:**
+**4. Pepe revisa sus vehículos:**
+"Pepe confirma qué auto va a usar y obtiene su ID."
+```bash
+curl http://127.0.0.1:5001/copark-api/us-central1/api/vehicles \
+  -H "Authorization: Bearer driver_1"
+```
+
+**5. Pepe busca cochera:**
 "Busca opciones disponibles."
 ```bash
 curl http://127.0.0.1:5001/copark-api/us-central1/api/parkings
 ```
 
-**5. Pepe reserva (El momento de la verdad):**
+**6. Pepe reserva (El momento de la verdad):**
 "Encuentra la cochera de Juan y reserva por 2 horas."
 ```bash
 curl -X POST http://127.0.0.1:5001/copark-api/us-central1/api/bookings \
   -H "Authorization: Bearer driver_1" \
   -H "Content-Type: application/json" \
   -d '{
-    "parkingId": "ID_DE_COCHERA", 
-    "vehicleId": "ID_DEL_VEHICULO",
-    "startTime": "2023-11-27T10:00:00Z",
-    "endTime": "2023-11-27T12:00:00Z"
+    "parkingId": "-Of5AV8qf0UOnN_VpTG8", 
+    "vehicleId": "-Of5AV8nCvyL5A6ZQlSS", 
+    "startTime": "2025-12-01T10:00:00Z",
+    "endTime": "2025-12-01T12:00:00Z"
   }'
 ```
 *(El ID del vehículo lo puedes sacar del seed o haciendo GET /vehicles)*
@@ -70,23 +77,23 @@ curl -X POST http://127.0.0.1:5001/copark-api/us-central1/api/bookings \
 ## 🎬 Escena 3: La Experiencia
 Pepe ya usó la cochera y quiere dejar feedback.
 
-**6. Pepe deja una reseña:**
+**7. Pepe deja una reseña:**
 "Le gustó el servicio y deja 5 estrellas."
 ```bash
 curl -X POST http://127.0.0.1:5001/copark-api/us-central1/api/reviews \
   -H "Authorization: Bearer driver_1" \
   -H "Content-Type: application/json" \
   -d '{
-    "parkingId": "ID_DE_COCHERA",
+    "parkingId": "-Of5AV8qf0UOnN_VpTG8",
     "rating": 5,
     "comment": "Excelente lugar, muy seguro."
   }'
 ```
 
-**7. Verificación de Rating (Trigger):**
+**8. Verificación de Rating (Trigger):**
 "Automáticamente, el sistema recalculó el puntaje de la cochera de Juan."
 ```bash
-curl http://127.0.0.1:5001/copark-api/us-central1/api/parkings/ID_DE_COCHERA
+curl http://127.0.0.1:5001/copark-api/us-central1/api/parkings/-Of5AV8qf0UOnN_VpTG8
 ```
 *Deberías ver `rating: 5`.*
 
@@ -95,7 +102,7 @@ curl http://127.0.0.1:5001/copark-api/us-central1/api/parkings/ID_DE_COCHERA
 ## 🎬 Escena 4: Manejo de Errores (Bonus)
 Demuestra que el sistema es robusto.
 
-**8. Intento de fraude/error:**
+**9. Intento de fraude/error:**
 "Pepe intenta reservar la misma cochera en el mismo horario otra vez."
 *(Repetir el comando del paso 5)*
 *Resultado esperado: Error 400/409.*
