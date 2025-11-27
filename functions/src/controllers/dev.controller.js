@@ -18,14 +18,14 @@ const seedDatabase = async (req, res, next) => {
       phone: "9988776655",
     });
 
-    await vehicleService.addVehicle(driverId, {
+    const vehicle = await vehicleService.addVehicle(driverId, {
       brand: "Toyota",
       model: "Corolla",
       plate: "AB123CD",
       type: "SEDAN",
     });
 
-    await parkingService.publishParking(ownerId, {
+    const parking = await parkingService.publishParking(ownerId, {
       title: "Cochera Centro Seguro",
       address: "Av. Corrientes 1234",
       pricePerHour: 500,
@@ -34,7 +34,15 @@ const seedDatabase = async (req, res, next) => {
       lng: -58.3816,
     });
 
-    res.json({ message: "✅ Base de datos sembrada con éxito" });
+    res.json({
+      message: "✅ Base de datos sembrada con éxito",
+      data: {
+        ownerId,
+        driverId,
+        parkingId: parking.id,
+        vehicleId: vehicle.id,
+      },
+    });
   } catch (error) {
     next(error);
   }

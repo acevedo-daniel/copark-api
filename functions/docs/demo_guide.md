@@ -9,6 +9,7 @@ Reseteamos el universo para empezar desde cero.
 ```bash
 curl -X POST http://127.0.0.1:5001/copark-api/us-central1/api/dev/seed
 ```
+**¡IMPORTANTE!** Copia los `parkingId` y `vehicleId` que te devuelve este comando. Los usarás en toda la demo.
 
 ---
 
