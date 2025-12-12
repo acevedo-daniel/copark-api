@@ -12,6 +12,9 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.1.0",

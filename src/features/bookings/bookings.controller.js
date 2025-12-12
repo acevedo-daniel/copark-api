@@ -1,6 +1,6 @@
-import bookingService from "../services/bookings.service.js";
+import * as bookingService from "./bookings.service.js";
 
-const create = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
     const userId = req.user.uid;
     const bookingData = req.body;
@@ -11,7 +11,7 @@ const create = async (req, res, next) => {
   }
 };
 
-const listMine = async (req, res, next) => {
+export const listMine = async (req, res, next) => {
   try {
     const userId = req.user.uid;
     const bookings = await bookingService.getMyBookings(userId);
@@ -21,7 +21,7 @@ const listMine = async (req, res, next) => {
   }
 };
 
-const cancel = async (req, res, next) => {
+export const cancel = async (req, res, next) => {
   try {
     const userId = req.user.uid;
     const { bookingId } = req.params;
@@ -32,7 +32,7 @@ const cancel = async (req, res, next) => {
   }
 };
 
-const getById = async (req, res, next) => {
+export const getById = async (req, res, next) => {
   try {
     const userId = req.user.uid;
     const { id } = req.params;
@@ -42,5 +42,3 @@ const getById = async (req, res, next) => {
     next(error);
   }
 };
-
-export default { create, listMine, cancel, getById };

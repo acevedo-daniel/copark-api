@@ -1,6 +1,6 @@
-import vehiclesService from "../services/vehicles.service.js";
+import * as vehiclesService from "./vehicles.service.js";
 
-const create = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
     const uid = req.user.uid;
     const vehicleData = req.body;
@@ -11,7 +11,7 @@ const create = async (req, res, next) => {
   }
 };
 
-const listMine = async (req, res, next) => {
+export const listMine = async (req, res, next) => {
   try {
     const uid = req.user.uid;
     const vehicles = await vehiclesService.getMyVehicles(uid);
@@ -21,11 +21,11 @@ const listMine = async (req, res, next) => {
   }
 };
 
-const remove = async (req, res, next) => {
+export const remove = async (req, res, next) => {
   try {
     const uid = req.user.uid;
-    const { vehicleId } = req.params;
-    await vehiclesService.removeVehicle(uid, vehicleId);
+    const { id } = req.params;
+    await vehiclesService.removeVehicle(uid, id);
     res.json({
       success: true,
       message: "Vehicle Removed",
@@ -34,5 +34,3 @@ const remove = async (req, res, next) => {
     next(error);
   }
 };
-
-export default { create, listMine, remove };

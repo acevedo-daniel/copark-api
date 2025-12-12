@@ -1,6 +1,6 @@
-import usersService from "../services/users.service.js";
+import * as usersService from "./users.service.js";
 
-const getMe = async (req, res, next) => {
+export const getMe = async (req, res, next) => {
   try {
     const uid = req.user.uid;
     const user = await usersService.getUser(uid);
@@ -10,7 +10,7 @@ const getMe = async (req, res, next) => {
   }
 };
 
-const updateMe = async (req, res, next) => {
+export const updateMe = async (req, res, next) => {
   try {
     const uid = req.user.uid;
     const data = req.body;
@@ -21,7 +21,7 @@ const updateMe = async (req, res, next) => {
   }
 };
 
-const getUserById = async (req, res, next) => {
+export const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await usersService.getUser(id);
@@ -30,5 +30,3 @@ const getUserById = async (req, res, next) => {
     next(error);
   }
 };
-
-export default { getMe, updateMe, getUserById };

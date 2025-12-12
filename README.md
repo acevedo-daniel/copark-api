@@ -1,55 +1,41 @@
-# CoPark API
+# CoPark API 🚀
 
-**CoPark** is a robust RESTful API designed to manage parking rentals, connecting parking owners with drivers in an efficient and scalable way. Built with modern technologies, it ensures secure data handling, real-time availability, and a seamless user experience.
+> **Backend Service for CoPark Parking Management Platform**
 
-## 🚀 Key Features
+**CoPark API** is a robust RESTful service capable of handling high-concurrency requests for parking reservations. Built with Scalable Architecture in mind, it provides the core logic for user authentication, parking management, booking processing, and vehicle registration.
 
-*   **User Management**: Secure registration and authentication for drivers and parking owners using JWT.
-*   **Parking Operations**: Full CRUD capabilities for parking listings, including geolocation and availability management.
-*   **Vehicle Management**: Drivers can register and manage multiple vehicles.
-*   **Booking System**: efficient booking flow with status tracking (Pending, Confirmed, Cancelled, Completed).
-*   **Review System**: Feedback loop with ratings and comments to ensure service quality.
-*   **Security**: Implements best practices including Helmet for headers, CORS handling, and strict input validation.
+---
 
-## 🛠 Tech Stack
+## ✨ Key Features
 
-*   **Runtime**: [Node.js](https://nodejs.org/) (v22)
-*   **Framework**: [Express.js](https://expressjs.com/)
-*   **Database**: [PostgreSQL](https://www.postgresql.org/)
-*   **ORM**: [Prisma](https://www.prisma.io/)
-*   **Authentication**: JWT (JSON Web Tokens) with Argon2 hashing
-*   **Validation**: Joi
-*   **Security**: Helmet, CORS
+*   **Security First**: JWT Authentication (Argon2 hashing), Helmet security headers, and CORS protection.
+*   **Scalable Architecture**: Feature-Based (Vertical Slice) structure for easy maintenance and scaling.
+*   **Database Management**: PostgreSQL + Prisma ORM for type-safe and efficient database operations.
+*   **Smart Booking**: Concurrency-safe booking logic with status tracking (Pending, Confirmed, Completed).
+*   **Geolocation**: Support for parking location coordinates (Lat/Lng).
 
-## 📂 Project Structure
+## 🛠️ Tech Stack
 
-The project follows a clean **Controller-Service-Repository** architecture to separate concerns and improve maintainability:
-
-```
-src/
-├── controllers/  # Request handling and response formatting
-├── services/     # Business logic and domain rules
-├── repositories/ # Data access layer (Prisma)
-├── routes/       # API route definitions
-├── schemas/      # Joi validation schemas
-├── middlewares/  # Auth, logging, and error handling
-└── utils/        # Helper functions
-```
+*   **Runtime**: Node.js (v20+)
+*   **Framework**: Express.js
+*   **Database**: PostgreSQL
+*   **ORM**: Prisma
+*   **Validation**: Joi & Joi-Passport
+*   **Architecture**: Modular Feature-Based (Controller-Service-Repository)
 
 ## ⚡ Getting Started
 
 ### Prerequisites
-
 *   Node.js v18+
-*   PostgreSQL
+*   PostgreSQL Database
 *   npm or yarn
 
 ### Installation
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/yourusername/copark-api.git
-    cd copark-api
+    git clone https://github.com/your-username/copark.git
+    cd copark/copark-api
     ```
 
 2.  **Install dependencies**
@@ -57,39 +43,52 @@ src/
     npm install
     ```
 
-3.  **Environment Setup**
+3.  **Configure Environment**
     Create a `.env` file in the root directory:
     ```env
-    PORT=3001
-    DATABASE_URL="postgresql://user:password@localhost:5432/copark_db?schema=public"
-    JWT_SECRET="your_secure_jwt_secret"
+    PORT=3000
+    DATABASE_URL="postgresql://user:password@localhost:5432/copark_db"
+    JWT_SECRET="your_super_secret_key"
     ```
 
-4.  **Database Migration**
-    Apply the Prisma schema to your database:
+4.  **Database Setup**
     ```bash
+    # Run migrations
     npx prisma migrate dev --name init
+
+    # Seed initial data (optional)
+    npx prisma db seed
     ```
 
-5.  **Start the Server**
+5.  **Run the Server**
     ```bash
-    # Development mode
-    npm run dev
-    
-    # Production
-    npm start
+    npm run dev   # Development Mode
+    npm start     # Production Mode
     ```
 
-## 📝 API Documentation
+## � Project Structure
 
-Authentication is required for most endpoints via Bearer Token.
+The project is organized by **Features** (Vertical Slices) for better scalability:
 
-### Main Endpoints
+```
+src/
+├── config/        # Environment and DB configuration
+├── features/      # Business Logic by Feature
+│   ├── auth/      # Authentication (Login/Register)
+│   ├── bookings/  # Reservation Logic
+│   ├── parkings/  # Parking Management
+│   ├── users/     # User Profiles
+│   └── vehicles/  # Vehicle Management
+├── middlewares/   # Global middlewares (Auth, Error, Logger)
+└── app.js         # App Entry Point
+```
 
-*   **Auth**: `POST /auth/login`, `POST /auth/register`
-*   **Parkings**: `GET /parkings`, `POST /parkings`, `GET /parkings/:id`
-*   **Bookings**: `POST /bookings`, `GET /bookings/user/:userId`
-*   **Vehicles**: `POST /vehicles`, `GET /vehicles/user/:userId`
+## 📜 Available Scripts
+
+*   `npm run dev`: Starts the server with Nodemon (auto-restart).
+*   `npm start`: Starts the production server.
+*   `npm run lint`: Runs ESLint check.
+*   `npx prisma studio`: Opens the visual database editor.
 
 ---
-*Developed by Daniel. Open for collaboration and improvements.*
+*Developed by Daniel for CoPark Platform.*

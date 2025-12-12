@@ -1,8 +1,8 @@
 import express from "express";
-import parkingController from "../controllers/parkings.controller.js";
-import parkingSchemas from "../schemas/parking.schema.js";
-import validate from "../middlewares/validation.middleware.js";
-import { requireAuth } from "../middlewares/auth.middleware.js";
+import * as parkingController from "./parkings.controller.js";
+import parkingSchemas from "../../schemas/parking.schema.js";
+import validate from "../../middlewares/validation.middleware.js";
+import { requireAuth } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -24,4 +24,4 @@ router.post(
   parkingController.publish
 );
 
-export default router;
+export const parkingsRouter = router;

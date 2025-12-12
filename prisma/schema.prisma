@@ -58,6 +58,7 @@ model Vehicle {
 model Parking {
   id           String   @id @default(uuid())
   title        String
+  image        String?
   address      String
   pricePerHour Float
   totalSpaces  Int

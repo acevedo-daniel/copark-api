@@ -1,6 +1,6 @@
-import reviewService from "../services/reviews.service.js";
+import * as reviewService from "./reviews.service.js";
 
-const create = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
     const authorId = req.user.uid;
     const reviewData = req.body;
@@ -11,7 +11,7 @@ const create = async (req, res, next) => {
   }
 };
 
-const listByParking = async (req, res, next) => {
+export const listByParking = async (req, res, next) => {
   try {
     const { parkingId } = req.params;
     const reviews = await reviewService.getParkingReviews(parkingId);
@@ -20,5 +20,3 @@ const listByParking = async (req, res, next) => {
     next(error);
   }
 };
-
-export default { create, listByParking };

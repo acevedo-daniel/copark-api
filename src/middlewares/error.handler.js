@@ -5,6 +5,7 @@ const ERROR_MAP = {
   BOOKING_NOT_FOUND_OR_NOT_YOURS: 404,
   INVALID_DATA: 400,
   PERMISSION_DENIED: 403,
+  INVALID_CREDENTIALS: 401,
 };
 
 const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars

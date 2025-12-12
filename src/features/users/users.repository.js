@@ -1,6 +1,6 @@
-import { prisma } from "../config/prisma.js";
+import { prisma } from "../../config/prisma.js";
 
-const save = async (uid, userData) => {
+export const save = async (uid, userData) => {
   return await prisma.user.upsert({
     where: { id: uid },
     update: userData,
@@ -8,10 +8,8 @@ const save = async (uid, userData) => {
   });
 };
 
-const findById = async (uid) => {
+export const findById = async (uid) => {
   return await prisma.user.findUnique({
     where: { id: uid },
   });
 };
-
-export default { save, findById };

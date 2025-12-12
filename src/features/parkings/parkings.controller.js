@@ -1,6 +1,6 @@
-import parkingsService from "../services/parkings.service.js";
+import * as parkingsService from "./parkings.service.js";
 
-const publish = async (req, res, next) => {
+export const publish = async (req, res, next) => {
   try {
     const uid = req.user.uid;
     const parkingData = req.body;
@@ -11,7 +11,7 @@ const publish = async (req, res, next) => {
   }
 };
 
-const listAll = async (req, res, next) => {
+export const listAll = async (req, res, next) => {
   try {
     const parkings = await parkingsService.getAllParkings();
     return res.json(parkings);
@@ -20,7 +20,7 @@ const listAll = async (req, res, next) => {
   }
 };
 
-const getById = async (req, res, next) => {
+export const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const parking = await parkingsService.getParkingById(id);
@@ -30,7 +30,7 @@ const getById = async (req, res, next) => {
   }
 };
 
-const listMine = async (req, res, next) => {
+export const listMine = async (req, res, next) => {
   try {
     const ownerId = req.user.uid;
     const parkings = await parkingsService.getMyParkings(ownerId);
@@ -40,7 +40,7 @@ const listMine = async (req, res, next) => {
   }
 };
 
-const update = async (req, res, next) => {
+export const update = async (req, res, next) => {
   try {
     const ownerId = req.user.uid;
     const { id } = req.params;
@@ -55,5 +55,3 @@ const update = async (req, res, next) => {
     next(error);
   }
 };
-
-export default { publish, listAll, getById, listMine, update };

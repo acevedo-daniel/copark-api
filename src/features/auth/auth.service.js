@@ -1,6 +1,6 @@
-import { prisma } from "../config/prisma.js";
-import { hashPassword, verifyPassword } from "../utils/password.js";
-import { signAccessToken } from "../utils/jwt.js";
+import { prisma } from "../../config/prisma.js";
+import { hashPassword, verifyPassword } from "../../utils/password.js";
+import { signAccessToken } from "../../utils/jwt.js";
 
 export const register = async ({ email, password }) => {
   const passwordHash = await hashPassword(password);

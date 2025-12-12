@@ -1,8 +1,8 @@
 import express from "express";
-import userController from "../controllers/users.controller.js";
-import userSchemas from "../schemas/user.schema.js";
-import validate from "../middlewares/validation.middleware.js";
-import { requireAuth } from "../middlewares/auth.middleware.js";
+import * as userController from "./users.controller.js";
+import userSchemas from "../../schemas/user.schema.js";
+import validate from "../../middlewares/validation.middleware.js";
+import { requireAuth } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.patch(
 );
 router.get("/:id", requireAuth, userController.getUserById);
 
-export default router;
+export const usersRouter = router;

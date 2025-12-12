@@ -1,6 +1,6 @@
-import { prisma } from "../config/prisma.js";
+import { prisma } from "../../config/prisma.js";
 
-const create = async (data) => {
+export const create = async (data) => {
   const vehicleData = { ...data };
   if (vehicleData.userId) {
     vehicleData.ownerId = vehicleData.userId;
@@ -11,16 +11,14 @@ const create = async (data) => {
   });
 };
 
-const findByUserId = async (userId) => {
+export const findByUserId = async (userId) => {
   return await prisma.vehicle.findMany({
     where: { ownerId: userId },
   });
 };
 
-const deleteById = async (vehicleId) => {
+export const deleteById = async (vehicleId) => {
   return await prisma.vehicle.delete({
     where: { id: vehicleId },
   });
 };
-
-export default { create, findByUserId, deleteById };
