@@ -1,76 +1,95 @@
 # CoPark API
 
-**CoPark** es una plataforma serverless para la gestión de alquiler de estacionamientos, diseñada para conectar propietarios de cocheras con conductores de manera eficiente y escalable.
+**CoPark** is a robust RESTful API designed to manage parking rentals, connecting parking owners with drivers in an efficient and scalable way. Built with modern technologies, it ensures secure data handling, real-time availability, and a seamless user experience.
 
-## Descripción
+## 🚀 Key Features
 
-Este proyecto implementa una API RESTful robusta utilizando **Firebase Cloud Functions** y **Express.js**. La arquitectura sigue un patrón de diseño en capas (Controller-Service-Repository) para asegurar la separación de responsabilidades, mantenibilidad y escalabilidad del código.
+*   **User Management**: Secure registration and authentication for drivers and parking owners using JWT.
+*   **Parking Operations**: Full CRUD capabilities for parking listings, including geolocation and availability management.
+*   **Vehicle Management**: Drivers can register and manage multiple vehicles.
+*   **Booking System**: efficient booking flow with status tracking (Pending, Confirmed, Cancelled, Completed).
+*   **Review System**: Feedback loop with ratings and comments to ensure service quality.
+*   **Security**: Implements best practices including Helmet for headers, CORS handling, and strict input validation.
 
-## Stack Tecnológico
+## 🛠 Tech Stack
 
-*   **Runtime**: Node.js v22
-*   **Framework**: Express.js
-*   **Cloud Platform**: Firebase (Functions, Authentication, Realtime Database)
-*   **Validación**: Joi
-*   **Seguridad**: Helmet, CORS, JWT Auth
-*   **Calidad de Código**: ESLint
+*   **Runtime**: [Node.js](https://nodejs.org/) (v22)
+*   **Framework**: [Express.js](https://expressjs.com/)
+*   **Database**: [PostgreSQL](https://www.postgresql.org/)
+*   **ORM**: [Prisma](https://www.prisma.io/)
+*   **Authentication**: JWT (JSON Web Tokens) with Argon2 hashing
+*   **Validation**: Joi
+*   **Security**: Helmet, CORS
 
-## Arquitectura
+## 📂 Project Structure
 
-El sistema está construido sobre una arquitectura de tres capas:
+The project follows a clean **Controller-Service-Repository** architecture to separate concerns and improve maintainability:
 
-1.  **Controllers**: Manejo de peticiones HTTP, validación de entrada y respuestas.
-2.  **Services**: Implementación de la lógica de negocio y reglas del dominio.
-3.  **Repositories**: Abstracción de la capa de datos (Firebase RTDB).
+```
+src/
+├── controllers/  # Request handling and response formatting
+├── services/     # Business logic and domain rules
+├── repositories/ # Data access layer (Prisma)
+├── routes/       # API route definitions
+├── schemas/      # Joi validation schemas
+├── middlewares/  # Auth, logging, and error handling
+└── utils/        # Helper functions
+```
 
-## Instalación y Uso
+## ⚡ Getting Started
 
-### Prerrequisitos
+### Prerequisites
 
-*   Node.js v18 o superior
-*   Firebase CLI (`npm install -g firebase-tools`)
-*   Java (para Firebase Emulators)
+*   Node.js v18+
+*   PostgreSQL
+*   npm or yarn
 
-### Configuración Local
+### Installation
 
-1.  Clonar el repositorio.
-2.  Instalar dependencias:
+1.  **Clone the repository**
     ```bash
-    cd functions
+    git clone https://github.com/yourusername/copark-api.git
+    cd copark-api
+    ```
+
+2.  **Install dependencies**
+    ```bash
     npm install
     ```
-3.  Configurar variables de entorno en `.env`.
-4.  Iniciar los emuladores:
-    ```bash
-    npm run serve
+
+3.  **Environment Setup**
+    Create a `.env` file in the root directory:
+    ```env
+    PORT=3001
+    DATABASE_URL="postgresql://user:password@localhost:5432/copark_db?schema=public"
+    JWT_SECRET="your_secure_jwt_secret"
     ```
 
-### Despliegue (Producción)
+4.  **Database Migration**
+    Apply the Prisma schema to your database:
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
-Para subir la API a Firebase Cloud Functions:
+5.  **Start the Server**
+    ```bash
+    # Development mode
+    npm run dev
+    
+    # Production
+    npm start
+    ```
 
-```bash
-firebase login
-firebase deploy --only functions
-```
-*(Ver `deployment_guide.md` para más detalles)*
+## 📝 API Documentation
 
-## Estado del Proyecto
+Authentication is required for most endpoints via Bearer Token.
 
-### Versión 1.0 (Actual)
-MVP funcional enfocado en la entrega académica. Incluye:
-*   Gestión completa de usuarios, vehículos y cocheras.
-*   Flujo de reservas y cancelaciones.
-*   Sistema de reseñas y calificaciones.
-*   Notificaciones en segundo plano (Triggers).
+### Main Endpoints
 
-### Roadmap (v2)
-Planificación para evolución a producto de portfolio:
-*   Integración de pasarelas de pago.
-*   Búsqueda geoespacial.
-*   Tests unitarios y de integración.
-*   Pipeline de CI/CD.
+*   **Auth**: `POST /auth/login`, `POST /auth/register`
+*   **Parkings**: `GET /parkings`, `POST /parkings`, `GET /parkings/:id`
+*   **Bookings**: `POST /bookings`, `GET /bookings/user/:userId`
+*   **Vehicles**: `POST /vehicles`, `GET /vehicles/user/:userId`
 
-## Licencia
-
-Este proyecto es de uso académico y demostrativo.
+---
+*Developed by Daniel. Open for collaboration and improvements.*
