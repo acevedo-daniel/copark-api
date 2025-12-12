@@ -4,8 +4,6 @@ export const publishParking = async (ownerId, parkingData) => {
   const newParking = {
     ...parkingData,
     ownerId,
-    rating: 0,
-    availableSpaces: parkingData.totalSpaces,
     createdAt: new Date().toISOString(),
   };
   return await parkingRepository.create(newParking);

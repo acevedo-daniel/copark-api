@@ -8,7 +8,7 @@ const ERROR_MAP = {
   INVALID_CREDENTIALS: 401,
 };
 
-const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused-vars
+const errorHandler = (err, req, res, next) => {
   console.error("Unhandled Error", {
     error: err.message,
     stack: err.stack,

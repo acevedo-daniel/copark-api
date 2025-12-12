@@ -22,5 +22,12 @@ export const cancel = async (bookingId) => {
 export const findById = async (bookingId) => {
   return await prisma.booking.findUnique({
     where: { id: bookingId },
+    include: {
+      parking: {
+        select: {
+          ownerId: true,
+        },
+      },
+    },
   });
 };

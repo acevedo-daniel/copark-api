@@ -62,7 +62,8 @@ export const getBookingById = async (uid, bookingId) => {
     throw new Error("BOOKING_NOT_FOUND");
   }
 
-  if (booking.driverId !== uid && booking.ownerId !== uid) {
+  const ownerId = booking.parking?.ownerId;
+  if (booking.driverId !== uid && ownerId !== uid) {
     throw new Error("UNAUTHORIZED_ACCESS");
   }
 
