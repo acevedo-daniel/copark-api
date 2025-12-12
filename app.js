@@ -19,6 +19,10 @@ app.use(helmet());
 app.use(cors({ origin: true }));
 app.use(express.json());
 
+app.get("/healthz", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/users", userRoutes);
 app.use("/vehicles", vehiclesRoutes);
 app.use("/parkings", parkingsRoutes);
