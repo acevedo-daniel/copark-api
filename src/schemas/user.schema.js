@@ -2,13 +2,13 @@ import Joi from "joi";
 
 const updateProfile = Joi.object({
   name: Joi.string().min(2).max(50).trim().messages({
-    "string.base": "El nombre debe ser texto",
-    "string.min": "El nombre debe tener al menos 2 caracteres",
+    "string.base": "Name must be text",
+    "string.min": "Name must be at least 2 characters",
   }),
 
   lastName: Joi.string().min(2).max(50).trim().messages({
-    "string.base": "El apellido debe ser texto",
-    "string.min": "El apellido debe tener al menos 2 caracteres",
+    "string.base": "Last name must be text",
+    "string.min": "Last name must be at least 2 characters",
   }),
 
   phone: Joi.string()
@@ -17,14 +17,14 @@ const updateProfile = Joi.object({
       .max(15)
       .trim()
       .messages({
-        "string.pattern.base": "El teléfono solo debe contener números",
+        "string.pattern.base": "Phone must contain only numbers",
       }),
 
   photoUrl: Joi.string().uri().optional(),
 })
     .min(1)
     .messages({
-      "object.min": "Debes enviar al menos un campo para actualizar",
+      "object.min": "At least one field must be provided to update",
     });
 
 export default { updateProfile };
