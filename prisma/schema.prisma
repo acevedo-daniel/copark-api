@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated"
 }
 
 datasource db {
@@ -86,10 +87,10 @@ model Booking {
   // Relaciones
   driverId   String
   driver     User    @relation("BookingDriver", fields: [driverId], references: [id])
-  
+
   parkingId  String
   parking    Parking @relation(fields: [parkingId], references: [id])
-  
+
   vehicleId  String
   vehicle    Vehicle @relation(fields: [vehicleId], references: [id])
 }
@@ -103,7 +104,8 @@ model Review {
   // Relaciones
   driverId  String
   driver    User    @relation(fields: [driverId], references: [id])
-  
+
   parkingId String
   parking   Parking @relation(fields: [parkingId], references: [id], onDelete: Cascade)
 }
+

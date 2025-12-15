@@ -1,8 +1,22 @@
+import { User } from "../../../prisma/generated/browser.js";
 import { prisma } from "../../config/prisma.js";
-import { hashPassword, verifyPassword } from "../../utils/password.js";
-import { signAccessToken } from "../../utils/jwt.js";
+import { signAccessToken } from "./jwt.js";
+import { hashPassword, verifyPassword } from "./password.js";
 
-export const register = async ({ email, password }) => {
+interface loginAndRegisterParams {
+  email: string;
+  password: string;
+}
+
+interface authResponse {
+  user: Pick<User, "id" | "email">;
+  token: string;
+}
+
+export const register = async ({
+  email,
+  password,
+}: loginAndRegisterParams): Promise<authResponse> => {
   const passwordHash = await hashPassword(password);
 
   const user = await prisma.user.create({
@@ -15,7 +29,12 @@ export const register = async ({ email, password }) => {
   return { user, token };
 };
 
-export const login = async ({ email, password }) => {
+interface loginResponse {}
+
+export const login = async ({
+  email,
+  password,
+}: loginAndRegisterParams): Promise<authResponse> => {
   const user = await prisma.user.findUnique({
     where: { email },
     select: { id: true, email: true, passwordHash: true },
