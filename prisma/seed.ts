@@ -1,13 +1,5 @@
-import pkg from "@prisma/client";
-const { PrismaClient } = pkg;
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
 import argon2 from "argon2";
-import "dotenv/config";
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+import { prisma } from "../src/config/prisma.js";
 
 async function main() {
   console.log("🌱 Starting seeding...");
@@ -79,7 +71,8 @@ async function main() {
       lat: -34.5611,
       lng: -58.4566,
       ownerId: admin.id,
-      image: "https://images.pexels.com/photos/3313988/pexels-photo-3313988.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image:
+        "https://images.pexels.com/photos/3313988/pexels-photo-3313988.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     },
     {
       title: "Parking San Telmo",
@@ -89,7 +82,8 @@ async function main() {
       lat: -34.6186,
       lng: -58.3712,
       ownerId: admin.id,
-      image: "https://images.pexels.com/photos/1004409/pexels-photo-1004409.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image:
+        "https://images.pexels.com/photos/1004409/pexels-photo-1004409.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     },
     {
       title: "Recoleta Mall Parking",
@@ -99,7 +93,8 @@ async function main() {
       lat: -34.5866,
       lng: -58.3913,
       ownerId: admin.id,
-      image: "https://images.pexels.com/photos/1756957/pexels-photo-1756957.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      image:
+        "https://images.pexels.com/photos/1756957/pexels-photo-1756957.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     },
   ];
 
