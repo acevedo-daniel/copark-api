@@ -5,15 +5,24 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "prisma migrate deploy && node server.js",
-    "dev": "nodemon server.js",
+    "dev": "tsx watch server.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node server.js",
+    "start:prod": "prisma migrate deploy && node server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "prisma:seed": "prisma db seed",
     "lint": "eslint .",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f"
+    "lint:fix": "eslint . --fix",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:ps": "docker compose ps"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.1.0",
@@ -29,11 +38,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.2",
     "@types/pg": "^8.16.0",
     "eslint": "^9.39.1",
-    "eslint-plugin-react": "^7.37.5",
     "globals": "^16.5.0",
-    "nodemon": "^3.1.0",
-    "prisma": "^7.1.0"
-  }
+    "prisma": "^7.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@10.25.0+sha512.5e82639027af37cf832061bcc6d639c219634488e0f2baebe785028a793de7b525ffcd3f7ff574f5e9860654e098fe852ba8ac5dd5cefe1767d23a020a92f501"
 }

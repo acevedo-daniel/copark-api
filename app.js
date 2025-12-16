@@ -1,16 +1,16 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 import helmet from "helmet";
 
-import requestLogger from "./src/middlewares/logger.middleware.js";
 import errorHandler from "./src/middlewares/error.handler.js";
+import requestLogger from "./src/middlewares/logger.middleware.js";
 
+import { authRouter } from "./src/features/auth/auth.routes.js";
+import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";
+import { parkingsRouter } from "./src/features/parkings/parkings.routes.js";
+import { reviewsRouter } from "./src/features/reviews/reviews.routes.js";
 import { usersRouter } from "./src/features/users/users.routes.js";
 import { vehiclesRouter } from "./src/features/vehicles/vehicles.routes.js";
-import { parkingsRouter } from "./src/features/parkings/parkings.routes.js";
-import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";
-import { reviewsRouter } from "./src/features/reviews/reviews.routes.js";
-import { authRouter } from "./src/features/auth/auth.routes.js";
 
 const app = express();
 
