@@ -1,6 +1,6 @@
 import express from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
-import validate from "../../middlewares/validation.middleware.js";
+import { validate } from "../../middlewares/validation.middleware.js";
 import userSchemas from "../../schemas/user.schema.js";
 import * as userController from "./users.controller.js";
 

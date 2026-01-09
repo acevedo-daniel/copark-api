@@ -1,8 +1,8 @@
 import express from "express";
-import * as parkingController from "./parkings.controller.js";
-import parkingSchemas from "../../schemas/parking.schema.js";
-import validate from "../../middlewares/validation.middleware.js";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
+import { validate } from "../../middlewares/validation.middleware.js";
+import parkingSchemas from "../../schemas/parking.schema.js";
+import * as parkingController from "./parkings.controller.js";
 
 const router = express.Router();
 

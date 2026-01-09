@@ -1,8 +1,8 @@
 import { Router } from "express";
-import * as vehicleController from "./vehicles.controller.js";
-import vehicleSchemas from "../../schemas/vehicle.schema.js";
-import validate from "../../middlewares/validation.middleware.js";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
+import { validate } from "../../middlewares/validation.middleware.js";
+import vehicleSchemas from "../../schemas/vehicle.schema.js";
+import * as vehicleController from "./vehicles.controller.js";
 
 const router = Router();
 

@@ -2,8 +2,8 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 
-import errorHandler from "./src/middlewares/error.handler.js";
-import requestLogger from "./src/middlewares/logger.middleware.js";
+import { errorHandler } from "./src/middlewares/error.handler.js";
+import { requestLogger } from "./src/middlewares/logger.middleware.js";
 
 import { authRouter } from "./src/features/auth/auth.routes.ts";
 import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";

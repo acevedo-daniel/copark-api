@@ -1,4 +1,7 @@
-const ERROR_MAP = {
+import type { NextFunction, Request, Response } from "express";
+import { AppError } from "../utils/AppError.js";
+
+const ERROR_MAP: Record<string, number> = {
   USER_NOT_FOUND: 404,
   PARKING_NOT_FOUND: 404,
   VEHICLE_NOT_FOUND_OR_NOT_YOURS: 404,
@@ -8,7 +11,12 @@ const ERROR_MAP = {
   INVALID_CREDENTIALS: 401,
 };
 
-const errorHandler = (err, req, res, next) => {
+export const errorHandler = (
+  err: AppError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   console.error("Unhandled Error", {
     error: err.message,
     stack: err.stack,
@@ -24,5 +32,3 @@ const errorHandler = (err, req, res, next) => {
     message: err.message || "Internal Server Error",
   });
 };
-
-export default errorHandler;
