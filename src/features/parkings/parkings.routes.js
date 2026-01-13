@@ -1,7 +1,7 @@
 import express from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
-import parkingSchemas from "../../schemas/parking.schema.js";
+import { publishParking, updateParking } from "../../schemas/parking.schema.js";
 import * as parkingController from "./parkings.controller.js";
 
 const router = express.Router();
@@ -13,14 +13,14 @@ router.get("/:id", parkingController.getById);
 router.patch(
   "/:id",
   requireAuth,
-  validate(parkingSchemas.updateParking),
+  validate(updateParking),
   parkingController.update
 );
 
 router.post(
   "/",
   requireAuth,
-  validate(parkingSchemas.publishParking),
+  validate(publishParking),
   parkingController.publish
 );
 
