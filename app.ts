@@ -2,10 +2,10 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 
-import { errorHandler } from "./src/middlewares/error.handler.js";
+import { errorHandler } from "./src/middlewares/error-handler.middleware.js";
 import { requestLogger } from "./src/middlewares/logger.middleware.js";
 
-import { authRouter } from "./src/features/auth/auth.routes.ts";
+import { authRouter } from "./src/features/auth/auth.routes.js";
 import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";
 import { parkingsRouter } from "./src/features/parkings/parkings.routes.js";
 import { reviewsRouter } from "./src/features/reviews/reviews.routes.js";

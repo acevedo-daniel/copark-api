@@ -19,7 +19,7 @@ export const requireAuth = async (
     const payload = await verifyAccessToken(token);
 
     req.user = {
-      uid: payload.sub,
+      id: payload.sub,
     };
 
     next();

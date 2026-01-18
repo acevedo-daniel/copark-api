@@ -13,6 +13,13 @@
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true
   },
-  "include": ["src", "prisma", "app.js", "server.js"],
+  "include": [
+    "src",
+    "prisma",
+    "app.ts",
+    "server.ts",
+    "shared/errors",
+    "shared/utils/password.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

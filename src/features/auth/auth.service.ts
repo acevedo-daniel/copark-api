@@ -1,48 +1,59 @@
-import { User } from "../../../prisma/generated/browser.js";
-import { prisma } from "../../config/prisma.js";
+import { User } from "@prisma/client";
+import {
+  hashPassword,
+  verifyPassword,
+} from "../../../shared/utils/password.js";
+import {
+  UnauthorizedError,
+  ConflictError,
+} from "../../../shared/errors/index.js";
+import { UserResponseDto } from "../users/user.types.js";
 import { signAccessToken } from "./jwt.js";
-import { hashPassword, verifyPassword } from "./password.js";
+import type { RegisterDto, LoginDto, AuthResponse } from "./auth.types.js";
+import * as userRepository from "../users/users.repository.js";
 
-interface loginAndRegisterParams {
-  email: string;
-  password: string;
-}
+const toUserResponseDto = ({
+  passwordHash: _,
+  ...user
+}: User): UserResponseDto => user;
 
-interface authResponse {
-  user: Pick<User, "id" | "email">;
-  token: string;
-}
+export const register = async (dto: RegisterDto): Promise<AuthResponse> => {
+  const existing = await userRepository.findByEmail(dto.email);
+  if (existing) {
+    throw new ConflictError("Email already in use");
+  }
 
-export const register = async ({
-  email,
-  password,
-}: loginAndRegisterParams): Promise<authResponse> => {
-  const passwordHash = await hashPassword(password);
+  const passwordHash = await hashPassword(dto.password);
 
-  const user = await prisma.user.create({
-    data: { email, passwordHash },
-    select: { id: true, email: true },
+  const user = await userRepository.create({
+    email: dto.email,
+    passwordHash,
+    name: dto.name,
   });
 
-  const token = await signAccessToken({ sub: user.id });
+  const accessToken = await signAccessToken({ sub: user.id });
 
-  return { user, token };
+  return {
+    user: toUserResponseDto(user),
+    accessToken,
+  };
 };
 
-interface loginResponse {}
+export const login = async (dto: LoginDto): Promise<AuthResponse> => {
+  const user = await userRepository.findByEmail(dto.email);
+  if (!user) {
+    throw new UnauthorizedError("Invalid email or password");
+  }
 
-export const login = async ({
-  email,
-  password,
-}: loginAndRegisterParams): Promise<authResponse> => {
-  const user = await prisma.user.findUnique({
-    where: { email },
-    select: { id: true, email: true, passwordHash: true },
-  });
-  if (!user) throw new Error("INVALID_CREDENTIALS");
-  const ok = await verifyPassword(user.passwordHash, password);
-  if (!ok) throw new Error("INVALID_CREDENTIALS");
+  const isValidPassword = await verifyPassword(user.passwordHash, dto.password);
+  if (!isValidPassword) {
+    throw new UnauthorizedError("Invalid email or password");
+  }
 
-  const token = await signAccessToken({ sub: user.id });
-  return { user: { id: user.id, email: user.email }, token };
+  const accessToken = await signAccessToken({ sub: user.id });
+
+  return {
+    user: toUserResponseDto(user),
+    accessToken,
+  };
 };

@@ -1,12 +1,12 @@
 import { prisma } from "../../config/prisma.js";
-
-export const create = async (data) => {
+import { Review } from "@prisma/client";
+export const create = async (data: Review): Promise<Review> => {
   return await prisma.review.create({
     data: data,
   });
 };
 
-export const findByParkingId = async (parkingId) => {
+export const findByParkingId = async (parkingId: string): Promise<Review[]> => {
   return await prisma.review.findMany({
     where: { parkingId: parkingId },
   });

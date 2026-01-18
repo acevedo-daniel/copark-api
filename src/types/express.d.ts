@@ -1,15 +1,13 @@
 export {};
 
 export interface UserPayload {
-  uid: string;
-  id?: string;
-  email?: string;
-  role?: "admin" | "user";
+  id: string;
 }
+
 declare global {
   namespace Express {
     interface Request {
-      user?: UserPayload;
+      user: UserPayload;
     }
   }
 }

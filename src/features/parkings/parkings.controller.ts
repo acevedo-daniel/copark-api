@@ -1,38 +1,55 @@
 import * as parkingsService from "./parkings.service.js";
+import { Request, Response, NextFunction } from "express";
 
-export const publish = async (req, res, next) => {
+export const publish = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const uid = req.user.uid;
+    const uid = req.user.id;
     const parkingData = req.body;
     const newParking = await parkingsService.publishParking(uid, parkingData);
-    return res.status(201).json(newParking);
+    res.status(201).json(newParking);
   } catch (error) {
     next(error);
   }
 };
 
-export const listAll = async (req, res, next) => {
+export const listAll = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const parkings = await parkingsService.getAllParkings();
-    return res.json(parkings);
+    res.json(parkings);
   } catch (error) {
     next(error);
   }
 };
 
-export const getById = async (req, res, next) => {
+export const getById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const { id } = req.params;
     const parking = await parkingsService.getParkingById(id);
-    return res.json(parking);
+    res.json(parking);
   } catch (error) {
     next(error);
   }
 };
 
-export const listMine = async (req, res, next) => {
+export const listMine = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const ownerId = req.user.uid;
+    const ownerId = req.user.id;
     const parkings = await parkingsService.getMyParkings(ownerId);
     res.json(parkings);
   } catch (error) {
@@ -40,15 +57,19 @@ export const listMine = async (req, res, next) => {
   }
 };
 
-export const update = async (req, res, next) => {
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
-    const ownerId = req.user.uid;
+    const ownerId = req.user.id;
     const { id } = req.params;
     const data = req.body;
     const updatedParking = await parkingsService.updateParking(
       ownerId,
       id,
-      data
+      data,
     );
     res.json(updatedParking);
   } catch (error) {

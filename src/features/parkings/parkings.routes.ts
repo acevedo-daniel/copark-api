@@ -14,14 +14,14 @@ router.patch(
   "/:id",
   requireAuth,
   validate(updateParking),
-  parkingController.update
+  parkingController.update,
 );
 
 router.post(
   "/",
   requireAuth,
   validate(publishParking),
-  parkingController.publish
+  parkingController.publish,
 );
 
 export const parkingsRouter = router;

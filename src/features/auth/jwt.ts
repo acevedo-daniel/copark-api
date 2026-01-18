@@ -1,5 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
-import { AccessTokenPayload } from "./jwt.types.js";
+
+type AccessTokenPayload = {
+  sub: string;
+};
 
 const rawSecret = process.env.JWT_SECRET;
 
@@ -10,7 +13,7 @@ if (!rawSecret) {
 const secret = new TextEncoder().encode(rawSecret);
 
 export const signAccessToken = async (
-  payload: AccessTokenPayload
+  payload: AccessTokenPayload,
 ): Promise<string> => {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
@@ -20,11 +23,11 @@ export const signAccessToken = async (
 };
 
 export const verifyAccessToken = async (
-  token: string
+  token: string,
 ): Promise<AccessTokenPayload> => {
   const { payload } = await jwtVerify(token, secret);
 
-  if (typeof payload.sub !== "string" || payload.length === 0)
+  if (typeof payload.sub !== "string" || payload.sub.length === 0)
     throw new Error("Invalid access token payload");
 
   return payload as AccessTokenPayload;

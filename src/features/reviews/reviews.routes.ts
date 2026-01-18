@@ -10,7 +10,7 @@ reviewsRouter.post(
   "/",
   requireAuth,
   validate(createReview),
-  reviewController.create
+  reviewController.create,
 );
 
 reviewsRouter.get("/parking/:parkingId", reviewController.listByParking);
