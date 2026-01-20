@@ -18,8 +18,8 @@
     "prisma",
     "app.ts",
     "server.ts",
-    "shared/errors",
-    "shared/utils/password.ts"
+    "src/errors",
+    "src/features/auth/password.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

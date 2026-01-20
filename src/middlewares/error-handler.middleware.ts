@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
-import { AppError } from "../../shared/errors/app-error.js";
+import { AppError } from "../errors/app-error.js";
 
 export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (err instanceof AppError && err.isOperational) {
     console.error("Operational Error:", {

@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { NotFoundError } from "../../../shared/errors/index.js";
+import { NotFoundError } from "../../errors/index.js";
 import { UserResponseDto, UpdateUserData } from "./user.types.js";
 import * as userRepository from "./users.repository.js";
 

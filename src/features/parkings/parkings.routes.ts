@@ -1,7 +1,7 @@
 import express from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
-import { publishParking, updateParking } from "../../schemas/parking.schema.js";
+import { publishParking, updateParking } from "./parking.schema.js";
 import * as parkingController from "./parkings.controller.js";
 
 const router = express.Router();

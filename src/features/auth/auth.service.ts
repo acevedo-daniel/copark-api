@@ -1,12 +1,6 @@
 import { User } from "@prisma/client";
-import {
-  hashPassword,
-  verifyPassword,
-} from "../../../shared/utils/password.js";
-import {
-  UnauthorizedError,
-  ConflictError,
-} from "../../../shared/errors/index.js";
+import { hashPassword, verifyPassword } from "./password.js";
+import { UnauthorizedError, ConflictError } from "../../errors/index.js";
 import { UserResponseDto } from "../users/user.types.js";
 import { signAccessToken } from "./jwt.js";
 import type { RegisterDto, LoginDto, AuthResponse } from "./auth.types.js";

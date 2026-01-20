@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
-import { createBooking } from "../../schemas/booking.schema.js";
+import { createBooking } from "./booking.schema.js";
 import * as bookingController from "./bookings.controller.js";
 
 export const bookingsRouter = Router();
