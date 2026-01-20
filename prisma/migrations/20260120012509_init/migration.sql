@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "VehicleType" AS ENUM ('CAR', 'MOTORCYCLE', 'BUS', 'TRUCK');
+CREATE TYPE "VehicleType" AS ENUM ('CAR', 'MOTORCYCLE', 'LARGE');
 
 -- CreateEnum
 CREATE TYPE "BookingStatus" AS ENUM ('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED');
@@ -8,6 +8,7 @@ CREATE TYPE "BookingStatus" AS ENUM ('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPL
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "passwordHash" TEXT NOT NULL,
     "name" TEXT,
     "lastName" TEXT,
     "phone" TEXT,
@@ -36,11 +37,14 @@ CREATE TABLE "Vehicle" (
 CREATE TABLE "Parking" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "description" TEXT,
+    "image" TEXT,
     "address" TEXT NOT NULL,
     "pricePerHour" DOUBLE PRECISION NOT NULL,
     "totalSpaces" INTEGER NOT NULL,
     "lat" DOUBLE PRECISION NOT NULL,
     "lng" DOUBLE PRECISION NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ownerId" TEXT NOT NULL,
@@ -53,8 +57,8 @@ CREATE TABLE "Booking" (
     "id" TEXT NOT NULL,
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
-    "totalPrice" DOUBLE PRECISION,
-    "status" "BookingStatus" NOT NULL DEFAULT 'CONFIRMED',
+    "totalPrice" DOUBLE PRECISION NOT NULL,
+    "status" "BookingStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "driverId" TEXT NOT NULL,
@@ -70,6 +74,7 @@ CREATE TABLE "Review" (
     "rating" INTEGER NOT NULL,
     "comment" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "driverId" TEXT NOT NULL,
     "parkingId" TEXT NOT NULL,
 

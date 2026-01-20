@@ -10,8 +10,7 @@ datasource db {
 enum VehicleType {
   CAR
   MOTORCYCLE
-  BUS
-  TRUCK
+  LARGE
 }
 
 enum BookingStatus {
@@ -59,16 +58,17 @@ model Vehicle {
 model Parking {
   id           String   @id @default(uuid())
   title        String
+  description  String?
   image        String?
   address      String
   pricePerHour Float
   totalSpaces  Int
   lat          Float
   lng          Float
+  isActive     Boolean @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // Relaciones
   ownerId      String
   owner        User      @relation("ParkingOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   bookings     Booking[]
@@ -79,12 +79,11 @@ model Booking {
   id         String        @id @default(uuid())
   startTime  DateTime
   endTime    DateTime
-  totalPrice Float?
-  status     BookingStatus @default(CONFIRMED)
+  totalPrice Float
+  status     BookingStatus @default(PENDING)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
-  // Relaciones
   driverId   String
   driver     User    @relation("BookingDriver", fields: [driverId], references: [id])
 
@@ -100,8 +99,8 @@ model Review {
   rating    Int      // 1-5
   comment   String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  // Relaciones
   driverId  String
   driver    User    @relation(fields: [driverId], references: [id])
 
