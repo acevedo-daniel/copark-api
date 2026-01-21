@@ -1,5 +1,5 @@
 import { prisma } from "../../config/prisma.js";
-import { Booking, Prisma } from "@prisma/client";
+import { Booking, Prisma } from "../../../prisma/generated/client.js";
 
 type BookingWithParking = Prisma.BookingGetPayload<{
   include: { parking: { select: { ownerId: true } } };

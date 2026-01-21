@@ -7,7 +7,7 @@ import { requestLogger } from "./src/middlewares/logger.middleware.js";
 
 import { authRouter } from "./src/features/auth/auth.routes.js";
 import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";
-import { parkingsRouter } from "./src/features/parkings/parkings.routes.js";
+import { parkingRouter } from "./src/features/parking/parking.routes.js";
 import { reviewsRouter } from "./src/features/reviews/reviews.routes.js";
 import { usersRouter } from "./src/features/users/users.routes.js";
 import { vehiclesRouter } from "./src/features/vehicles/vehicles.routes.js";
@@ -25,7 +25,7 @@ app.get("/healthz", (req, res) => {
 
 app.use("/users", usersRouter);
 app.use("/vehicles", vehiclesRouter);
-app.use("/parkings", parkingsRouter);
+app.use("/parkings", parkingRouter);
 app.use("/bookings", bookingsRouter);
 app.use("/reviews", reviewsRouter);
 app.use("/auth", authRouter);

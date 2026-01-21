@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "../../../prisma/generated/client.js";
 import { hashPassword, verifyPassword } from "./password.js";
 import { UnauthorizedError, ConflictError } from "../../errors/index.js";
 import { UserResponseDto } from "../users/user.types.js";

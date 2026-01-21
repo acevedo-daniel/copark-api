@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
 import { validate } from "../../middlewares/validation.middleware.js";
-import { createVehicle } from "./vehicle.schema.js";
+import { createVehicleSchema } from "./vehicle.schema.js";
 import * as vehicleController from "./vehicles.controller.js";
 
 const router = Router();
 
 router.use(requireAuth);
 
-router.post("/", validate(createVehicle), vehicleController.create);
+router.post("/", validate(createVehicleSchema), vehicleController.create);
 
 router.get("/", vehicleController.listMine);
 

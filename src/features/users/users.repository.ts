@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "../../../prisma/generated/client.js";
 import { prisma } from "../../config/prisma.js";
 import type { CreateUserData, UpdateUserData } from "./user.types.js";
 

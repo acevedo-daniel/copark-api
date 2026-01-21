@@ -1,12 +1,12 @@
 import * as reviewRepository from "./reviews.repository.js";
-import * as parkingService from "../parkings/parkings.service.js";
-import { Review } from "@prisma/client";
+import * as parkingService from "../parking/parking.service.js";
+import { Review } from "../../../prisma/generated/client.js";
 
 export const addReview = async (
   authorId: string,
   reviewData: Review,
 ): Promise<Review> => {
-  await parkingService.getParkingById(reviewData.parkingId);
+  await parkingService.findById(reviewData.parkingId);
 
   const newReview = {
     ...reviewData,

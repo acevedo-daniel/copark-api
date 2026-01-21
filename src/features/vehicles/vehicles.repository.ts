@@ -1,4 +1,4 @@
-import { Vehicle, Prisma } from "@prisma/client";
+import { Vehicle, Prisma } from "../../../prisma/generated/client.js";
 import { prisma } from "../../config/prisma.js";
 
 export const create = async (

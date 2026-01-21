@@ -1,0 +1,48 @@
+import { prisma } from "../../config/prisma.js";
+import { Parking, Prisma } from "../../../prisma/generated/client.js";
+
+export const create = async (
+  data: Prisma.ParkingCreateInput,
+): Promise<Parking> => {
+  return await prisma.parking.create({
+    data: data,
+  });
+};
+
+export const findById = async (id: string): Promise<Parking | null> => {
+  return await prisma.parking.findUnique({
+    where: { id },
+  });
+};
+
+export const findByOwnerId = async (ownerId: string): Promise<Parking[]> => {
+  return await prisma.parking.findMany({
+    where: { ownerId },
+  });
+};
+
+export const update = async (
+  id: string,
+  data: Prisma.ParkingUpdateInput,
+): Promise<Parking> => {
+  return await prisma.parking.update({
+    where: { id },
+    data: data,
+  });
+};
+
+export const findManyPaginated = async (
+  skip: number,
+  take: number,
+): Promise<{ data: Parking[]; total: number }> => {
+  const [data, total] = await Promise.all([
+    prisma.parking.findMany({
+      skip,
+      take,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.parking.count(),
+  ]);
+
+  return { data, total };
+};

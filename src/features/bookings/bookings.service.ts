@@ -1,13 +1,13 @@
 import * as bookingRepository from "./bookings.repository.js";
-import * as parkingService from "../parkings/parkings.service.js";
+import * as parkingService from "../parking/parking.service.js";
 import * as vehicleService from "../vehicles/vehicles.service.js";
-import { Booking } from "@prisma/client";
+import { Booking } from "../../../prisma/generated/client.js";
 
 export const createBooking = async (
   userId: string,
   bookingData: Booking,
 ): Promise<Booking> => {
-  const parking = await parkingService.getParkingById(bookingData.parkingId);
+  const parking = await parkingService.findById(bookingData.parkingId);
   let myVehicle;
 
   if (bookingData.vehicleId) {
