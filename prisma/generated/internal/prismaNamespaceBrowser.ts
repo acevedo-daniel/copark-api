@@ -64,12 +64,12 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName]
  * Enums
  */
 
-export const TransactionIsolationLevel = {
+export const TransactionIsolationLevel = runtime.makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
   RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
-} as const
+} as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
@@ -91,13 +91,16 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const VehicleScalarFieldEnum = {
   id: 'id',
+  plate: 'plate',
   brand: 'brand',
   model: 'model',
-  plate: 'plate',
   type: 'type',
+  customerName: 'customerName',
+  customerPhone: 'customerPhone',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  ownerId: 'ownerId'
+  parkingId: 'parkingId'
 } as const
 
 export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
@@ -106,12 +109,14 @@ export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeo
 export const ParkingScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  description: 'description',
   image: 'image',
   address: 'address',
   pricePerHour: 'pricePerHour',
   totalSpaces: 'totalSpaces',
   lat: 'lat',
   lng: 'lng',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   ownerId: 'ownerId'
@@ -128,7 +133,6 @@ export const BookingScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  driverId: 'driverId',
   parkingId: 'parkingId',
   vehicleId: 'vehicleId'
 } as const
@@ -140,8 +144,9 @@ export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
   comment: 'comment',
+  authorName: 'authorName',
   createdAt: 'createdAt',
-  driverId: 'driverId',
+  updatedAt: 'updatedAt',
   parkingId: 'parkingId'
 } as const
 

@@ -7,6 +7,87 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  lastName     String?
+  phone        String?
+  photoUrl     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  parkings     Parking[] @relation("ParkingOwner")
+}
+
+model Vehicle {
+  id            String      @id @default(uuid())
+  plate         String
+  brand         String?
+  model         String?
+  type          VehicleType @default(CAR)
+  customerName  String?
+  customerPhone String?
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  parkingId     String
+  bookings      Booking[]
+  parking       Parking     @relation(fields: [parkingId], references: [id], onDelete: Cascade)
+
+  @@unique([plate, parkingId])
+  @@index([plate])
+}
+
+model Parking {
+  id           String    @id @default(uuid())
+  title        String
+  description  String?
+  image        String?
+  address      String
+  pricePerHour Float
+  totalSpaces  Int
+  lat          Float
+  lng          Float
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  ownerId      String
+  bookings     Booking[]
+  owner        User      @relation("ParkingOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  reviews      Review[]
+  vehicles     Vehicle[]
+
+  @@index([ownerId])
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  startTime  DateTime
+  endTime    DateTime?
+  totalPrice Float?
+  status     BookingStatus @default(CONFIRMED)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  parkingId  String
+  vehicleId  String
+  parking    Parking       @relation(fields: [parkingId], references: [id], onDelete: Cascade)
+  vehicle    Vehicle       @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  @@index([parkingId, status])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  rating     Int
+  comment    String?
+  authorName String   @default("Anónimo")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  parkingId  String
+  parking    Parking  @relation(fields: [parkingId], references: [id], onDelete: Cascade)
+}
+
 enum VehicleType {
   CAR
   MOTORCYCLE
@@ -19,92 +100,3 @@ enum BookingStatus {
   CANCELLED
   COMPLETED
 }
-
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  passwordHash String
-  name      String?
-  lastName  String?
-  phone     String?
-  photoUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relaciones
-  parkings  Parking[] @relation("ParkingOwner")
-  bookings  Booking[] @relation("BookingDriver")
-  reviews   Review[]
-  vehicles  Vehicle[]
-}
-
-model Vehicle {
-  id        String      @id @default(uuid())
-  brand     String
-  model     String
-  plate     String
-  type      VehicleType
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-
-  // Relaciones
-  ownerId   String
-  owner     User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  bookings  Booking[]
-
-  @@unique([plate, ownerId]) // Evitar duplicados por usuario
-}
-
-model Parking {
-  id           String   @id @default(uuid())
-  title        String
-  description  String?
-  image        String?
-  address      String
-  pricePerHour Float
-  totalSpaces  Int
-  lat          Float
-  lng          Float
-  isActive     Boolean @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  ownerId      String
-  owner        User      @relation("ParkingOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  bookings     Booking[]
-  reviews      Review[]
-}
-
-model Booking {
-  id         String        @id @default(uuid())
-  startTime  DateTime
-  endTime    DateTime
-  totalPrice Float
-  status     BookingStatus @default(PENDING)
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-
-  driverId   String
-  driver     User    @relation("BookingDriver", fields: [driverId], references: [id])
-
-  parkingId  String
-  parking    Parking @relation(fields: [parkingId], references: [id])
-
-  vehicleId  String
-  vehicle    Vehicle @relation(fields: [vehicleId], references: [id])
-}
-
-model Review {
-  id        String   @id @default(uuid())
-  rating    Int      // 1-5
-  comment   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  driverId  String
-  driver    User    @relation(fields: [driverId], references: [id])
-
-  parkingId String
-  parking   Parking @relation(fields: [parkingId], references: [id], onDelete: Cascade)
-}
-

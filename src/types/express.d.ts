@@ -1,13 +1,15 @@
-export {};
-
-export interface UserPayload {
-  id: string;
-}
-
 declare global {
   namespace Express {
     interface Request {
-      user: UserPayload;
+      user?: {
+        id: string;
+      };
+    }
+
+    interface Locals {
+      validatedQuery?: Record<string, unknown>;
     }
   }
 }
+
+export {};

@@ -1,19 +1,52 @@
-import type { NextFunction, Request, Response } from "express";
-import { z } from "zod";
+import * as z from "zod";
+import type { RequestHandler } from "express";
 import { AppError } from "../errors/app-error.js";
 
-export const validate = (schema: z.ZodObject) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const result = await schema.safeParseAsync(req.body);
+interface Schemas {
+  body?: z.ZodType;
+  params?: z.ZodType;
+  query?: z.ZodType;
+}
 
-    if (!result.success) {
-      const errorMessage = result.error.issues
-        .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
-        .join(", ");
-      return next(new AppError(errorMessage, 400));
+export function validateRequest(schemas: Schemas): RequestHandler {
+  return async (req, res, next) => {
+    if (schemas.body) {
+      const result = await schemas.body.safeParseAsync(req.body);
+      if (!result.success) {
+        const msg = result.error.issues
+          .map((i) => `${i.path.join(".")}: ${i.message}`)
+          .join(", ");
+        next(new AppError(msg, 400));
+        return;
+      }
+      req.body = result.data;
     }
 
-    req.body = result.data;
+    if (schemas.params) {
+      const result = await schemas.params.safeParseAsync(req.params);
+      if (!result.success) {
+        const msg = result.error.issues
+          .map((i) => `${i.path.join(".")}: ${i.message}`)
+          .join(", ");
+        next(new AppError(msg, 400));
+        return;
+      }
+      req.params = result.data as typeof req.params;
+    }
+
+    if (schemas.query) {
+      const result = await schemas.query.safeParseAsync(req.query);
+      if (!result.success) {
+        const msg = result.error.issues
+          .map((i) => `${i.path.join(".")}: ${i.message}`)
+          .join(", ");
+        next(new AppError(msg, 400));
+        return;
+      }
+
+      res.locals.validatedQuery = result.data as Record<string, unknown>;
+    }
+
     next();
   };
-};
+}

@@ -3,7 +3,7 @@ export interface PaginationParams {
   limit?: number;
 }
 
-export type PaginationResult<T> = {
+export interface PaginationResult<T> {
   data: T[];
   meta: {
     page: number;
@@ -13,14 +13,14 @@ export type PaginationResult<T> = {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
   };
-};
+}
 
 export const parsePaginationParams = (query: {
   page?: string;
   limit?: string;
 }): { skip: number; take: number; page: number; limit: number } => {
-  const page = Math.max(1, parseInt(query.page || "1", 10));
-  const limit = Math.min(100, parseInt(query.limit || "10", 10));
+  const page = Math.max(1, parseInt(query.page ?? "1", 10));
+  const limit = Math.min(100, parseInt(query.limit ?? "10", 10));
 
   return {
     page,

@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.1.0
- * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
+ * Prisma Client JS version: 7.3.0
+ * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.1.0",
-  engine: "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba"
+  client: "7.3.0",
+  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
 }
 
 /**
@@ -834,13 +834,16 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const VehicleScalarFieldEnum = {
   id: 'id',
+  plate: 'plate',
   brand: 'brand',
   model: 'model',
-  plate: 'plate',
   type: 'type',
+  customerName: 'customerName',
+  customerPhone: 'customerPhone',
+  notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  ownerId: 'ownerId'
+  parkingId: 'parkingId'
 } as const
 
 export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeof VehicleScalarFieldEnum]
@@ -849,12 +852,14 @@ export type VehicleScalarFieldEnum = (typeof VehicleScalarFieldEnum)[keyof typeo
 export const ParkingScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  description: 'description',
   image: 'image',
   address: 'address',
   pricePerHour: 'pricePerHour',
   totalSpaces: 'totalSpaces',
   lat: 'lat',
   lng: 'lng',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   ownerId: 'ownerId'
@@ -871,7 +876,6 @@ export const BookingScalarFieldEnum = {
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  driverId: 'driverId',
   parkingId: 'parkingId',
   vehicleId: 'vehicleId'
 } as const
@@ -883,8 +887,9 @@ export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
   comment: 'comment',
+  authorName: 'authorName',
   createdAt: 'createdAt',
-  driverId: 'driverId',
+  updatedAt: 'updatedAt',
   parkingId: 'parkingId'
 } as const
 
@@ -988,6 +993,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

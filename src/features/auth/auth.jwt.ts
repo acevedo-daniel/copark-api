@@ -1,8 +1,8 @@
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 
-type AccessTokenPayload = {
+interface AccessTokenPayload extends JWTPayload {
   sub: string;
-};
+}
 
 const rawSecret = process.env.JWT_SECRET;
 

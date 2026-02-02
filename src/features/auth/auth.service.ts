@@ -1,17 +1,15 @@
-import { User } from "../../../prisma/generated/client.js";
-import { hashPassword, verifyPassword } from "./password.js";
+import { hashPassword, verifyPassword } from "./auth.password.js";
 import { UnauthorizedError, ConflictError } from "../../errors/index.js";
-import { UserResponseDto } from "../users/user.types.js";
-import { signAccessToken } from "./jwt.js";
-import type { RegisterDto, LoginDto, AuthResponse } from "./auth.types.js";
-import * as userRepository from "../users/users.repository.js";
+import { signAccessToken } from "./auth.jwt.js";
+import * as userRepository from "../user/user.repository.js";
+import {
+  type RegisterDto,
+  type LoginDto,
+  type AuthResponseDto,
+} from "./auth.schema.js";
+import { toUserResponseDto } from "../user/user.schema.js";
 
-const toUserResponseDto = ({
-  passwordHash: _,
-  ...user
-}: User): UserResponseDto => user;
-
-export const register = async (dto: RegisterDto): Promise<AuthResponse> => {
+export const register = async (dto: RegisterDto): Promise<AuthResponseDto> => {
   const existing = await userRepository.findByEmail(dto.email);
   if (existing) {
     throw new ConflictError("Email already in use");
@@ -33,7 +31,7 @@ export const register = async (dto: RegisterDto): Promise<AuthResponse> => {
   };
 };
 
-export const login = async (dto: LoginDto): Promise<AuthResponse> => {
+export const login = async (dto: LoginDto): Promise<AuthResponseDto> => {
   const user = await userRepository.findByEmail(dto.email);
   if (!user) {
     throw new UnauthorizedError("Invalid email or password");

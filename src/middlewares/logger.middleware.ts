@@ -9,14 +9,14 @@ export const requestLogger = (
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    const user = req.user
-      ? `[User: ${req.user.id || req.user.id || "unknown"}]`
-      : "[Guest]";
+    const user = req.user ? `[User: ${req.user.id || "unknown"}]` : "[Guest]";
     const method = req.method;
     const url = req.originalUrl;
     const status = res.statusCode;
 
-    console.log(`${method} ${url} ${status} - ${duration}ms ${user}`);
+    console.log(
+      `${method} ${url} ${status.toString()} - ${duration.toString()}ms ${user}`,
+    );
   });
 
   next();

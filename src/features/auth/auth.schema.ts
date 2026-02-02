@@ -1,39 +1,47 @@
 import { z } from "zod";
+import { UserResponseDto } from "../user/user.schema.js";
 
-/**
- * Schema para validar el registro de usuario
- */
 export const registerSchema = z.object({
-  email: z
-    .string({ message: "Email is required" })
-    .email({ message: "Invalid email format" })
-    .toLowerCase()
-    .trim(),
+  email: z.email({ error: "Invalid email format" }).toLowerCase().trim(),
 
   password: z
-    .string({ message: "Password is required" })
-    .min(8, { message: "Password must be at least 8 characters" })
-    .max(100),
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Password is required"
+          : "Password must be a string",
+    })
+    .min(8, { error: "Password must be at least 8 characters" })
+    .max(100, { error: "Password must be less than 100 characters" }),
 
   name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters" })
-    .max(50)
+    .string({
+      error: (issue) =>
+        issue.input === undefined ? undefined : "Name must be a string",
+    })
+    .min(2, { error: "Name must be at least 2 characters" })
+    .max(50, { error: "Name must be at most 50 characters" })
     .trim()
     .optional(),
 });
 
-/**
- * Schema para validar el login de usuario
- */
 export const loginSchema = z.object({
-  email: z
-    .string({ message: "Email is required" })
-    .email({ message: "Invalid email format" })
-    .toLowerCase()
-    .trim(),
+  email: z.email({ error: "Invalid email format" }).toLowerCase().trim(),
 
   password: z
-    .string({ message: "Password is required" })
-    .min(1, { message: "Password is required" }),
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? "Password is required"
+          : "Password must be a string",
+    })
+    .min(1, { error: "Password is required" }),
 });
+
+export type RegisterDto = z.infer<typeof registerSchema>;
+export type LoginDto = z.infer<typeof loginSchema>;
+
+export interface AuthResponseDto {
+  user: UserResponseDto;
+  accessToken: string;
+}

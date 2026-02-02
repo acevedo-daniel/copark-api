@@ -6,11 +6,11 @@ import { errorHandler } from "./src/middlewares/error-handler.middleware.js";
 import { requestLogger } from "./src/middlewares/logger.middleware.js";
 
 import { authRouter } from "./src/features/auth/auth.routes.js";
-import { bookingsRouter } from "./src/features/bookings/bookings.routes.js";
+import { bookingRouter } from "./src/features/booking/booking.routes.js";
 import { parkingRouter } from "./src/features/parking/parking.routes.js";
-import { reviewsRouter } from "./src/features/reviews/reviews.routes.js";
-import { usersRouter } from "./src/features/users/users.routes.js";
-import { vehiclesRouter } from "./src/features/vehicles/vehicles.routes.js";
+import { reviewRouter } from "./src/features/review/review.routes.js";
+import { userRouter } from "./src/features/user/user.routes.js";
+import { vehicleRouter } from "./src/features/vehicle/vehicle.routes.js";
 
 const app = express();
 
@@ -23,11 +23,11 @@ app.get("/healthz", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.use("/users", usersRouter);
-app.use("/vehicles", vehiclesRouter);
+app.use("/users", userRouter);
+app.use("/vehicles", vehicleRouter);
 app.use("/parkings", parkingRouter);
-app.use("/bookings", bookingsRouter);
-app.use("/reviews", reviewsRouter);
+app.use("/bookings", bookingRouter);
+app.use("/reviews", reviewRouter);
 app.use("/auth", authRouter);
 
 app.use(errorHandler);

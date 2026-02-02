@@ -26,70 +26,88 @@ export type AggregateVehicle = {
 
 export type VehicleMinAggregateOutputType = {
   id: string | null
+  plate: string | null
   brand: string | null
   model: string | null
-  plate: string | null
   type: $Enums.VehicleType | null
+  customerName: string | null
+  customerPhone: string | null
+  notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  ownerId: string | null
+  parkingId: string | null
 }
 
 export type VehicleMaxAggregateOutputType = {
   id: string | null
+  plate: string | null
   brand: string | null
   model: string | null
-  plate: string | null
   type: $Enums.VehicleType | null
+  customerName: string | null
+  customerPhone: string | null
+  notes: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  ownerId: string | null
+  parkingId: string | null
 }
 
 export type VehicleCountAggregateOutputType = {
   id: number
+  plate: number
   brand: number
   model: number
-  plate: number
   type: number
+  customerName: number
+  customerPhone: number
+  notes: number
   createdAt: number
   updatedAt: number
-  ownerId: number
+  parkingId: number
   _all: number
 }
 
 
 export type VehicleMinAggregateInputType = {
   id?: true
+  plate?: true
   brand?: true
   model?: true
-  plate?: true
   type?: true
+  customerName?: true
+  customerPhone?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
-  ownerId?: true
+  parkingId?: true
 }
 
 export type VehicleMaxAggregateInputType = {
   id?: true
+  plate?: true
   brand?: true
   model?: true
-  plate?: true
   type?: true
+  customerName?: true
+  customerPhone?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
-  ownerId?: true
+  parkingId?: true
 }
 
 export type VehicleCountAggregateInputType = {
   id?: true
+  plate?: true
   brand?: true
   model?: true
-  plate?: true
   type?: true
+  customerName?: true
+  customerPhone?: true
+  notes?: true
   createdAt?: true
   updatedAt?: true
-  ownerId?: true
+  parkingId?: true
   _all?: true
 }
 
@@ -167,13 +185,16 @@ export type VehicleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type VehicleGroupByOutputType = {
   id: string
-  brand: string
-  model: string
   plate: string
+  brand: string | null
+  model: string | null
   type: $Enums.VehicleType
+  customerName: string | null
+  customerPhone: string | null
+  notes: string | null
   createdAt: Date
   updatedAt: Date
-  ownerId: string
+  parkingId: string
   _count: VehicleCountAggregateOutputType | null
   _min: VehicleMinAggregateOutputType | null
   _max: VehicleMaxAggregateOutputType | null
@@ -199,56 +220,68 @@ export type VehicleWhereInput = {
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   id?: Prisma.StringFilter<"Vehicle"> | string
-  brand?: Prisma.StringFilter<"Vehicle"> | string
-  model?: Prisma.StringFilter<"Vehicle"> | string
   plate?: Prisma.StringFilter<"Vehicle"> | string
+  brand?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  model?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   type?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
+  customerName?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  customerPhone?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  notes?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
-  ownerId?: Prisma.StringFilter<"Vehicle"> | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  parkingId?: Prisma.StringFilter<"Vehicle"> | string
+  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
   bookings?: Prisma.BookingListRelationFilter
 }
 
 export type VehicleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  model?: Prisma.SortOrder
   plate?: Prisma.SortOrder
+  brand?: Prisma.SortOrderInput | Prisma.SortOrder
+  model?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  customerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
-  owner?: Prisma.UserOrderByWithRelationInput
+  parkingId?: Prisma.SortOrder
+  parking?: Prisma.ParkingOrderByWithRelationInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
 
 export type VehicleWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  plate_ownerId?: Prisma.VehiclePlateOwnerIdCompoundUniqueInput
+  plate_parkingId?: Prisma.VehiclePlateParkingIdCompoundUniqueInput
   AND?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
-  brand?: Prisma.StringFilter<"Vehicle"> | string
-  model?: Prisma.StringFilter<"Vehicle"> | string
   plate?: Prisma.StringFilter<"Vehicle"> | string
+  brand?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  model?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   type?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
+  customerName?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  customerPhone?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  notes?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
-  ownerId?: Prisma.StringFilter<"Vehicle"> | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  parkingId?: Prisma.StringFilter<"Vehicle"> | string
+  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
   bookings?: Prisma.BookingListRelationFilter
-}, "id" | "plate_ownerId">
+}, "id" | "plate_parkingId">
 
 export type VehicleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  model?: Prisma.SortOrder
   plate?: Prisma.SortOrder
+  brand?: Prisma.SortOrderInput | Prisma.SortOrder
+  model?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
+  customerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  parkingId?: Prisma.SortOrder
   _count?: Prisma.VehicleCountOrderByAggregateInput
   _max?: Prisma.VehicleMaxOrderByAggregateInput
   _min?: Prisma.VehicleMinOrderByAggregateInput
@@ -259,93 +292,164 @@ export type VehicleScalarWhereWithAggregatesInput = {
   OR?: Prisma.VehicleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.VehicleScalarWhereWithAggregatesInput | Prisma.VehicleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
-  brand?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
-  model?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   plate?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
+  brand?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
+  model?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
   type?: Prisma.EnumVehicleTypeWithAggregatesFilter<"Vehicle"> | $Enums.VehicleType
+  customerName?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
+  customerPhone?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
+  notes?: Prisma.StringNullableWithAggregatesFilter<"Vehicle"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Vehicle"> | Date | string
-  ownerId?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
+  parkingId?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
 }
 
 export type VehicleCreateInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutVehiclesInput
+  parking: Prisma.ParkingCreateNestedOneWithoutVehiclesInput
   bookings?: Prisma.BookingCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  ownerId: string
+  parkingId: string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutVehiclesNestedInput
+  parking?: Prisma.ParkingUpdateOneRequiredWithoutVehiclesNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  parkingId?: Prisma.StringFieldUpdateOperationsInput | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleCreateManyInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  ownerId: string
+  parkingId: string
 }
 
 export type VehicleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type VehicleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  parkingId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type VehiclePlateParkingIdCompoundUniqueInput = {
+  plate: string
+  parkingId: string
+}
+
+export type VehicleCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  plate?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  model?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  customerName?: Prisma.SortOrder
+  customerPhone?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  parkingId?: Prisma.SortOrder
+}
+
+export type VehicleMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  plate?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  model?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  customerName?: Prisma.SortOrder
+  customerPhone?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  parkingId?: Prisma.SortOrder
+}
+
+export type VehicleMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  plate?: Prisma.SortOrder
+  brand?: Prisma.SortOrder
+  model?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  customerName?: Prisma.SortOrder
+  customerPhone?: Prisma.SortOrder
+  notes?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  parkingId?: Prisma.SortOrder
 }
 
 export type VehicleListRelationFilter = {
@@ -358,93 +462,55 @@ export type VehicleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type VehiclePlateOwnerIdCompoundUniqueInput = {
-  plate: string
-  ownerId: string
-}
-
-export type VehicleCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  model?: Prisma.SortOrder
-  plate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
-}
-
-export type VehicleMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  model?: Prisma.SortOrder
-  plate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
-}
-
-export type VehicleMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  brand?: Prisma.SortOrder
-  model?: Prisma.SortOrder
-  plate?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
-}
-
 export type VehicleScalarRelationFilter = {
   is?: Prisma.VehicleWhereInput
   isNot?: Prisma.VehicleWhereInput
 }
 
-export type VehicleCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput> | Prisma.VehicleCreateWithoutOwnerInput[] | Prisma.VehicleUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutOwnerInput | Prisma.VehicleCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.VehicleCreateManyOwnerInputEnvelope
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-}
-
-export type VehicleUncheckedCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput> | Prisma.VehicleCreateWithoutOwnerInput[] | Prisma.VehicleUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutOwnerInput | Prisma.VehicleCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.VehicleCreateManyOwnerInputEnvelope
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-}
-
-export type VehicleUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput> | Prisma.VehicleCreateWithoutOwnerInput[] | Prisma.VehicleUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutOwnerInput | Prisma.VehicleCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutOwnerInput | Prisma.VehicleUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.VehicleCreateManyOwnerInputEnvelope
-  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutOwnerInput | Prisma.VehicleUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutOwnerInput | Prisma.VehicleUpdateManyWithWhereWithoutOwnerInput[]
-  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
-}
-
-export type VehicleUncheckedUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput> | Prisma.VehicleCreateWithoutOwnerInput[] | Prisma.VehicleUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutOwnerInput | Prisma.VehicleCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutOwnerInput | Prisma.VehicleUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.VehicleCreateManyOwnerInputEnvelope
-  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
-  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutOwnerInput | Prisma.VehicleUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutOwnerInput | Prisma.VehicleUpdateManyWithWhereWithoutOwnerInput[]
-  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
-}
-
 export type EnumVehicleTypeFieldUpdateOperationsInput = {
   set?: $Enums.VehicleType
+}
+
+export type VehicleCreateNestedManyWithoutParkingInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput> | Prisma.VehicleCreateWithoutParkingInput[] | Prisma.VehicleUncheckedCreateWithoutParkingInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutParkingInput | Prisma.VehicleCreateOrConnectWithoutParkingInput[]
+  createMany?: Prisma.VehicleCreateManyParkingInputEnvelope
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+}
+
+export type VehicleUncheckedCreateNestedManyWithoutParkingInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput> | Prisma.VehicleCreateWithoutParkingInput[] | Prisma.VehicleUncheckedCreateWithoutParkingInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutParkingInput | Prisma.VehicleCreateOrConnectWithoutParkingInput[]
+  createMany?: Prisma.VehicleCreateManyParkingInputEnvelope
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+}
+
+export type VehicleUpdateManyWithoutParkingNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput> | Prisma.VehicleCreateWithoutParkingInput[] | Prisma.VehicleUncheckedCreateWithoutParkingInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutParkingInput | Prisma.VehicleCreateOrConnectWithoutParkingInput[]
+  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutParkingInput | Prisma.VehicleUpsertWithWhereUniqueWithoutParkingInput[]
+  createMany?: Prisma.VehicleCreateManyParkingInputEnvelope
+  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutParkingInput | Prisma.VehicleUpdateWithWhereUniqueWithoutParkingInput[]
+  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutParkingInput | Prisma.VehicleUpdateManyWithWhereWithoutParkingInput[]
+  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
+}
+
+export type VehicleUncheckedUpdateManyWithoutParkingNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput> | Prisma.VehicleCreateWithoutParkingInput[] | Prisma.VehicleUncheckedCreateWithoutParkingInput[]
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutParkingInput | Prisma.VehicleCreateOrConnectWithoutParkingInput[]
+  upsert?: Prisma.VehicleUpsertWithWhereUniqueWithoutParkingInput | Prisma.VehicleUpsertWithWhereUniqueWithoutParkingInput[]
+  createMany?: Prisma.VehicleCreateManyParkingInputEnvelope
+  set?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  disconnect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  delete?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  connect?: Prisma.VehicleWhereUniqueInput | Prisma.VehicleWhereUniqueInput[]
+  update?: Prisma.VehicleUpdateWithWhereUniqueWithoutParkingInput | Prisma.VehicleUpdateWithWhereUniqueWithoutParkingInput[]
+  updateMany?: Prisma.VehicleUpdateManyWithWhereWithoutParkingInput | Prisma.VehicleUpdateManyWithWhereWithoutParkingInput[]
+  deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
 }
 
 export type VehicleCreateNestedOneWithoutBookingsInput = {
@@ -461,52 +527,58 @@ export type VehicleUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutBookingsInput, Prisma.VehicleUpdateWithoutBookingsInput>, Prisma.VehicleUncheckedUpdateWithoutBookingsInput>
 }
 
-export type VehicleCreateWithoutOwnerInput = {
+export type VehicleCreateWithoutParkingInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingCreateNestedManyWithoutVehicleInput
 }
 
-export type VehicleUncheckedCreateWithoutOwnerInput = {
+export type VehicleUncheckedCreateWithoutParkingInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutVehicleInput
 }
 
-export type VehicleCreateOrConnectWithoutOwnerInput = {
+export type VehicleCreateOrConnectWithoutParkingInput = {
   where: Prisma.VehicleWhereUniqueInput
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput>
 }
 
-export type VehicleCreateManyOwnerInputEnvelope = {
-  data: Prisma.VehicleCreateManyOwnerInput | Prisma.VehicleCreateManyOwnerInput[]
+export type VehicleCreateManyParkingInputEnvelope = {
+  data: Prisma.VehicleCreateManyParkingInput | Prisma.VehicleCreateManyParkingInput[]
   skipDuplicates?: boolean
 }
 
-export type VehicleUpsertWithWhereUniqueWithoutOwnerInput = {
+export type VehicleUpsertWithWhereUniqueWithoutParkingInput = {
   where: Prisma.VehicleWhereUniqueInput
-  update: Prisma.XOR<Prisma.VehicleUpdateWithoutOwnerInput, Prisma.VehicleUncheckedUpdateWithoutOwnerInput>
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutOwnerInput, Prisma.VehicleUncheckedCreateWithoutOwnerInput>
+  update: Prisma.XOR<Prisma.VehicleUpdateWithoutParkingInput, Prisma.VehicleUncheckedUpdateWithoutParkingInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutParkingInput, Prisma.VehicleUncheckedCreateWithoutParkingInput>
 }
 
-export type VehicleUpdateWithWhereUniqueWithoutOwnerInput = {
+export type VehicleUpdateWithWhereUniqueWithoutParkingInput = {
   where: Prisma.VehicleWhereUniqueInput
-  data: Prisma.XOR<Prisma.VehicleUpdateWithoutOwnerInput, Prisma.VehicleUncheckedUpdateWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.VehicleUpdateWithoutParkingInput, Prisma.VehicleUncheckedUpdateWithoutParkingInput>
 }
 
-export type VehicleUpdateManyWithWhereWithoutOwnerInput = {
+export type VehicleUpdateManyWithWhereWithoutParkingInput = {
   where: Prisma.VehicleScalarWhereInput
-  data: Prisma.XOR<Prisma.VehicleUpdateManyMutationInput, Prisma.VehicleUncheckedUpdateManyWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.VehicleUpdateManyMutationInput, Prisma.VehicleUncheckedUpdateManyWithoutParkingInput>
 }
 
 export type VehicleScalarWhereInput = {
@@ -514,35 +586,44 @@ export type VehicleScalarWhereInput = {
   OR?: Prisma.VehicleScalarWhereInput[]
   NOT?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
   id?: Prisma.StringFilter<"Vehicle"> | string
-  brand?: Prisma.StringFilter<"Vehicle"> | string
-  model?: Prisma.StringFilter<"Vehicle"> | string
   plate?: Prisma.StringFilter<"Vehicle"> | string
+  brand?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  model?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   type?: Prisma.EnumVehicleTypeFilter<"Vehicle"> | $Enums.VehicleType
+  customerName?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  customerPhone?: Prisma.StringNullableFilter<"Vehicle"> | string | null
+  notes?: Prisma.StringNullableFilter<"Vehicle"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
-  ownerId?: Prisma.StringFilter<"Vehicle"> | string
+  parkingId?: Prisma.StringFilter<"Vehicle"> | string
 }
 
 export type VehicleCreateWithoutBookingsInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutVehiclesInput
+  parking: Prisma.ParkingCreateNestedOneWithoutVehiclesInput
 }
 
 export type VehicleUncheckedCreateWithoutBookingsInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  ownerId: string
+  parkingId: string
 }
 
 export type VehicleCreateOrConnectWithoutBookingsInput = {
@@ -563,64 +644,82 @@ export type VehicleUpdateToOneWithWhereWithoutBookingsInput = {
 
 export type VehicleUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutVehiclesNestedInput
+  parking?: Prisma.ParkingUpdateOneRequiredWithoutVehiclesNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  parkingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type VehicleCreateManyOwnerInput = {
+export type VehicleCreateManyParkingInput = {
   id?: string
-  brand: string
-  model: string
   plate: string
-  type: $Enums.VehicleType
+  brand?: string | null
+  model?: string | null
+  type?: $Enums.VehicleType
+  customerName?: string | null
+  customerPhone?: string | null
+  notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type VehicleUpdateWithoutOwnerInput = {
+export type VehicleUpdateWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUpdateManyWithoutVehicleNestedInput
 }
 
-export type VehicleUncheckedUpdateWithoutOwnerInput = {
+export type VehicleUncheckedUpdateWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
-export type VehicleUncheckedUpdateManyWithoutOwnerInput = {
+export type VehicleUncheckedUpdateManyWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  brand?: Prisma.StringFieldUpdateOperationsInput | string
-  model?: Prisma.StringFieldUpdateOperationsInput | string
   plate?: Prisma.StringFieldUpdateOperationsInput | string
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumVehicleTypeFieldUpdateOperationsInput | $Enums.VehicleType
+  customerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -658,81 +757,96 @@ export type VehicleCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Type
 
 export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  plate?: boolean
   brand?: boolean
   model?: boolean
-  plate?: boolean
   type?: boolean
+  customerName?: boolean
+  customerPhone?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ownerId?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parkingId?: boolean
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Vehicle$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
 export type VehicleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  plate?: boolean
   brand?: boolean
   model?: boolean
-  plate?: boolean
   type?: boolean
+  customerName?: boolean
+  customerPhone?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ownerId?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parkingId?: boolean
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
 export type VehicleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  plate?: boolean
   brand?: boolean
   model?: boolean
-  plate?: boolean
   type?: boolean
+  customerName?: boolean
+  customerPhone?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ownerId?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parkingId?: boolean
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
 export type VehicleSelectScalar = {
   id?: boolean
+  plate?: boolean
   brand?: boolean
   model?: boolean
-  plate?: boolean
   type?: boolean
+  customerName?: boolean
+  customerPhone?: boolean
+  notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ownerId?: boolean
+  parkingId?: boolean
 }
 
-export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "brand" | "model" | "plate" | "type" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["vehicle"]>
+export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plate" | "brand" | "model" | "type" | "customerName" | "customerPhone" | "notes" | "createdAt" | "updatedAt" | "parkingId", ExtArgs["result"]["vehicle"]>
 export type VehicleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Vehicle$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }
 
 export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vehicle"
   objects: {
-    owner: Prisma.$UserPayload<ExtArgs>
+    parking: Prisma.$ParkingPayload<ExtArgs>
     bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    brand: string
-    model: string
     plate: string
+    brand: string | null
+    model: string | null
     type: $Enums.VehicleType
+    customerName: string | null
+    customerPhone: string | null
+    notes: string | null
     createdAt: Date
     updatedAt: Date
-    ownerId: string
+    parkingId: string
   }, ExtArgs["result"]["vehicle"]>
   composites: {}
 }
@@ -1127,7 +1241,7 @@ readonly fields: VehicleFieldRefs;
  */
 export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  parking<T extends Prisma.ParkingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParkingDefaultArgs<ExtArgs>>): Prisma.Prisma__ParkingClient<runtime.Types.Result.GetResult<Prisma.$ParkingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bookings<T extends Prisma.Vehicle$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1159,13 +1273,16 @@ export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface VehicleFieldRefs {
   readonly id: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly plate: Prisma.FieldRef<"Vehicle", 'String'>
   readonly brand: Prisma.FieldRef<"Vehicle", 'String'>
   readonly model: Prisma.FieldRef<"Vehicle", 'String'>
-  readonly plate: Prisma.FieldRef<"Vehicle", 'String'>
   readonly type: Prisma.FieldRef<"Vehicle", 'VehicleType'>
+  readonly customerName: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly customerPhone: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly notes: Prisma.FieldRef<"Vehicle", 'String'>
   readonly createdAt: Prisma.FieldRef<"Vehicle", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Vehicle", 'DateTime'>
-  readonly ownerId: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly parkingId: Prisma.FieldRef<"Vehicle", 'String'>
 }
     
 

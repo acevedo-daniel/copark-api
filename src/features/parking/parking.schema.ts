@@ -66,11 +66,11 @@ export const parkingParamsSchema = z.object({
 });
 
 export const parkingQuerySchema = z.object({
-  page: z.string().optional(),
-  limit: z.string().optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().optional(),
-  minPrice: z.string().optional(),
-  maxPrice: z.string().optional(),
+  minPrice: z.coerce.number().positive().optional(),
+  maxPrice: z.coerce.number().positive().optional(),
   ownerId: z.uuid().optional(),
 });
 

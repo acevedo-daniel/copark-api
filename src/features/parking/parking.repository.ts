@@ -15,7 +15,7 @@ export const findById = async (id: string): Promise<Parking | null> => {
   });
 };
 
-export const findByOwnerId = async (ownerId: string): Promise<Parking[]> => {
+export const findByOwner = async (ownerId: string): Promise<Parking[]> => {
   return await prisma.parking.findMany({
     where: { ownerId },
   });
@@ -31,7 +31,7 @@ export const update = async (
   });
 };
 
-export const findManyPaginated = async (
+export const findAll = async (
   skip: number,
   take: number,
 ): Promise<{ data: Parking[]; total: number }> => {

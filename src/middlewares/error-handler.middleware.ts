@@ -5,7 +5,7 @@ export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
   if (err instanceof AppError && err.isOperational) {
     console.error("Operational Error:", {

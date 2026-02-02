@@ -1,12 +1,15 @@
 import {
-  parsePaginationParams,
   PaginationResult,
   createPaginatedResult,
 } from "../../utils/pagination.js";
-import { NotFoundError, UnauthorizedError } from "../../errors/index.js";
+import { NotFoundError, ForbiddenError } from "../../errors/index.js";
 import * as parkingRepository from "./parking.repository.js";
 import { Parking, Prisma } from "../../../prisma/generated/client.js";
-import { CreateParkingDto, UpdateParkingDto } from "./parking.schema.js";
+import {
+  CreateParkingDto,
+  UpdateParkingDto,
+  ParkingQuery,
+} from "./parking.schema.js";
 
 export const create = async (
   ownerId: string,
@@ -25,8 +28,8 @@ export const findById = async (id: string): Promise<Parking> => {
   return parking;
 };
 
-export const findByOwnerId = async (ownerId: string): Promise<Parking[]> => {
-  return parkingRepository.findByOwnerId(ownerId);
+export const findOwned = async (ownerId: string): Promise<Parking[]> => {
+  return parkingRepository.findByOwner(ownerId);
 };
 
 export const update = async (
@@ -37,18 +40,17 @@ export const update = async (
   const parking = await parkingRepository.findById(parkingId);
   if (!parking) throw new NotFoundError("Parking not found");
 
-  if (parking.ownerId !== ownerId)
-    throw new UnauthorizedError("Unauthorized access");
+  if (parking.ownerId !== ownerId) throw new ForbiddenError("Access denied");
 
   return parkingRepository.update(parkingId, dto);
 };
 
-export const findAllPaginated = async (query: {
-  page?: string;
-  limit?: string;
-}): Promise<PaginationResult<Parking>> => {
-  const { skip, take, page, limit } = parsePaginationParams(query);
-  const { data, total } = await parkingRepository.findManyPaginated(skip, take);
+export const findAll = async (
+  query: ParkingQuery,
+): Promise<PaginationResult<Parking>> => {
+  const { page, limit } = query;
+  const skip = (page - 1) * limit;
+  const { data, total } = await parkingRepository.findAll(skip, limit);
 
   return createPaginatedResult(data, total, page, limit);
 };

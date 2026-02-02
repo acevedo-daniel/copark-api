@@ -215,9 +215,6 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   parkings?: Prisma.ParkingListRelationFilter
-  bookings?: Prisma.BookingListRelationFilter
-  reviews?: Prisma.ReviewListRelationFilter
-  vehicles?: Prisma.VehicleListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -231,9 +228,6 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   parkings?: Prisma.ParkingOrderByRelationAggregateInput
-  bookings?: Prisma.BookingOrderByRelationAggregateInput
-  reviews?: Prisma.ReviewOrderByRelationAggregateInput
-  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -250,9 +244,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   parkings?: Prisma.ParkingListRelationFilter
-  bookings?: Prisma.BookingListRelationFilter
-  reviews?: Prisma.ReviewListRelationFilter
-  vehicles?: Prisma.VehicleListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -296,9 +287,6 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   parkings?: Prisma.ParkingCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -312,9 +300,6 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   parkings?: Prisma.ParkingUncheckedCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUpdateInput = {
@@ -328,9 +313,6 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parkings?: Prisma.ParkingUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -344,9 +326,6 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parkings?: Prisma.ParkingUncheckedUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUncheckedUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -438,20 +417,6 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutVehiclesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVehiclesInput, Prisma.UserUncheckedCreateWithoutVehiclesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehiclesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutVehiclesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVehiclesInput, Prisma.UserUncheckedCreateWithoutVehiclesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehiclesInput
-  upsert?: Prisma.UserUpsertWithoutVehiclesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVehiclesInput, Prisma.UserUpdateWithoutVehiclesInput>, Prisma.UserUncheckedUpdateWithoutVehiclesInput>
-}
-
 export type UserCreateNestedOneWithoutParkingsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutParkingsInput, Prisma.UserUncheckedCreateWithoutParkingsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutParkingsInput
@@ -466,110 +431,6 @@ export type UserUpdateOneRequiredWithoutParkingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutParkingsInput, Prisma.UserUpdateWithoutParkingsInput>, Prisma.UserUncheckedUpdateWithoutParkingsInput>
 }
 
-export type UserCreateNestedOneWithoutBookingsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBookingsInput, Prisma.UserUncheckedCreateWithoutBookingsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBookingsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutBookingsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBookingsInput, Prisma.UserUncheckedCreateWithoutBookingsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBookingsInput
-  upsert?: Prisma.UserUpsertWithoutBookingsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBookingsInput, Prisma.UserUpdateWithoutBookingsInput>, Prisma.UserUncheckedUpdateWithoutBookingsInput>
-}
-
-export type UserCreateNestedOneWithoutReviewsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewsInput
-  upsert?: Prisma.UserUpsertWithoutReviewsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
-}
-
-export type UserCreateWithoutVehiclesInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutDriverInput
-}
-
-export type UserUncheckedCreateWithoutVehiclesInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingUncheckedCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDriverInput
-}
-
-export type UserCreateOrConnectWithoutVehiclesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutVehiclesInput, Prisma.UserUncheckedCreateWithoutVehiclesInput>
-}
-
-export type UserUpsertWithoutVehiclesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutVehiclesInput, Prisma.UserUncheckedUpdateWithoutVehiclesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutVehiclesInput, Prisma.UserUncheckedCreateWithoutVehiclesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutVehiclesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutVehiclesInput, Prisma.UserUncheckedUpdateWithoutVehiclesInput>
-}
-
-export type UserUpdateWithoutVehiclesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutDriverNestedInput
-}
-
-export type UserUncheckedUpdateWithoutVehiclesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUncheckedUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUncheckedUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDriverNestedInput
-}
-
 export type UserCreateWithoutParkingsInput = {
   id?: string
   email: string
@@ -580,9 +441,6 @@ export type UserCreateWithoutParkingsInput = {
   photoUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  bookings?: Prisma.BookingCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutParkingsInput = {
@@ -595,9 +453,6 @@ export type UserUncheckedCreateWithoutParkingsInput = {
   photoUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDriverInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutParkingsInput = {
@@ -626,9 +481,6 @@ export type UserUpdateWithoutParkingsInput = {
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  bookings?: Prisma.BookingUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutParkingsInput = {
@@ -641,161 +493,6 @@ export type UserUncheckedUpdateWithoutParkingsInput = {
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  bookings?: Prisma.BookingUncheckedUpdateManyWithoutDriverNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserCreateWithoutBookingsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingCreateNestedManyWithoutOwnerInput
-  reviews?: Prisma.ReviewCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutOwnerInput
-}
-
-export type UserUncheckedCreateWithoutBookingsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingUncheckedCreateNestedManyWithoutOwnerInput
-  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutOwnerInput
-}
-
-export type UserCreateOrConnectWithoutBookingsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutBookingsInput, Prisma.UserUncheckedCreateWithoutBookingsInput>
-}
-
-export type UserUpsertWithoutBookingsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutBookingsInput, Prisma.UserUncheckedUpdateWithoutBookingsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutBookingsInput, Prisma.UserUncheckedCreateWithoutBookingsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutBookingsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutBookingsInput, Prisma.UserUncheckedUpdateWithoutBookingsInput>
-}
-
-export type UserUpdateWithoutBookingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUpdateManyWithoutOwnerNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutBookingsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUncheckedUpdateManyWithoutOwnerNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserCreateWithoutReviewsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutOwnerInput
-}
-
-export type UserUncheckedCreateWithoutReviewsInput = {
-  id?: string
-  email: string
-  passwordHash: string
-  name?: string | null
-  lastName?: string | null
-  phone?: string | null
-  photoUrl?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  parkings?: Prisma.ParkingUncheckedCreateNestedManyWithoutOwnerInput
-  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutDriverInput
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutOwnerInput
-}
-
-export type UserCreateOrConnectWithoutReviewsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
-}
-
-export type UserUpsertWithoutReviewsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewsInput, Prisma.UserUncheckedUpdateWithoutReviewsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutReviewsInput, Prisma.UserUncheckedCreateWithoutReviewsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutReviewsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewsInput, Prisma.UserUncheckedUpdateWithoutReviewsInput>
-}
-
-export type UserUpdateWithoutReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkings?: Prisma.ParkingUncheckedUpdateManyWithoutOwnerNestedInput
-  bookings?: Prisma.BookingUncheckedUpdateManyWithoutDriverNestedInput
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 
@@ -805,16 +502,10 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
 
 export type UserCountOutputType = {
   parkings: number
-  bookings: number
-  reviews: number
-  vehicles: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parkings?: boolean | UserCountOutputTypeCountParkingsArgs
-  bookings?: boolean | UserCountOutputTypeCountBookingsArgs
-  reviews?: boolean | UserCountOutputTypeCountReviewsArgs
-  vehicles?: boolean | UserCountOutputTypeCountVehiclesArgs
 }
 
 /**
@@ -834,27 +525,6 @@ export type UserCountOutputTypeCountParkingsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ParkingWhereInput
 }
 
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BookingWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReviewWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VehicleWhereInput
-}
-
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -867,9 +537,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   parkings?: boolean | Prisma.User$parkingsArgs<ExtArgs>
-  bookings?: boolean | Prisma.User$bookingsArgs<ExtArgs>
-  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
-  vehicles?: boolean | Prisma.User$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -912,9 +579,6 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "lastName" | "phone" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parkings?: boolean | Prisma.User$parkingsArgs<ExtArgs>
-  bookings?: boolean | Prisma.User$bookingsArgs<ExtArgs>
-  reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
-  vehicles?: boolean | Prisma.User$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -924,9 +588,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     parkings: Prisma.$ParkingPayload<ExtArgs>[]
-    bookings: Prisma.$BookingPayload<ExtArgs>[]
-    reviews: Prisma.$ReviewPayload<ExtArgs>[]
-    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1333,9 +994,6 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   parkings<T extends Prisma.User$parkingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$parkingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ParkingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  bookings<T extends Prisma.User$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  vehicles<T extends Prisma.User$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1783,78 +1441,6 @@ export type User$parkingsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ParkingScalarFieldEnum | Prisma.ParkingScalarFieldEnum[]
-}
-
-/**
- * User.bookings
- */
-export type User$bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Booking
-   */
-  select?: Prisma.BookingSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Booking
-   */
-  omit?: Prisma.BookingOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BookingInclude<ExtArgs> | null
-  where?: Prisma.BookingWhereInput
-  orderBy?: Prisma.BookingOrderByWithRelationInput | Prisma.BookingOrderByWithRelationInput[]
-  cursor?: Prisma.BookingWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
-}
-
-/**
- * User.reviews
- */
-export type User$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Review
-   */
-  select?: Prisma.ReviewSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Review
-   */
-  omit?: Prisma.ReviewOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ReviewInclude<ExtArgs> | null
-  where?: Prisma.ReviewWhereInput
-  orderBy?: Prisma.ReviewOrderByWithRelationInput | Prisma.ReviewOrderByWithRelationInput[]
-  cursor?: Prisma.ReviewWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
-}
-
-/**
- * User.vehicles
- */
-export type User$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Vehicle
-   */
-  select?: Prisma.VehicleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Vehicle
-   */
-  omit?: Prisma.VehicleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VehicleInclude<ExtArgs> | null
-  where?: Prisma.VehicleWhereInput
-  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
-  cursor?: Prisma.VehicleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
 }
 
 /**

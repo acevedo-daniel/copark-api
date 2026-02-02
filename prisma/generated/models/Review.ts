@@ -38,8 +38,9 @@ export type ReviewMinAggregateOutputType = {
   id: string | null
   rating: number | null
   comment: string | null
+  authorName: string | null
   createdAt: Date | null
-  driverId: string | null
+  updatedAt: Date | null
   parkingId: string | null
 }
 
@@ -47,8 +48,9 @@ export type ReviewMaxAggregateOutputType = {
   id: string | null
   rating: number | null
   comment: string | null
+  authorName: string | null
   createdAt: Date | null
-  driverId: string | null
+  updatedAt: Date | null
   parkingId: string | null
 }
 
@@ -56,8 +58,9 @@ export type ReviewCountAggregateOutputType = {
   id: number
   rating: number
   comment: number
+  authorName: number
   createdAt: number
-  driverId: number
+  updatedAt: number
   parkingId: number
   _all: number
 }
@@ -75,8 +78,9 @@ export type ReviewMinAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
+  authorName?: true
   createdAt?: true
-  driverId?: true
+  updatedAt?: true
   parkingId?: true
 }
 
@@ -84,8 +88,9 @@ export type ReviewMaxAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
+  authorName?: true
   createdAt?: true
-  driverId?: true
+  updatedAt?: true
   parkingId?: true
 }
 
@@ -93,8 +98,9 @@ export type ReviewCountAggregateInputType = {
   id?: true
   rating?: true
   comment?: true
+  authorName?: true
   createdAt?: true
-  driverId?: true
+  updatedAt?: true
   parkingId?: true
   _all?: true
 }
@@ -188,9 +194,10 @@ export type ReviewGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type ReviewGroupByOutputType = {
   id: string
   rating: number
-  comment: string
+  comment: string | null
+  authorName: string
   createdAt: Date
-  driverId: string
+  updatedAt: Date
   parkingId: string
   _count: ReviewCountAggregateOutputType | null
   _avg: ReviewAvgAggregateOutputType | null
@@ -220,22 +227,22 @@ export type ReviewWhereInput = {
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   id?: Prisma.StringFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
-  comment?: Prisma.StringFilter<"Review"> | string
+  comment?: Prisma.StringNullableFilter<"Review"> | string | null
+  authorName?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  driverId?: Prisma.StringFilter<"Review"> | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   parkingId?: Prisma.StringFilter<"Review"> | string
-  driver?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
 }
 
 export type ReviewOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
-  comment?: Prisma.SortOrder
+  comment?: Prisma.SortOrderInput | Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  driverId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
-  driver?: Prisma.UserOrderByWithRelationInput
   parking?: Prisma.ParkingOrderByWithRelationInput
 }
 
@@ -245,20 +252,21 @@ export type ReviewWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ReviewWhereInput[]
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   rating?: Prisma.IntFilter<"Review"> | number
-  comment?: Prisma.StringFilter<"Review"> | string
+  comment?: Prisma.StringNullableFilter<"Review"> | string | null
+  authorName?: Prisma.StringFilter<"Review"> | string
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  driverId?: Prisma.StringFilter<"Review"> | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
   parkingId?: Prisma.StringFilter<"Review"> | string
-  driver?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
 }, "id">
 
 export type ReviewOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
-  comment?: Prisma.SortOrder
+  comment?: Prisma.SortOrderInput | Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  driverId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
   _count?: Prisma.ReviewCountOrderByAggregateInput
   _avg?: Prisma.ReviewAvgOrderByAggregateInput
@@ -273,70 +281,79 @@ export type ReviewScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ReviewScalarWhereWithAggregatesInput | Prisma.ReviewScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
-  comment?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  comment?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null
+  authorName?: Prisma.StringWithAggregatesFilter<"Review"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
-  driverId?: Prisma.StringWithAggregatesFilter<"Review"> | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
   parkingId?: Prisma.StringWithAggregatesFilter<"Review"> | string
 }
 
 export type ReviewCreateInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driver: Prisma.UserCreateNestedOneWithoutReviewsInput
+  updatedAt?: Date | string
   parking: Prisma.ParkingCreateNestedOneWithoutReviewsInput
 }
 
 export type ReviewUncheckedCreateInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driverId: string
+  updatedAt?: Date | string
   parkingId: string
 }
 
 export type ReviewUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driver?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parking?: Prisma.ParkingUpdateOneRequiredWithoutReviewsNestedInput
 }
 
 export type ReviewUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parkingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type ReviewCreateManyInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driverId: string
+  updatedAt?: Date | string
   parkingId: string
 }
 
 export type ReviewUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   parkingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -354,8 +371,9 @@ export type ReviewCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  driverId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
 }
 
@@ -367,8 +385,9 @@ export type ReviewMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  driverId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
 }
 
@@ -376,55 +395,14 @@ export type ReviewMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  authorName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  driverId?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
 }
 
 export type ReviewSumOrderByAggregateInput = {
   rating?: Prisma.SortOrder
-}
-
-export type ReviewCreateNestedManyWithoutDriverInput = {
-  create?: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput> | Prisma.ReviewCreateWithoutDriverInput[] | Prisma.ReviewUncheckedCreateWithoutDriverInput[]
-  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutDriverInput | Prisma.ReviewCreateOrConnectWithoutDriverInput[]
-  createMany?: Prisma.ReviewCreateManyDriverInputEnvelope
-  connect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-}
-
-export type ReviewUncheckedCreateNestedManyWithoutDriverInput = {
-  create?: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput> | Prisma.ReviewCreateWithoutDriverInput[] | Prisma.ReviewUncheckedCreateWithoutDriverInput[]
-  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutDriverInput | Prisma.ReviewCreateOrConnectWithoutDriverInput[]
-  createMany?: Prisma.ReviewCreateManyDriverInputEnvelope
-  connect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-}
-
-export type ReviewUpdateManyWithoutDriverNestedInput = {
-  create?: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput> | Prisma.ReviewCreateWithoutDriverInput[] | Prisma.ReviewUncheckedCreateWithoutDriverInput[]
-  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutDriverInput | Prisma.ReviewCreateOrConnectWithoutDriverInput[]
-  upsert?: Prisma.ReviewUpsertWithWhereUniqueWithoutDriverInput | Prisma.ReviewUpsertWithWhereUniqueWithoutDriverInput[]
-  createMany?: Prisma.ReviewCreateManyDriverInputEnvelope
-  set?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  disconnect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  delete?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  connect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  update?: Prisma.ReviewUpdateWithWhereUniqueWithoutDriverInput | Prisma.ReviewUpdateWithWhereUniqueWithoutDriverInput[]
-  updateMany?: Prisma.ReviewUpdateManyWithWhereWithoutDriverInput | Prisma.ReviewUpdateManyWithWhereWithoutDriverInput[]
-  deleteMany?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
-}
-
-export type ReviewUncheckedUpdateManyWithoutDriverNestedInput = {
-  create?: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput> | Prisma.ReviewCreateWithoutDriverInput[] | Prisma.ReviewUncheckedCreateWithoutDriverInput[]
-  connectOrCreate?: Prisma.ReviewCreateOrConnectWithoutDriverInput | Prisma.ReviewCreateOrConnectWithoutDriverInput[]
-  upsert?: Prisma.ReviewUpsertWithWhereUniqueWithoutDriverInput | Prisma.ReviewUpsertWithWhereUniqueWithoutDriverInput[]
-  createMany?: Prisma.ReviewCreateManyDriverInputEnvelope
-  set?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  disconnect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  delete?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  connect?: Prisma.ReviewWhereUniqueInput | Prisma.ReviewWhereUniqueInput[]
-  update?: Prisma.ReviewUpdateWithWhereUniqueWithoutDriverInput | Prisma.ReviewUpdateWithWhereUniqueWithoutDriverInput[]
-  updateMany?: Prisma.ReviewUpdateManyWithWhereWithoutDriverInput | Prisma.ReviewUpdateManyWithWhereWithoutDriverInput[]
-  deleteMany?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
 }
 
 export type ReviewCreateNestedManyWithoutParkingInput = {
@@ -469,74 +447,22 @@ export type ReviewUncheckedUpdateManyWithoutParkingNestedInput = {
   deleteMany?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
 }
 
-export type ReviewCreateWithoutDriverInput = {
-  id?: string
-  rating: number
-  comment: string
-  createdAt?: Date | string
-  parking: Prisma.ParkingCreateNestedOneWithoutReviewsInput
-}
-
-export type ReviewUncheckedCreateWithoutDriverInput = {
-  id?: string
-  rating: number
-  comment: string
-  createdAt?: Date | string
-  parkingId: string
-}
-
-export type ReviewCreateOrConnectWithoutDriverInput = {
-  where: Prisma.ReviewWhereUniqueInput
-  create: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput>
-}
-
-export type ReviewCreateManyDriverInputEnvelope = {
-  data: Prisma.ReviewCreateManyDriverInput | Prisma.ReviewCreateManyDriverInput[]
-  skipDuplicates?: boolean
-}
-
-export type ReviewUpsertWithWhereUniqueWithoutDriverInput = {
-  where: Prisma.ReviewWhereUniqueInput
-  update: Prisma.XOR<Prisma.ReviewUpdateWithoutDriverInput, Prisma.ReviewUncheckedUpdateWithoutDriverInput>
-  create: Prisma.XOR<Prisma.ReviewCreateWithoutDriverInput, Prisma.ReviewUncheckedCreateWithoutDriverInput>
-}
-
-export type ReviewUpdateWithWhereUniqueWithoutDriverInput = {
-  where: Prisma.ReviewWhereUniqueInput
-  data: Prisma.XOR<Prisma.ReviewUpdateWithoutDriverInput, Prisma.ReviewUncheckedUpdateWithoutDriverInput>
-}
-
-export type ReviewUpdateManyWithWhereWithoutDriverInput = {
-  where: Prisma.ReviewScalarWhereInput
-  data: Prisma.XOR<Prisma.ReviewUpdateManyMutationInput, Prisma.ReviewUncheckedUpdateManyWithoutDriverInput>
-}
-
-export type ReviewScalarWhereInput = {
-  AND?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
-  OR?: Prisma.ReviewScalarWhereInput[]
-  NOT?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
-  id?: Prisma.StringFilter<"Review"> | string
-  rating?: Prisma.IntFilter<"Review"> | number
-  comment?: Prisma.StringFilter<"Review"> | string
-  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
-  driverId?: Prisma.StringFilter<"Review"> | string
-  parkingId?: Prisma.StringFilter<"Review"> | string
-}
-
 export type ReviewCreateWithoutParkingInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driver: Prisma.UserCreateNestedOneWithoutReviewsInput
+  updatedAt?: Date | string
 }
 
 export type ReviewUncheckedCreateWithoutParkingInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driverId: string
+  updatedAt?: Date | string
 }
 
 export type ReviewCreateOrConnectWithoutParkingInput = {
@@ -565,68 +491,53 @@ export type ReviewUpdateManyWithWhereWithoutParkingInput = {
   data: Prisma.XOR<Prisma.ReviewUpdateManyMutationInput, Prisma.ReviewUncheckedUpdateManyWithoutParkingInput>
 }
 
-export type ReviewCreateManyDriverInput = {
-  id?: string
-  rating: number
-  comment: string
-  createdAt?: Date | string
-  parkingId: string
-}
-
-export type ReviewUpdateWithoutDriverInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parking?: Prisma.ParkingUpdateOneRequiredWithoutReviewsNestedInput
-}
-
-export type ReviewUncheckedUpdateWithoutDriverInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkingId?: Prisma.StringFieldUpdateOperationsInput | string
-}
-
-export type ReviewUncheckedUpdateManyWithoutDriverInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parkingId?: Prisma.StringFieldUpdateOperationsInput | string
+export type ReviewScalarWhereInput = {
+  AND?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
+  OR?: Prisma.ReviewScalarWhereInput[]
+  NOT?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
+  id?: Prisma.StringFilter<"Review"> | string
+  rating?: Prisma.IntFilter<"Review"> | number
+  comment?: Prisma.StringNullableFilter<"Review"> | string | null
+  authorName?: Prisma.StringFilter<"Review"> | string
+  createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Review"> | Date | string
+  parkingId?: Prisma.StringFilter<"Review"> | string
 }
 
 export type ReviewCreateManyParkingInput = {
   id?: string
   rating: number
-  comment: string
+  comment?: string | null
+  authorName?: string
   createdAt?: Date | string
-  driverId: string
+  updatedAt?: Date | string
 }
 
 export type ReviewUpdateWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driver?: Prisma.UserUpdateOneRequiredWithoutReviewsNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewUncheckedUpdateWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ReviewUncheckedUpdateManyWithoutParkingInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.StringFieldUpdateOperationsInput | string
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorName?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  driverId?: Prisma.StringFieldUpdateOperationsInput | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -635,10 +546,10 @@ export type ReviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   rating?: boolean
   comment?: boolean
+  authorName?: boolean
   createdAt?: boolean
-  driverId?: boolean
+  updatedAt?: boolean
   parkingId?: boolean
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
@@ -646,10 +557,10 @@ export type ReviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   rating?: boolean
   comment?: boolean
+  authorName?: boolean
   createdAt?: boolean
-  driverId?: boolean
+  updatedAt?: boolean
   parkingId?: boolean
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
@@ -657,10 +568,10 @@ export type ReviewSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   rating?: boolean
   comment?: boolean
+  authorName?: boolean
   createdAt?: boolean
-  driverId?: boolean
+  updatedAt?: boolean
   parkingId?: boolean
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["review"]>
 
@@ -668,37 +579,35 @@ export type ReviewSelectScalar = {
   id?: boolean
   rating?: boolean
   comment?: boolean
+  authorName?: boolean
   createdAt?: boolean
-  driverId?: boolean
+  updatedAt?: boolean
   parkingId?: boolean
 }
 
-export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "createdAt" | "driverId" | "parkingId", ExtArgs["result"]["review"]>
+export type ReviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "rating" | "comment" | "authorName" | "createdAt" | "updatedAt" | "parkingId", ExtArgs["result"]["review"]>
 export type ReviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }
 export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  driver?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
 }
 
 export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Review"
   objects: {
-    driver: Prisma.$UserPayload<ExtArgs>
     parking: Prisma.$ParkingPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     rating: number
-    comment: string
+    comment: string | null
+    authorName: string
     createdAt: Date
-    driverId: string
+    updatedAt: Date
     parkingId: string
   }, ExtArgs["result"]["review"]>
   composites: {}
@@ -1094,7 +1003,6 @@ readonly fields: ReviewFieldRefs;
  */
 export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  driver<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   parking<T extends Prisma.ParkingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParkingDefaultArgs<ExtArgs>>): Prisma.Prisma__ParkingClient<runtime.Types.Result.GetResult<Prisma.$ParkingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1128,8 +1036,9 @@ export interface ReviewFieldRefs {
   readonly id: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
   readonly comment: Prisma.FieldRef<"Review", 'String'>
+  readonly authorName: Prisma.FieldRef<"Review", 'String'>
   readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>
-  readonly driverId: Prisma.FieldRef<"Review", 'String'>
+  readonly updatedAt: Prisma.FieldRef<"Review", 'DateTime'>
   readonly parkingId: Prisma.FieldRef<"Review", 'String'>
 }
     

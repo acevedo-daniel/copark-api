@@ -1,14 +1,12 @@
-import { User } from "../../../prisma/generated/client.js";
 import { NotFoundError } from "../../errors/index.js";
-import { UserResponseDto, UpdateUserData } from "./user.types.js";
-import * as userRepository from "./users.repository.js";
+import * as userRepository from "./user.repository.js";
+import {
+  type UserResponseDto,
+  type UpdateProfileDto,
+  toUserResponseDto,
+} from "./user.schema.js";
 
-const toUserResponseDto = ({
-  passwordHash: _,
-  ...user
-}: User): UserResponseDto => user;
-
-export const getUser = async (id: string): Promise<UserResponseDto> => {
+export const getById = async (id: string): Promise<UserResponseDto> => {
   const user = await userRepository.findById(id);
   if (!user) {
     throw new NotFoundError("User not found");
@@ -16,9 +14,7 @@ export const getUser = async (id: string): Promise<UserResponseDto> => {
   return toUserResponseDto(user);
 };
 
-export const getUserByEmail = async (
-  email: string,
-): Promise<UserResponseDto> => {
+export const getByEmail = async (email: string): Promise<UserResponseDto> => {
   const user = await userRepository.findByEmail(email);
   if (!user) {
     throw new NotFoundError("User not found");
@@ -26,9 +22,9 @@ export const getUserByEmail = async (
   return toUserResponseDto(user);
 };
 
-export const updateUser = async (
+export const updateProfile = async (
   id: string,
-  data: UpdateUserData,
+  data: UpdateProfileDto,
 ): Promise<UserResponseDto> => {
   const user = await userRepository.update(id, data);
   return toUserResponseDto(user);

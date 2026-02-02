@@ -1,15 +1,16 @@
 import type { NextFunction, Request, Response } from "express";
-import { verifyAccessToken } from "../features/auth/jwt.js";
+import { verifyAccessToken } from "../features/auth/auth.jwt.js";
+import { AppError } from "../errors/app-error.js";
 
 export const requireAuth = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const header = req.headers.authorization;
 
-  if (!header || !header.startsWith("Bearer ")) {
-    res.status(401).json({ message: "Missing token" });
+  if (!header?.startsWith("Bearer ")) {
+    next(new AppError("Missing token", 401));
     return;
   }
 
@@ -24,6 +25,6 @@ export const requireAuth = async (
 
     next();
   } catch {
-    res.status(401).json({ message: "invalid or expired token" });
+    next(new AppError("Invalid or expired token", 401));
   }
 };
