@@ -1,15 +1,10 @@
-import * as bookingService from "./booking.service.js";
-import type { Request, Response, NextFunction } from "express";
-import type {
-  CheckInDto,
-  BookingQuery,
-  ParkingParams,
-  BookingParams,
-} from "./booking.schema.js";
-import { UnauthorizedError } from "../../errors/http.errors.js";
+import * as bookingService from './booking.service.js';
+import type { Request, Response, NextFunction } from 'express';
+import type { CheckIn, BookingQuery, ParkingParams, BookingParams } from './booking.schema.js';
+import { UnauthorizedError } from '../../errors/index.js';
 
 export const checkIn = async (
-  req: Request<ParkingParams, unknown, CheckInDto>,
+  req: Request<ParkingParams, unknown, CheckIn>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -50,10 +45,7 @@ export const listActive = async (
     if (!req.user) throw new UnauthorizedError();
     const ownerId = req.user.id;
     const { parkingId } = req.params;
-    const bookings = await bookingService.getActiveBookingsByParking(
-      ownerId,
-      parkingId,
-    );
+    const bookings = await bookingService.getActiveBookingsByParking(ownerId, parkingId);
     res.json(bookings);
   } catch (error) {
     next(error);
@@ -61,7 +53,7 @@ export const listActive = async (
 };
 
 export const findAll = async (
-  req: Request<ParkingParams>,
+  req: Request<ParkingParams, unknown, unknown, BookingQuery>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -69,12 +61,7 @@ export const findAll = async (
     if (!req.user) throw new UnauthorizedError();
     const ownerId = req.user.id;
     const { parkingId } = req.params;
-    const query = res.locals.validatedQuery as BookingQuery;
-    const result = await bookingService.getBookingsByParking(
-      ownerId,
-      parkingId,
-      query,
-    );
+    const result = await bookingService.getBookingsByParking(ownerId, parkingId, req.query);
     res.json(result);
   } catch (error) {
     next(error);

@@ -75,17 +75,20 @@ model Booking {
   vehicle    Vehicle       @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
 
   @@index([parkingId, status])
+  @@index([vehicleId, status])
 }
 
 model Review {
   id         String   @id @default(uuid())
   rating     Int
   comment    String?
-  authorName String   @default("Anónimo")
+  authorName String   @default("Anonimo")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   parkingId  String
   parking    Parking  @relation(fields: [parkingId], references: [id], onDelete: Cascade)
+
+  @@index([parkingId])
 }
 
 enum VehicleType {

@@ -1,6 +1,6 @@
-import type { NextFunction, Request, Response } from "express";
-import { verifyAccessToken } from "../features/auth/auth.jwt.js";
-import { AppError } from "../errors/app-error.js";
+import type { NextFunction, Request, Response } from 'express';
+import { UnauthorizedError } from '../errors/index.js';
+import { verifyAccessToken } from '../features/auth/auth.jwt.js';
 
 export const requireAuth = async (
   req: Request,
@@ -8,13 +8,12 @@ export const requireAuth = async (
   next: NextFunction,
 ): Promise<void> => {
   const header = req.headers.authorization;
+  const [scheme, token, ...extra] = header?.trim().split(/\s+/) ?? [];
 
-  if (!header?.startsWith("Bearer ")) {
-    next(new AppError("Missing token", 401));
+  if (scheme !== 'Bearer' || !token || extra.length > 0) {
+    next(new UnauthorizedError('Missing token'));
     return;
   }
-
-  const token = header.split(" ")[1];
 
   try {
     const payload = await verifyAccessToken(token);
@@ -25,6 +24,6 @@ export const requireAuth = async (
 
     next();
   } catch {
-    next(new AppError("Invalid or expired token", 401));
+    next(new UnauthorizedError('Invalid or expired token'));
   }
 };

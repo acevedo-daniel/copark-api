@@ -1,34 +1,30 @@
-import { SignJWT, jwtVerify, type JWTPayload } from "jose";
+import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
+import { env } from '../../config/env.js';
 
 interface AccessTokenPayload extends JWTPayload {
   sub: string;
 }
 
-const rawSecret = process.env.JWT_SECRET;
+const secret = new TextEncoder().encode(env.JWT_SECRET);
 
-if (!rawSecret) {
-  throw new Error("JWT_SECRET environment variable is required");
-}
+export const signAccessToken = async (payload: AccessTokenPayload): Promise<string> => {
+  const { sub, ...claims } = payload;
 
-const secret = new TextEncoder().encode(rawSecret);
-
-export const signAccessToken = async (
-  payload: AccessTokenPayload,
-): Promise<string> => {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
+  return new SignJWT(claims)
+    .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+    .setSubject(sub)
     .setIssuedAt()
-    .setExpirationTime("24h")
+    .setExpirationTime(env.JWT_EXPIRES_IN)
     .sign(secret);
 };
 
-export const verifyAccessToken = async (
-  token: string,
-): Promise<AccessTokenPayload> => {
-  const { payload } = await jwtVerify(token, secret);
+export const verifyAccessToken = async (token: string): Promise<AccessTokenPayload> => {
+  const { payload } = await jwtVerify(token, secret, {
+    algorithms: ['HS256'],
+  });
 
-  if (typeof payload.sub !== "string" || payload.sub.length === 0)
-    throw new Error("Invalid access token payload");
+  if (typeof payload.sub !== 'string' || payload.sub.length === 0)
+    throw new Error('Invalid access token payload');
 
   return payload as AccessTokenPayload;
 };

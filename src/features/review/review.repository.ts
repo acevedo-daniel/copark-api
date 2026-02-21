@@ -1,9 +1,6 @@
-import { prisma } from "../../config/prisma.js";
-import type { Review } from "../../../prisma/generated/client.js";
-import {
-  createPaginatedResult,
-  type PaginationResult,
-} from "../../utils/pagination.js";
+import { prisma } from '../../config/prisma.js';
+import type { Review } from '../../../prisma/generated/client.js';
+import { createPaginatedResult, type PaginationResult } from '../../utils/pagination.js';
 
 export const findByParkingId = async (
   parkingId: string,
@@ -17,7 +14,7 @@ export const findByParkingId = async (
       where: { parkingId },
       skip,
       take: limit,
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     }),
     prisma.review.count({ where: { parkingId } }),
   ]);

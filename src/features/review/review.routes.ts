@@ -1,24 +1,22 @@
-import { Router } from "express";
-import { validateRequest } from "../../middlewares/validation.middleware.js";
-import {
-  reviewParkingParamsSchema,
-  reviewQuerySchema,
-} from "./review.schema.js";
-import * as reviewController from "./review.controller.js";
+import { Router } from 'express';
+import { validateRequest } from '../../middlewares/validation.middleware.js';
+import { typedHandler } from '../../utils/typed-handler.js';
+import * as reviewController from './review.controller.js';
+import { reviewParkingParamsSchema, reviewQuerySchema } from './review.schema.js';
 
 const reviewRouter = Router();
 
 reviewRouter.get(
-  "/parking/:parkingId",
+  '/parking/:parkingId',
   validateRequest({
     params: reviewParkingParamsSchema,
     query: reviewQuerySchema,
   }),
-  reviewController.listByParking,
+  typedHandler(reviewController.listByParking),
 );
 
 reviewRouter.get(
-  "/parking/:parkingId/stats",
+  '/parking/:parkingId/stats',
   validateRequest({ params: reviewParkingParamsSchema }),
   reviewController.getStats,
 );

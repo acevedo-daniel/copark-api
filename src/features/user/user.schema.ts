@@ -1,50 +1,59 @@
-import { z } from "zod";
-import type { User } from "../../../prisma/generated/client.js";
+import { z } from 'zod';
+import type { User } from '../../../prisma/generated/client.js';
 
 export const updateProfileSchema = z
-  .object({
+  .strictObject({
     name: z
-      .string({
-        error: (issue) =>
-          issue.input === undefined ? undefined : "Name must be a string",
-      })
-      .min(2, { error: "Name must be at least 2 characters" })
-      .max(50, { error: "Name must be at most 50 characters" })
+      .string({ error: 'Required' })
       .trim()
-      .optional(),
+      .min(2, { error: 'Min 2 chars' })
+      .max(50, { error: 'Max 50 chars' })
+      .optional()
+      .openapi({ description: 'User first name', example: 'John' }),
 
     lastName: z
-      .string({
-        error: (issue) =>
-          issue.input === undefined ? undefined : "Last name must be a string",
-      })
-      .min(2, { error: "Last name must be at least 2 characters" })
-      .max(50, { error: "Last name must be at most 50 characters" })
+      .string({ error: 'Required' })
       .trim()
-      .optional(),
+      .min(2, { error: 'Min 2 chars' })
+      .max(50, { error: 'Max 50 chars' })
+      .optional()
+      .openapi({ description: 'User last name', example: 'Doe' }),
 
     phone: z
-      .string({
-        error: (issue) =>
-          issue.input === undefined ? undefined : "Phone must be a string",
-      })
-      .regex(/^[0-9]+$/, {
-        error: "Phone must contain only numbers",
-      })
-      .min(8, { error: "Phone must be at least 8 characters" })
-      .max(15, { error: "Phone must be at most 15 characters" })
-      .optional(),
+      .string({ error: 'Required' })
+      .trim()
+      .min(8, { error: 'Min 8 chars' })
+      .max(15, { error: 'Max 15 chars' })
+      .regex(/^[0-9]+$/, { error: 'Numbers only' })
+      .optional()
+      .openapi({ description: 'User phone number', example: '1234567890' }),
 
-    photoUrl: z.url({ error: "Photo URL must be a valid URL" }).optional(),
+    photoUrl: z
+      .url({ error: 'Invalid URL' })
+      .optional()
+      .openapi({ description: 'Profile photo URL', example: 'https://example.com/me.jpg' }),
   })
   .refine((data) => Object.keys(data).length > 0, {
-    error: "At least one field must be provided",
+    message: 'At least one field must be provided',
   });
 
-export type UpdateProfileDto = z.infer<typeof updateProfileSchema>;
-export type UserResponseDto = Omit<User, "passwordHash">;
+export const userResponseSchema = z
+  .strictObject({
+    id: z.uuid().openapi({ description: 'User UUID' }),
+    email: z.email().openapi({ description: 'User email address' }),
+    name: z.string().nullable().openapi({ description: 'First name' }),
+    lastName: z.string().nullable().openapi({ description: 'Last name' }),
+    phone: z.string().nullable().openapi({ description: 'Phone number' }),
+    photoUrl: z.string().nullable().openapi({ description: 'Profile photo URL' }),
+    createdAt: z.date().openapi({ description: 'Creation date' }),
+    updatedAt: z.date().openapi({ description: 'Update date' }),
+  })
+  .openapi('UserResponse');
 
-export const toUserResponseDto = (user: User): UserResponseDto => {
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;
+export type UserResponse = z.infer<typeof userResponseSchema>;
+
+export const toUserResponse = (user: User): UserResponse => {
   const { passwordHash: _passwordHash, ...userWithoutPassword } = user;
   return userWithoutPassword;
 };

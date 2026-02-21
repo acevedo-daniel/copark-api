@@ -1,19 +1,19 @@
-import { Router } from "express";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
-import { validateRequest } from "../../middlewares/validation.middleware.js";
+import { Router } from 'express';
+import { requireAuth } from '../../middlewares/auth.middleware.js';
+import { validateRequest } from '../../middlewares/validation.middleware.js';
 import {
   createVehicleSchema,
   vehicleParkingParamsSchema,
   vehiclePlateParamsSchema,
-} from "./vehicle.schema.js";
-import * as vehicleController from "./vehicle.controller.js";
+} from './vehicle.schema.js';
+import * as vehicleController from './vehicle.controller.js';
 
 const vehicleRouter = Router();
 
 vehicleRouter.use(requireAuth);
 
 vehicleRouter.post(
-  "/:parkingId",
+  '/:parkingId',
   validateRequest({
     params: vehicleParkingParamsSchema,
     body: createVehicleSchema,
@@ -22,7 +22,7 @@ vehicleRouter.post(
 );
 
 vehicleRouter.get(
-  "/:parkingId/plate/:plate",
+  '/:parkingId/plate/:plate',
   validateRequest({ params: vehiclePlateParamsSchema }),
   vehicleController.findByPlate,
 );

@@ -1,15 +1,10 @@
-import * as parkingService from "./parking.service.js";
-import type { Request, Response, NextFunction } from "express";
-import {
-  ParkingParams,
-  ParkingQuery,
-  CreateParkingDto,
-  UpdateParkingDto,
-} from "./parking.schema.js";
-import { UnauthorizedError } from "../../errors/index.js";
+import * as parkingService from './parking.service.js';
+import type { Request, Response, NextFunction } from 'express';
+import { ParkingParams, ParkingQuery, CreateParking, UpdateParking } from './parking.schema.js';
+import { UnauthorizedError } from '../../errors/index.js';
 
 export const create = async (
-  req: Request<unknown, unknown, CreateParkingDto>,
+  req: Request<unknown, unknown, CreateParking>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -25,13 +20,12 @@ export const create = async (
 };
 
 export const findAll = async (
-  req: Request,
+  req: Request<unknown, unknown, unknown, ParkingQuery>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const query = res.locals.validatedQuery as ParkingQuery;
-    const result = await parkingService.findAll(query);
+    const result = await parkingService.findAll(req.query);
     res.json(result);
   } catch (error) {
     next(error);
@@ -53,7 +47,7 @@ export const findById = async (
 };
 
 export const findOwned = async (
-  req: Request,
+  req: Request<unknown, unknown, unknown, unknown>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -68,7 +62,7 @@ export const findOwned = async (
 };
 
 export const update = async (
-  req: Request<ParkingParams, unknown, UpdateParkingDto>,
+  req: Request<ParkingParams, unknown, UpdateParking>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {

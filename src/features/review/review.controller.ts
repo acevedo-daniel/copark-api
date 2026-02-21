@@ -1,20 +1,16 @@
-import * as reviewService from "./review.service.js";
-import type { Request, Response, NextFunction } from "express";
-import type { ReviewParkingParams, ReviewQuery } from "./review.schema.js";
+import * as reviewService from './review.service.js';
+import type { Request, Response, NextFunction } from 'express';
+import type { ReviewParkingParams, ReviewQuery } from './review.schema.js';
 
 export const listByParking = async (
-  req: Request<ReviewParkingParams>,
+  req: Request<ReviewParkingParams, unknown, unknown, ReviewQuery>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
     const { parkingId } = req.params;
-    const { page, limit } = res.locals.validatedQuery as ReviewQuery;
-    const result = await reviewService.getParkingReviews(
-      parkingId,
-      page,
-      limit,
-    );
+    const { page, limit } = req.query;
+    const result = await reviewService.getParkingReviews(parkingId, page, limit);
     res.json(result);
   } catch (error) {
     next(error);

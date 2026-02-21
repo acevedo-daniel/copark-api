@@ -292,10 +292,10 @@ export type ParkingWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Parking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Parking"> | Date | string
   ownerId?: Prisma.StringFilter<"Parking"> | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  vehicles?: Prisma.VehicleListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviews?: Prisma.ReviewListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }
 
 export type ParkingOrderByWithRelationInput = {
@@ -312,10 +312,10 @@ export type ParkingOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
-  owner?: Prisma.UserOrderByWithRelationInput
-  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
+  owner?: Prisma.UserOrderByWithRelationInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  vehicles?: Prisma.VehicleOrderByRelationAggregateInput
 }
 
 export type ParkingWhereUniqueInput = Prisma.AtLeast<{
@@ -335,10 +335,10 @@ export type ParkingWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Parking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Parking"> | Date | string
   ownerId?: Prisma.StringFilter<"Parking"> | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  vehicles?: Prisma.VehicleListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   reviews?: Prisma.ReviewListRelationFilter
+  vehicles?: Prisma.VehicleListRelationFilter
 }, "id">
 
 export type ParkingOrderByWithAggregationInput = {
@@ -394,10 +394,10 @@ export type ParkingCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutParkingsInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
   bookings?: Prisma.BookingCreateNestedManyWithoutParkingInput
+  owner: Prisma.UserCreateNestedOneWithoutParkingsInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingUncheckedCreateInput = {
@@ -414,9 +414,9 @@ export type ParkingUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutParkingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingUpdateInput = {
@@ -432,10 +432,10 @@ export type ParkingUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutParkingNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingUncheckedUpdateInput = {
@@ -452,9 +452,9 @@ export type ParkingUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutParkingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingCreateManyInput = {
@@ -698,9 +698,9 @@ export type ParkingCreateWithoutOwnerInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
   bookings?: Prisma.BookingCreateNestedManyWithoutParkingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingUncheckedCreateWithoutOwnerInput = {
@@ -716,9 +716,9 @@ export type ParkingUncheckedCreateWithoutOwnerInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutParkingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingCreateOrConnectWithoutOwnerInput = {
@@ -779,8 +779,8 @@ export type ParkingCreateWithoutVehiclesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutParkingsInput
   bookings?: Prisma.BookingCreateNestedManyWithoutParkingInput
+  owner: Prisma.UserCreateNestedOneWithoutParkingsInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutParkingInput
 }
 
@@ -831,8 +831,8 @@ export type ParkingUpdateWithoutVehiclesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutParkingNestedInput
+  owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutParkingNestedInput
 }
 
@@ -868,8 +868,8 @@ export type ParkingCreateWithoutBookingsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutParkingsInput
-  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingUncheckedCreateWithoutBookingsInput = {
@@ -886,8 +886,8 @@ export type ParkingUncheckedCreateWithoutBookingsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingCreateOrConnectWithoutBookingsInput = {
@@ -920,8 +920,8 @@ export type ParkingUpdateWithoutBookingsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
-  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingUncheckedUpdateWithoutBookingsInput = {
@@ -938,8 +938,8 @@ export type ParkingUncheckedUpdateWithoutBookingsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingCreateWithoutReviewsInput = {
@@ -955,9 +955,9 @@ export type ParkingCreateWithoutReviewsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  bookings?: Prisma.BookingCreateNestedManyWithoutParkingInput
   owner: Prisma.UserCreateNestedOneWithoutParkingsInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutParkingInput
-  bookings?: Prisma.BookingCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingUncheckedCreateWithoutReviewsInput = {
@@ -974,8 +974,8 @@ export type ParkingUncheckedCreateWithoutReviewsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ownerId: string
-  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutParkingInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutParkingInput
 }
 
 export type ParkingCreateOrConnectWithoutReviewsInput = {
@@ -1007,9 +1007,9 @@ export type ParkingUpdateWithoutReviewsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingUpdateManyWithoutParkingNestedInput
   owner?: Prisma.UserUpdateOneRequiredWithoutParkingsNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
-  bookings?: Prisma.BookingUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingUncheckedUpdateWithoutReviewsInput = {
@@ -1026,8 +1026,8 @@ export type ParkingUncheckedUpdateWithoutReviewsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingCreateManyOwnerInput = {
@@ -1058,9 +1058,9 @@ export type ParkingUpdateWithoutOwnerInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutParkingNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingUncheckedUpdateWithoutOwnerInput = {
@@ -1076,9 +1076,9 @@ export type ParkingUncheckedUpdateWithoutOwnerInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutParkingNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutParkingNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutParkingNestedInput
 }
 
 export type ParkingUncheckedUpdateManyWithoutOwnerInput = {
@@ -1102,15 +1102,15 @@ export type ParkingUncheckedUpdateManyWithoutOwnerInput = {
  */
 
 export type ParkingCountOutputType = {
-  vehicles: number
   bookings: number
   reviews: number
+  vehicles: number
 }
 
 export type ParkingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  vehicles?: boolean | ParkingCountOutputTypeCountVehiclesArgs
   bookings?: boolean | ParkingCountOutputTypeCountBookingsArgs
   reviews?: boolean | ParkingCountOutputTypeCountReviewsArgs
+  vehicles?: boolean | ParkingCountOutputTypeCountVehiclesArgs
 }
 
 /**
@@ -1126,13 +1126,6 @@ export type ParkingCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * ParkingCountOutputType without action
  */
-export type ParkingCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VehicleWhereInput
-}
-
-/**
- * ParkingCountOutputType without action
- */
 export type ParkingCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BookingWhereInput
 }
@@ -1142,6 +1135,13 @@ export type ParkingCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.Type
  */
 export type ParkingCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReviewWhereInput
+}
+
+/**
+ * ParkingCountOutputType without action
+ */
+export type ParkingCountOutputTypeCountVehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VehicleWhereInput
 }
 
 
@@ -1159,10 +1159,10 @@ export type ParkingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   ownerId?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  vehicles?: boolean | Prisma.Parking$vehiclesArgs<ExtArgs>
   bookings?: boolean | Prisma.Parking$bookingsArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Parking$reviewsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.Parking$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ParkingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["parking"]>
 
@@ -1218,10 +1218,10 @@ export type ParkingSelectScalar = {
 
 export type ParkingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "image" | "address" | "pricePerHour" | "totalSpaces" | "lat" | "lng" | "isActive" | "createdAt" | "updatedAt" | "ownerId", ExtArgs["result"]["parking"]>
 export type ParkingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  vehicles?: boolean | Prisma.Parking$vehiclesArgs<ExtArgs>
   bookings?: boolean | Prisma.Parking$bookingsArgs<ExtArgs>
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.Parking$reviewsArgs<ExtArgs>
+  vehicles?: boolean | Prisma.Parking$vehiclesArgs<ExtArgs>
   _count?: boolean | Prisma.ParkingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ParkingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1234,10 +1234,10 @@ export type ParkingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ParkingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Parking"
   objects: {
-    owner: Prisma.$UserPayload<ExtArgs>
-    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
     bookings: Prisma.$BookingPayload<ExtArgs>[]
+    owner: Prisma.$UserPayload<ExtArgs>
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    vehicles: Prisma.$VehiclePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1647,10 +1647,10 @@ readonly fields: ParkingFieldRefs;
  */
 export interface Prisma__ParkingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  vehicles<T extends Prisma.Parking$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Parking$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookings<T extends Prisma.Parking$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Parking$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.Parking$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Parking$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vehicles<T extends Prisma.Parking$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Parking$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2089,30 +2089,6 @@ export type ParkingDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Parking.vehicles
- */
-export type Parking$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Vehicle
-   */
-  select?: Prisma.VehicleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Vehicle
-   */
-  omit?: Prisma.VehicleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VehicleInclude<ExtArgs> | null
-  where?: Prisma.VehicleWhereInput
-  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
-  cursor?: Prisma.VehicleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
-}
-
-/**
  * Parking.bookings
  */
 export type Parking$bookingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2158,6 +2134,30 @@ export type Parking$reviewsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
+}
+
+/**
+ * Parking.vehicles
+ */
+export type Parking$vehiclesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vehicle
+   */
+  select?: Prisma.VehicleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vehicle
+   */
+  omit?: Prisma.VehicleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehicleInclude<ExtArgs> | null
+  where?: Prisma.VehicleWhereInput
+  orderBy?: Prisma.VehicleOrderByWithRelationInput | Prisma.VehicleOrderByWithRelationInput[]
+  cursor?: Prisma.VehicleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VehicleScalarFieldEnum | Prisma.VehicleScalarFieldEnum[]
 }
 
 /**

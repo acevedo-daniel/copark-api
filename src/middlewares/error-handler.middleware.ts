@@ -1,30 +1,100 @@
-import type { NextFunction, Request, Response } from "express";
-import { AppError } from "../errors/app-error.js";
+import type { NextFunction, Request, Response } from 'express';
+import { AppError } from '../errors/app-error.js';
+import { logger } from '../lib/logger.js';
 
-export const errorHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  _next: NextFunction,
-) => {
-  if (err instanceof AppError && err.isOperational) {
-    console.error("Operational Error:", {
-      message: err.message,
-      statusCode: err.statusCode,
-      path: req.path,
-    });
-    return res.status(err.statusCode).json({
+type ErrorWithStatus = Error & {
+  status?: number;
+  statusCode?: number;
+  type?: string;
+};
+
+function isJsonSyntaxError(err: ErrorWithStatus): boolean {
+  return (
+    err instanceof SyntaxError &&
+    err.status === 400 &&
+    ('body' in err || err.type === 'entity.parse.failed')
+  );
+}
+
+function isEntityTooLargeError(err: ErrorWithStatus): boolean {
+  return err.type === 'entity.too.large' || err.status === 413;
+}
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function toErrorWithStatus(err: unknown): ErrorWithStatus {
+  if (err instanceof Error) {
+    return err as ErrorWithStatus;
+  }
+
+  if (isObject(err)) {
+    const normalized = new Error(
+      typeof err.message === 'string' ? err.message : 'Unexpected error object',
+    ) as ErrorWithStatus;
+
+    if (typeof err.status === 'number') {
+      normalized.status = err.status;
+    }
+
+    if (typeof err.statusCode === 'number') {
+      normalized.statusCode = err.statusCode;
+    }
+
+    if (typeof err.type === 'string') {
+      normalized.type = err.type;
+    }
+
+    return normalized;
+  }
+
+  return new Error('Unexpected non-error thrown');
+}
+
+export const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunction) => {
+  if (res.headersSent) {
+    next(err);
+    return;
+  }
+
+  const normalizedError = toErrorWithStatus(err);
+
+  if (isEntityTooLargeError(normalizedError)) {
+    return res.status(413).json({
       error: true,
-      message: err.message,
+      message: 'Payload too large',
     });
   }
-  console.error("CRITICAL - Unexpected Error:", {
-    error: err.message,
-    stack: err.stack,
+
+  if (isJsonSyntaxError(normalizedError)) {
+    return res.status(400).json({
+      error: true,
+      message: 'Invalid JSON payload',
+    });
+  }
+
+  if (normalizedError instanceof AppError && normalizedError.isOperational) {
+    logger.warn({
+      message: normalizedError.message,
+      statusCode: normalizedError.statusCode,
+      path: req.path,
+    }, 'Operational error');
+
+    return res.status(normalizedError.statusCode).json({
+      error: true,
+      message: normalizedError.message,
+    });
+  }
+
+  logger.error({
+    err: normalizedError,
+    error: normalizedError.message,
     path: req.path,
-  });
+  }, 'Unexpected error');
+
   return res.status(500).json({
     error: true,
-    message: "Internal Server Error",
+    message: 'Internal Server Error',
   });
 };

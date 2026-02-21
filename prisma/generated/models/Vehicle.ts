@@ -230,8 +230,8 @@ export type VehicleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   parkingId?: Prisma.StringFilter<"Vehicle"> | string
-  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
   bookings?: Prisma.BookingListRelationFilter
+  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
 }
 
 export type VehicleOrderByWithRelationInput = {
@@ -246,8 +246,8 @@ export type VehicleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   parkingId?: Prisma.SortOrder
-  parking?: Prisma.ParkingOrderByWithRelationInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
+  parking?: Prisma.ParkingOrderByWithRelationInput
 }
 
 export type VehicleWhereUniqueInput = Prisma.AtLeast<{
@@ -266,8 +266,8 @@ export type VehicleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   parkingId?: Prisma.StringFilter<"Vehicle"> | string
-  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
   bookings?: Prisma.BookingListRelationFilter
+  parking?: Prisma.XOR<Prisma.ParkingScalarRelationFilter, Prisma.ParkingWhereInput>
 }, "id" | "plate_parkingId">
 
 export type VehicleOrderByWithAggregationInput = {
@@ -315,8 +315,8 @@ export type VehicleCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  parking: Prisma.ParkingCreateNestedOneWithoutVehiclesInput
   bookings?: Prisma.BookingCreateNestedManyWithoutVehicleInput
+  parking: Prisma.ParkingCreateNestedOneWithoutVehiclesInput
 }
 
 export type VehicleUncheckedCreateInput = {
@@ -345,8 +345,8 @@ export type VehicleUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  parking?: Prisma.ParkingUpdateOneRequiredWithoutVehiclesNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutVehicleNestedInput
+  parking?: Prisma.ParkingUpdateOneRequiredWithoutVehiclesNestedInput
 }
 
 export type VehicleUncheckedUpdateInput = {
@@ -767,8 +767,8 @@ export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   parkingId?: boolean
-  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Vehicle$bookingsArgs<ExtArgs>
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
@@ -818,8 +818,8 @@ export type VehicleSelectScalar = {
 
 export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "plate" | "brand" | "model" | "type" | "customerName" | "customerPhone" | "notes" | "createdAt" | "updatedAt" | "parkingId", ExtArgs["result"]["vehicle"]>
 export type VehicleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   bookings?: boolean | Prisma.Vehicle$bookingsArgs<ExtArgs>
+  parking?: boolean | Prisma.ParkingDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -832,8 +832,8 @@ export type VehicleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vehicle"
   objects: {
-    parking: Prisma.$ParkingPayload<ExtArgs>
     bookings: Prisma.$BookingPayload<ExtArgs>[]
+    parking: Prisma.$ParkingPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1241,8 +1241,8 @@ readonly fields: VehicleFieldRefs;
  */
 export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  parking<T extends Prisma.ParkingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParkingDefaultArgs<ExtArgs>>): Prisma.Prisma__ParkingClient<runtime.Types.Result.GetResult<Prisma.$ParkingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   bookings<T extends Prisma.Vehicle$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  parking<T extends Prisma.ParkingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ParkingDefaultArgs<ExtArgs>>): Prisma.Prisma__ParkingClient<runtime.Types.Result.GetResult<Prisma.$ParkingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

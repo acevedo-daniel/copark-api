@@ -1,28 +1,68 @@
-import { z } from "zod";
-import { createVehicleSchema } from "../vehicle/vehicle.schema.js";
+import { z } from 'zod';
+import { paginationMetaSchema } from '../../utils/pagination.schema.js';
+import { createVehicleSchema } from '../vehicle/vehicle.schema.js';
 
 export const checkInSchema = createVehicleSchema;
 
-export const checkOutParamsSchema = z.object({
-  bookingId: z.uuid({ error: "Invalid booking ID" }),
+export const checkOutParamsSchema = z.strictObject({
+  bookingId: z.uuid({ error: 'Invalid ID' }).openapi({ description: 'Booking UUID' }),
 });
 
-export const bookingQuerySchema = z.object({
-  page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(100).default(10),
-  status: z.enum(["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"]).optional(),
+export const bookingQuerySchema = z.strictObject({
+  page: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(1)
+    .openapi({ description: 'Page number', example: 1 }),
+  limit: z.coerce
+    .number()
+    .int()
+    .positive()
+    .max(100)
+    .default(10)
+    .openapi({ description: 'Items per page', example: 10 }),
+  status: z
+    .enum(['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'])
+    .optional()
+    .openapi({ description: 'Filter by status', example: 'PENDING' }),
 });
 
-export const parkingParamsSchema = z.object({
-  parkingId: z.uuid({ error: "Invalid parking ID" }),
+export const parkingParamsSchema = z.strictObject({
+  parkingId: z.uuid({ error: 'Invalid ID' }).openapi({ description: 'Parking Lot UUID' }),
 });
 
-export const bookingParamsSchema = z.object({
-  bookingId: z.uuid({ error: "Invalid booking ID" }),
+export const bookingParamsSchema = z.strictObject({
+  bookingId: z.uuid({ error: 'Invalid ID' }).openapi({ description: 'Booking UUID' }),
 });
 
-export type CheckInDto = z.infer<typeof checkInSchema>;
+export const bookingResponseSchema = z
+  .strictObject({
+    id: z.uuid().openapi({ description: 'Booking UUID' }),
+    startTime: z.date().openapi({ description: 'Start time' }),
+    endTime: z.date().nullable().openapi({ description: 'End time' }),
+    totalPrice: z.number().nullable().openapi({ description: 'Total price' }),
+    status: z
+      .enum(['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'])
+      .openapi({ description: 'Booking status' }),
+    parkingId: z.uuid().openapi({ description: 'Parking UUID' }),
+    vehicleId: z.uuid().openapi({ description: 'Vehicle UUID' }),
+    createdAt: z.date().openapi({ description: 'Creation date' }),
+    updatedAt: z.date().openapi({ description: 'Update date' }),
+  })
+  .openapi('BookingResponse');
+
+export const bookingListResponseSchema = z
+  .strictObject({
+    data: z.array(bookingResponseSchema),
+    meta: paginationMetaSchema,
+  })
+  .openapi('BookingListResponse');
+
+export type CheckIn = z.infer<typeof checkInSchema>;
 export type CheckOutParams = z.infer<typeof checkOutParamsSchema>;
 export type BookingQuery = z.infer<typeof bookingQuerySchema>;
 export type ParkingParams = z.infer<typeof parkingParamsSchema>;
 export type BookingParams = z.infer<typeof bookingParamsSchema>;
+export type BookingResponse = z.infer<typeof bookingResponseSchema>;
+export type BookingListResponse = z.infer<typeof bookingListResponseSchema>;

@@ -1,35 +1,41 @@
-import { Router } from "express";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
-import { validateRequest } from "../../middlewares/validation.middleware.js";
+import { Router } from 'express';
+import { requireAuth } from '../../middlewares/auth.middleware.js';
+import { validateRequest } from '../../middlewares/validation.middleware.js';
+import { typedHandler } from '../../utils/typed-handler.js';
+import { parkingBookingsRouter } from '../booking/booking.routes.js';
+import * as parkingController from './parking.controller.js';
 import {
   createParkingSchema,
-  updateParkingSchema,
+  parkingParamsSchema,
   parkingQuerySchema,
-} from "./parking.schema.js";
-import * as parkingController from "./parking.controller.js";
-import { parkingBookingsRouter } from "../booking/booking.routes.js";
+  updateParkingSchema,
+} from './parking.schema.js';
 
 const parkingRouter = Router();
 
-parkingRouter.use("/:parkingId/bookings", parkingBookingsRouter);
+parkingRouter.use('/:parkingId/bookings', parkingBookingsRouter);
 
 parkingRouter.get(
-  "/",
+  '/',
   validateRequest({ query: parkingQuerySchema }),
-  parkingController.findAll,
+  typedHandler(parkingController.findAll),
 );
-parkingRouter.get("/me", requireAuth, parkingController.findOwned);
-parkingRouter.get("/:id", parkingController.findById);
+parkingRouter.get('/me', requireAuth, parkingController.findOwned);
+parkingRouter.get(
+  '/:id',
+  validateRequest({ params: parkingParamsSchema }),
+  parkingController.findById,
+);
 
 parkingRouter.patch(
-  "/:id",
+  '/:id',
   requireAuth,
-  validateRequest({ body: updateParkingSchema }),
+  validateRequest({ params: parkingParamsSchema, body: updateParkingSchema }),
   parkingController.update,
 );
 
 parkingRouter.post(
-  "/",
+  '/',
   requireAuth,
   validateRequest({ body: createParkingSchema }),
   parkingController.create,

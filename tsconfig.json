@@ -13,11 +13,12 @@
   },
   "include": [
     "src",
+    "tests",
     "prisma",
     "app.ts",
     "server.ts",
-    "src/errors",
-    "src/features/auth/password.ts"
+    "vitest.setup.ts",
+    "src/errors"
   ],
   "exclude": ["node_modules", "dist"]
 }

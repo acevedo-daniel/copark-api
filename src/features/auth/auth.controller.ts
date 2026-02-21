@@ -1,9 +1,9 @@
-import type { NextFunction, Request, Response } from "express";
-import * as authService from "./auth.service.js";
-import type { RegisterDto, LoginDto } from "./auth.schema.js";
+import type { NextFunction, Request, Response } from 'express';
+import * as authService from './auth.service.js';
+import type { Register, Login } from './auth.schema.js';
 
 export const register = async (
-  req: Request<unknown, unknown, RegisterDto>,
+  req: Request<unknown, unknown, Register>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
@@ -17,7 +17,7 @@ export const register = async (
 };
 
 export const login = async (
-  req: Request<unknown, unknown, LoginDto>,
+  req: Request<unknown, unknown, Login>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {

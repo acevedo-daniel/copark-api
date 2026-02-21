@@ -5,11 +5,8 @@ declare global {
         id: string;
       };
     }
-
-    interface Locals {
-      validatedQuery?: Record<string, unknown>;
-    }
   }
 }
 
-export {};
+export { };
+
