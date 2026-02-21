@@ -104,7 +104,7 @@ controller -> service -> repository
 - Repositories isolate Prisma operations
 - Errors flow through a global handler with a unified contract
 
-See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), and [ROADMAP.md](docs/ROADMAP.md) for details.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), [AI-WORKFLOW.md](docs/AI-WORKFLOW.md), and [API-DESIGN.md](docs/API-DESIGN.md) for details.
 
 ---
 

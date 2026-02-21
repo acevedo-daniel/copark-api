@@ -58,10 +58,12 @@ Mandatory engineering conventions for contributors and AI agents.
 
 ## Documentation rules
 
-1. Canonical technical docs live under `docs/technical/`.
-2. Module closure requires both:
-   - `TECHNICAL.md`
-   - `LEARNING.md`
+1. Canonical docs published in this repository live in the root `docs/` directory:
+   - `ARCHITECTURE.md`
+   - `CONVENTIONS.md`
+   - `AI-WORKFLOW.md`
+   - `API-DESIGN.md`
+2. Subfolders in `docs/` are local references and must not be part of the public repo surface.
 3. Update docs in the same change when behavior changes.
 
 ## Change discipline
