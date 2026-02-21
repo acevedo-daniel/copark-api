@@ -76,7 +76,7 @@ Auth rate limit defaults:
 - Production API base URL: `https://copark-api.onrender.com`
 - Demo docs URL: `https://copark-api-demo.onrender.com/api-docs/docs`
 
-> API docs are enabled in development by default.
+> API docs are enabled in development and test by default.
 > For demo/staging in production, set `ENABLE_API_DOCS=true`.
 
 ---
@@ -104,7 +104,7 @@ controller -> service -> repository
 - Repositories isolate Prisma operations
 - Errors flow through a global handler with a unified contract
 
-See [ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONVENTIONS.md](docs/CONVENTIONS.md) for details.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), [AI-WORKFLOW.md](docs/AI-WORKFLOW.md), and [API-DESIGN.md](docs/API-DESIGN.md) for details.
 
 ---
 

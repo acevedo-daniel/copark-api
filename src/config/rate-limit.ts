@@ -1,4 +1,5 @@
-import rateLimit from 'express-rate-limit';
+import type { Request } from 'express';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import { createClient, type RedisClientType } from 'redis';
 import { env } from './env.js';
@@ -6,6 +7,28 @@ import { logger } from '../lib/logger.js';
 
 let redisClient: RedisClientType | null = null;
 let redisErrorListenerBound = false;
+const trustedIpHeaders = ['cf-connecting-ip', 'true-client-ip', 'x-real-ip'] as const;
+
+function readHeaderValue(value: string | string[] | undefined): string | null {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const normalized = raw?.trim();
+  if (!normalized) {
+    return null;
+  }
+
+  return normalized;
+}
+
+function resolveRateLimitClientIp(request: Request): string {
+  for (const headerName of trustedIpHeaders) {
+    const headerValue = readHeaderValue(request.headers[headerName]);
+    if (headerValue) {
+      return headerValue;
+    }
+  }
+
+  return request.ip ?? request.socket.remoteAddress ?? '127.0.0.1';
+}
 
 function getRedisClient(): RedisClientType | null {
   if (!env.REDIS_URL) {
@@ -46,6 +69,7 @@ export function createAuthRateLimiter(scope: 'register' | 'login') {
   return rateLimit({
     windowMs: env.AUTH_RATE_LIMIT_WINDOW_MS,
     limit: env.AUTH_RATE_LIMIT_MAX,
+    keyGenerator: (request) => ipKeyGenerator(resolveRateLimitClientIp(request)),
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     passOnStoreError: true,

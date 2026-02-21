@@ -1,72 +1,81 @@
-# CoPark Conventions
+# Conventions
 
 ## Purpose
 
-Mandatory engineering conventions for contributors and AI agents.
+Defines mandatory engineering conventions for contributors and AI agents.
+These rules are normative and apply to all changes.
 
-## Language
+## Language and Communication
 
-- Code, identifiers, and comments: English.
-- Team discussion can be Spanish.
-- Documentation must be concise and kept aligned with code.
+1. Code, identifiers, commit messages, and documentation must be in English.
+2. Team discussion may be in Spanish.
+3. Public documentation must stay concise and synchronized with runtime behavior.
 
-## Architecture rules
+## Architecture Rules
 
-1. Respect direction: `routes -> controller -> service -> repository`.
-2. Controllers must not access Prisma directly.
-3. Business rules belong in services.
-4. Repositories are persistence-only.
+1. Respect dependency flow: `routes -> controller -> service -> repository`.
+2. Controllers handle HTTP only.
+3. Services own business rules and orchestration.
+4. Repositories contain persistence logic only.
+5. Route files compose middleware and controller wiring only.
 
-## Typing rules
+## Type Safety Rules
 
 1. TypeScript strict mode is mandatory.
-2. `any` and `ts-ignore` are not allowed.
-3. Prefer explicit typing for request handlers.
-4. Treat caught errors as `unknown` and normalize before use.
+2. `any` and `@ts-ignore` are prohibited.
+3. Prefer explicit function signatures for handlers and services.
+4. Treat caught errors as `unknown` and normalize before branching on shape.
 
-## Validation rules
+## Validation Rules
 
-1. Validate request body/params/query with Zod.
-2. Use `validateRequest` for endpoints with input contracts.
-3. Reuse schemas to avoid duplicated shapes.
+1. Validate all external inputs (`body`, `params`, `query`) with Zod.
+2. Use `validateRequest` middleware for validated endpoints.
+3. Keep schema definitions close to their feature module.
+4. Reuse schema fragments to avoid divergence.
 
-## Error handling rules
+## Error Handling Rules
 
-1. Throw `AppError` subclasses for expected HTTP/domain errors.
-2. Keep error response contract stable:
+1. Throw `AppError` subclasses for expected domain/HTTP failures.
+2. Keep the canonical error response contract:
 
 ```json
 { "error": true, "message": "..." }
 ```
 
-3. Unexpected errors must resolve to 500 with safe message.
-4. Global error middleware is the single formatting point.
+3. Do not leak internal implementation details in responses.
+4. The global error middleware is the single formatting layer.
 
-## Logging rules
+## Logging Rules
 
-1. Use Pino (`src/lib/logger.ts`) for application logs.
-2. Use pino-http middleware for request/response logging.
-3. Keep `x-request-id` correlation active.
-4. Never log sensitive values (tokens, secrets, raw passwords).
+1. Use the shared Pino logger from `src/lib/logger.ts`.
+2. Keep request logging enabled through pino-http middleware.
+3. Preserve request correlation via `x-request-id`.
+4. Never log secrets, password hashes, tokens, or authorization headers.
 
-## Security baseline rules
+## Security Rules
 
-1. Keep `helmet()` enabled globally.
-2. Enforce CORS policy by environment.
-3. Keep request body limits configured.
-4. For production, define `CORS_ORIGINS` explicitly.
+1. Keep `helmet()` globally enabled.
+2. Keep environment-aware CORS policy enforced in `app.ts`.
+3. Preserve body size limits unless there is a justified product requirement.
+4. In production, require explicit `CORS_ORIGINS`.
+5. Keep auth rate limiting active and configuration-driven.
 
-## Documentation rules
+## Documentation Rules
 
-1. Canonical technical docs live under `docs/technical/`.
-2. Module closure requires both:
-   - `TECHNICAL.md`
-   - `LEARNING.md`
-3. Update docs in the same change when behavior changes.
+1. Public docs in this repository are the root files in `docs/`:
+   - `ARCHITECTURE.md`
+   - `CONVENTIONS.md`
+   - `AI-WORKFLOW.md`
+   - `API-DESIGN.md`
+2. `docs/` subfolders are local reference material and are not part of the public surface.
+3. Documentation changes must ship in the same change set as behavior changes.
 
-## Change discipline
+## Change Discipline
 
 1. Prefer small, reviewable commits.
-2. Avoid broad rewrites without clear need.
-3. Prioritize maintainability over cleverness.
-4. Keep `pnpm lint` and `pnpm typecheck` green.
+2. Avoid broad rewrites without a clear technical reason.
+3. Prioritize clarity and maintainability over clever abstractions.
+4. Keep quality gates green before pushing:
+   - `pnpm lint`
+   - `pnpm typecheck`
+   - `pnpm test`
