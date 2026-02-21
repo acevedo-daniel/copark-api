@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-and-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: copark
+          POSTGRES_PASSWORD: copark
+          POSTGRES_DB: copark_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U copark -d copark_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Database bootstrap check
+        env:
+          DATABASE_URL: postgresql://copark:copark@localhost:5432/copark_ci
+        run: pnpm db:setup
+
+      - name: Pipeline checks
+        run: pnpm quality:ci
+
+      - name: Build and release readiness checks
+        run: pnpm release:readiness

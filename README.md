@@ -1,107 +1,138 @@
-<p align="center">
-  <h1 align="center">🅿️ CoPark API</h1>
-  <p align="center">
-    <strong>Parking Management System for Administrators</strong>
-  </p>
-  <p align="center">
-    <a href="#features">Features</a> •
-    <a href="#tech-stack">Tech Stack</a> •
-    <a href="#quick-start">Quick Start</a> •
-    <a href="#api-endpoints">API</a>
-  </p>
-</p>
+# CoPark API
 
----
+REST API for parking management.
 
-## Features
+## Stack
 
-- 🔐 **Authentication** — JWT-based auth with secure password hashing
-- 🚗 **Parking Management** — Full CRUD with pagination and filters
-- 📋 **Booking System** — Vehicle check-in/check-out flow
-- ⭐ **Reviews** — Rating system with statistics
-- ✅ **Type-Safe** — End-to-end TypeScript with Zod validation
+- Node.js + TypeScript (strict)
+- Express 5
+- Prisma + PostgreSQL
+- Zod (runtime validation)
+- OpenAPI 3.1 + Scalar
+- Pino + pino-http (structured logging)
 
----
+## Core capabilities
 
-## Tech Stack
+- Layered architecture: controller -> service -> repository
+- JWT auth with protected routes
+- Unified error contract: `{ "error": true, "message": "..." }`
+- Security baseline: `helmet`, CORS policy, request body limits
+- Request tracing with `x-request-id`
+- Graceful shutdown (SIGINT, SIGTERM, unhandledRejection, uncaughtException)
 
-| Category   | Technology   |
-| ---------- | ------------ |
-| Runtime    | Node.js 22   |
-| Framework  | Express.js   |
-| Database   | PostgreSQL   |
-| ORM        | Prisma       |
-| Validation | Zod          |
-| Auth       | JWT + Argon2 |
+## Quick start (3 minutes)
 
----
-
-## Quick Start
+1. Install dependencies
 
 ```bash
-# Clone & install
-git clone https://github.com/yourusername/copark-api.git
-cd copark-api
 pnpm install
+```
 
-# Setup database
-docker-compose up -d
-pnpm prisma migrate dev
+2. Configure environment
 
-# Run
+```bash
+cp .env.example .env
+```
+
+3. Start local database
+
+```bash
+pnpm docker:up
+```
+
+4. Bootstrap database (generate + migrate + seed)
+
+```bash
+pnpm db:setup
+```
+
+5. Run API
+
+```bash
 pnpm dev
 ```
 
----
+## Environment variables (core)
 
-## API Endpoints
+Required:
 
-### Auth
+- `NODE_ENV` (`development` | `production` | `test`)
+- `PORT`
+- `DATABASE_URL`
+- `JWT_SECRET` (min 32 chars)
+- `JWT_EXPIRES_IN`
 
-```
-POST /auth/register    # Create account
-POST /auth/login       # Get JWT token
-```
+Security/logging:
 
-### Parkings
+- `CORS_ORIGINS` (comma-separated; required in `production`)
+- `LOG_LEVEL` (`fatal|error|warn|info|debug|trace`)
+- `LOG_PRETTY` (`true|false`, recommended `true` only in local dev)
 
-```
-GET    /parkings       # List all (public)
-GET    /parkings/me    # List owned (auth)
-POST   /parkings       # Create (auth)
-PATCH  /parkings/:id   # Update (auth)
-```
+## API docs
 
-### Bookings
+- Scalar UI: `/api-docs/docs`
+- OpenAPI JSON: `/api-docs/openapi.json`
+- Legacy redirects:
+  - `/docs` -> `/api-docs/docs`
+  - `/openapi.json` -> `/api-docs/openapi.json`
 
-```
-POST /parkings/:id/bookings/check-in     # Register vehicle entry
-GET  /parkings/:id/bookings/active       # List active bookings
-GET  /parkings/:id/bookings              # List all with pagination
-POST /bookings/:id/check-out             # Register vehicle exit
-```
+## Quality commands
 
-### Reviews
-
-```
-GET /reviews/parking/:id         # List reviews
-GET /reviews/parking/:id/stats   # Get rating stats
-```
-
----
-
-## Project Structure
-
-```
-src/
-├── features/      # Feature modules (auth, booking, parking...)
-├── middlewares/   # Auth, validation, error handling
-├── errors/        # Custom error classes
-└── utils/         # Helpers (pagination)
+```bash
+pnpm typecheck
+pnpm lint
+pnpm generate:openapi
+pnpm quality:ci
+pnpm release:readiness
+pnpm smoke:local
 ```
 
----
+## Smoke checks
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/yourusername">Daniel</a>
-</p>
+Local API (health + docs):
+
+```bash
+pnpm smoke:local
+```
+
+Deployed API:
+
+```bash
+$env:SMOKE_BASE_URL='https://copark-api.onrender.com'
+pnpm smoke:remote
+```
+
+Deployed API with auth flow (register + login):
+
+```bash
+$env:SMOKE_BASE_URL='https://copark-api.onrender.com'
+$env:SMOKE_WITH_AUTH='true'
+pnpm smoke:remote
+```
+
+## CI/CD
+
+- Workflow: `.github/workflows/ci.yml`
+- Ejecuta en `push` y `pull_request` a `main`
+- Gates:
+  - `pnpm db:setup`
+  - `pnpm quality:ci`
+  - `pnpm release:readiness`
+
+## Portfolio-ready checklist
+
+- `pnpm quality:ci` and `pnpm release:readiness` green
+- `pnpm db:setup` green on local setup
+- `pnpm smoke:local` green
+- Remote smoke green against deployed environment
+- Branch protection enabled on `main` requiring CI checks
+- Public demo endpoints available:
+  - `https://copark-api.onrender.com/healthz`
+  - `https://copark-api.onrender.com/api-docs/docs`
+
+## Technical docs
+
+- Architecture: `docs/ARCHITECTURE.md`
+- Conventions: `docs/CONVENTIONS.md`
+- Roadmap: `docs/ROADMAP.md`
+- Module audit plan: `docs/technical/MODULE_AUDIT_PLAN.md`

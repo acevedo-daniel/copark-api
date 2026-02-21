@@ -1,0 +1,16 @@
+# Build outputs
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated
+prisma/generated/
+*.d.ts
+
+# Misc
+.env
+.env.*
+pnpm-lock.yaml
