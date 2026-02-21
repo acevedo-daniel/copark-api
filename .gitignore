@@ -28,3 +28,12 @@ Thumbs.db
 # Build
 dist/
 coverage/
+
+# Agent and local context
+.agent/
+CLAUDE.md
+
+# Local docs (do not publish)
+docs/local/
+docs/references/
+docs/technical/
