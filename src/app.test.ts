@@ -23,6 +23,16 @@ beforeAll(async () => {
 });
 
 describe('app smoke', () => {
+  it('GET / returns 200', async () => {
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      status: 'ok',
+      service: 'copark-api',
+    });
+  });
+
   it('GET /healthz returns 200', async () => {
     const response = await request(app).get('/healthz');
 
