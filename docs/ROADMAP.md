@@ -31,7 +31,7 @@ Completed baseline:
 
 Goal: keep runtime behavior and API contract aligned.
 
-1. Audit and close modules using `docs/technical/MODULE_AUDIT_PLAN.md`.
+1. Audit and close modules using the current module quality checklist.
 2. Fix route/docs mismatches when detected.
 3. Keep lint/typecheck/openapi generation green.
 
@@ -71,9 +71,9 @@ Exit criteria:
 - tests runnable locally and in CI
 - critical flows covered
 
-### Phase D - Portfolio release
+### Phase D - Demo release
 
-Goal: final recruiter-facing presentation.
+Goal: final recruiter-facing demo presentation.
 
 1. Finalize module technical/learning docs.
 2. Keep README/architecture/conventions synchronized with code.
@@ -82,7 +82,7 @@ Goal: final recruiter-facing presentation.
 Exit criteria:
 
 - end-to-end demo works reliably
-- repo is consistent and interview-ready
+- repo is consistent and demo-ready
 
 ## Immediate priority
 
