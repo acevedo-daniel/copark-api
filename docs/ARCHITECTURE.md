@@ -2,7 +2,7 @@
 
 ## Scope
 
-Runtime architecture for `copark-api` with focus on a portfolio-ready backend.
+Runtime architecture for `copark-api`, a technical demo API for a SaaS parking management platform.
 
 ## System model
 
@@ -68,6 +68,14 @@ src/
   - JSON: `10kb`
   - URL-encoded: `10kb`
 - `trust proxy` enabled for Render/proxy deployments.
+- Auth endpoints (`/auth/register`, `/auth/login`) are rate-limited.
+- Rate-limit configuration via env:
+  - `AUTH_RATE_LIMIT_MAX`
+  - `AUTH_RATE_LIMIT_WINDOW_MS`
+- Optional Redis-backed distributed rate limiting via `REDIS_URL`.
+- API docs exposure policy:
+  - enabled by default in non-production
+  - in production, enabled only when `ENABLE_API_DOCS=true`
 
 ## Observability baseline
 
@@ -95,5 +103,4 @@ Shutdown flow:
 ## Known constraints
 
 1. No automated route-vs-openapi contract tests yet.
-2. Rate limiting is pending for sensitive endpoints.
-3. API docs exposure is currently always on.
+2. End-to-end integration tests are still pending.

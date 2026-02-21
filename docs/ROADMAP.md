@@ -1,8 +1,8 @@
-# CoPark Roadmap (Portfolio Ready)
+# CoPark Roadmap (Technical Demo)
 
 ## Vision
 
-Build a small, defensible, and production-aware API that can be explained clearly in technical interviews.
+Build a small, defensible, and production-aware API that can be explained clearly in technical interviews for first backend opportunities.
 
 ## Current status (February 21, 2026)
 
@@ -22,8 +22,8 @@ Completed baseline:
 ## Remaining gaps
 
 - Route-vs-OpenAPI drift checks are still manual.
-- Basic rate limiting is pending.
-- API docs exposure policy by environment is pending.
+- End-to-end integration tests are still pending.
+- Multi-region deployment behavior is not covered by automated smoke checks.
 
 ## Phases
 
@@ -47,8 +47,8 @@ Exit criteria:
 Goal: improve runtime safety without overengineering.
 
 1. Keep Pino config stable and consistent across server/middlewares.
-2. Add rate limiting for sensitive public endpoints (`auth`).
-3. Decide docs exposure policy by environment.
+2. Keep rate limiting stable for proxied deployments and shared stores.
+3. Keep docs exposure policy explicit and environment-based.
 
 Exit criteria:
 
@@ -86,6 +86,6 @@ Exit criteria:
 
 ## Immediate priority
 
-1. Complete active module audits and documentation.
-2. Add minimal rate limiting.
-3. Enable branch protection requiring CI checks in `main`.
+1. Add route-vs-OpenAPI drift automation.
+2. Add E2E integration coverage for critical user flows.
+3. Keep branch protection requiring CI checks in `main`.
