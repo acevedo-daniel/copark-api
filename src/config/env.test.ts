@@ -43,11 +43,13 @@ describe('env config', () => {
   it('parses LOG_PRETTY as strict boolean string', async () => {
     setRequiredEnv({
       LOG_PRETTY: 'true',
+      ENABLE_API_DOCS: 'true',
     });
 
     const module = await import('./env.js');
 
     expect(module.env.LOG_PRETTY).toBe(true);
+    expect(module.env.ENABLE_API_DOCS).toBe(true);
   });
 
   it('fails fast when production env is missing CORS_ORIGINS', async () => {

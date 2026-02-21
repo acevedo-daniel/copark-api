@@ -16,6 +16,7 @@ const envSchema = z
       .default('development'),
     PORT: z.coerce.number({ error: 'Invalid PORT' }).default(3000),
     API_BASE_URL: z.url({ error: 'Invalid URL' }).optional(),
+    ENABLE_API_DOCS: envBooleanSchema.default(false),
     CORS_ORIGINS: z.string().optional(),
     DATABASE_URL: z.string({ error: 'Required' }).min(1, { error: 'Required' }),
     JWT_SECRET: z.string({ error: 'Required' }).min(32, { error: 'Min 32 chars' }),

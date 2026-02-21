@@ -53,8 +53,10 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 
-const openApiSpec = generateOpenApiDocument();
-mountApiDocs(app, openApiSpec);
+if (env.NODE_ENV !== 'production' || env.ENABLE_API_DOCS) {
+  const openApiSpec = generateOpenApiDocument();
+  mountApiDocs(app, openApiSpec);
+}
 
 app.get('/healthz', (_req, res) => {
   res.status(200).json({ status: 'ok' });

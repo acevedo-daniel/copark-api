@@ -5,12 +5,11 @@ import { env } from './env.js';
 import { logger } from '../lib/logger.js';
 
 let redisClient: RedisClientType | null = null;
-let redisStore: RedisStore | null = null;
 let redisErrorListenerBound = false;
 
-function getRateLimitStore(): RedisStore | undefined {
+function getRedisClient(): RedisClientType | null {
   if (!env.REDIS_URL) {
-    return undefined;
+    return null;
   }
 
   redisClient ??= createClient({ url: env.REDIS_URL });
@@ -28,23 +27,21 @@ function getRateLimitStore(): RedisStore | undefined {
     });
   }
 
-  if (!redisStore) {
-    const client = redisClient;
-    redisStore = new RedisStore({
-      prefix: 'copark:rl:',
-      sendCommand: (...args: string[]) => client.sendCommand(args),
-    });
-  }
-
-  return redisStore;
+  return redisClient;
 }
 
 function buildAuthRateLimitMessage() {
   return { error: true, message: 'Too many requests, try again later' };
 }
 
-export function createAuthRateLimiter() {
-  const store = getRateLimitStore();
+export function createAuthRateLimiter(scope: 'register' | 'login') {
+  const client = getRedisClient();
+  const store = client
+    ? new RedisStore({
+        prefix: `copark:rl:auth:${scope}:`,
+        sendCommand: (...args: string[]) => client.sendCommand(args),
+      })
+    : undefined;
 
   return rateLimit({
     windowMs: env.AUTH_RATE_LIMIT_WINDOW_MS,
