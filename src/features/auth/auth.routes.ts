@@ -4,8 +4,8 @@ import { validateRequest } from '../../middlewares/validation.middleware.js';
 import { registerSchema, loginSchema } from './auth.schema.js';
 import * as authController from './auth.controller.js';
 
-const registerLimiter = createAuthRateLimiter();
-const loginLimiter = createAuthRateLimiter();
+const registerLimiter = createAuthRateLimiter('register');
+const loginLimiter = createAuthRateLimiter('login');
 
 const authRouter = Router();
 
