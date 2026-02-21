@@ -30,6 +30,7 @@ export function registerAuthDocs(registry: OpenAPIRegistry): void {
       },
       400: errorResponse('Validation error (e.g. invalid email or password)'),
       409: errorResponse('Email taken'),
+      429: errorResponse('Too many requests'),
     },
   });
 
@@ -60,6 +61,7 @@ export function registerAuthDocs(registry: OpenAPIRegistry): void {
       },
       400: errorResponse('Validation error'),
       401: errorResponse('Invalid credentials'),
+      429: errorResponse('Too many requests'),
     },
   });
 }

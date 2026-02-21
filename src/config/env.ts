@@ -20,6 +20,17 @@ const envSchema = z
     DATABASE_URL: z.string({ error: 'Required' }).min(1, { error: 'Required' }),
     JWT_SECRET: z.string({ error: 'Required' }).min(32, { error: 'Min 32 chars' }),
     JWT_EXPIRES_IN: z.string({ error: 'Required' }).default('24h'),
+    AUTH_RATE_LIMIT_MAX: z.coerce
+      .number({ error: 'Invalid AUTH_RATE_LIMIT_MAX' })
+      .int()
+      .positive()
+      .default(15),
+    AUTH_RATE_LIMIT_WINDOW_MS: z.coerce
+      .number({ error: 'Invalid AUTH_RATE_LIMIT_WINDOW_MS' })
+      .int()
+      .positive()
+      .default(15 * 60 * 1000),
+    REDIS_URL: z.url({ error: 'Invalid REDIS_URL' }).optional(),
   })
   .superRefine((value, ctx) => {
     if (value.NODE_ENV !== 'production') {
