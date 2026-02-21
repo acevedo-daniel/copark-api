@@ -1,90 +1,109 @@
-# CoPark Architecture
+# Architecture
 
-## Scope
+## Purpose
 
-Runtime architecture for `copark-api`, a technical demo API for a SaaS parking management platform.
+Defines the runtime architecture and operational boundaries for `copark-api`.
+This project is a technical demo of a SaaS parking management backend.
 
-## System model
+## System Snapshot
 
-- API style: REST
-- Runtime: Node.js + Express 5
-- Language: TypeScript strict mode
-- Persistence: PostgreSQL via Prisma
-- Validation: Zod
-- Auth: JWT Bearer
-- Documentation: OpenAPI 3.1 + Scalar
-- Logging: Pino + pino-http
+| Layer          | Decision                         |
+| -------------- | -------------------------------- |
+| Runtime        | Node.js 22 + TypeScript (strict) |
+| Framework      | Express 5                        |
+| Persistence    | PostgreSQL via Prisma            |
+| Validation     | Zod                              |
+| Authentication | JWT (HS256) + Argon2             |
+| API Contract   | OpenAPI 3.1                      |
+| API Docs UI    | Scalar                           |
+| Logging        | Pino + pino-http                 |
+| Testing        | Vitest + Supertest               |
 
-## Bootstrap model
+## Entry Points
 
-- `server.ts`: process bootstrap, server lifecycle, graceful shutdown
-- `app.ts`: express composition (middlewares, routes, error handling)
-- `src/config/env.ts`: validated runtime config (fail-fast)
+- `server.ts`: process bootstrap, HTTP lifecycle, graceful shutdown.
+- `app.ts`: middleware pipeline, route mounting, and global error handling.
+- `src/config/env.ts`: fail-fast environment validation with Zod.
+- `src/config/openapi.ts`: OpenAPI generation and metadata registration.
 
-## Request lifecycle
+## Request Pipeline
 
 1. Request enters `app.ts`.
-2. `requestLogger` (pino-http) assigns/propagates `x-request-id`.
-3. Security and parsing middlewares run (`helmet`, `cors`, `json/urlencoded` limits).
-4. Route-level middlewares apply (`requireAuth`, `validateRequest`).
-5. Controller delegates to service.
-6. Service enforces business rules and calls repository.
-7. Repository performs Prisma operations.
-8. Response is sent, or errors flow into global `errorHandler`.
+2. `requestLogger` creates or propagates `x-request-id`.
+3. `helmet` applies security headers.
+4. `cors` enforces origin policy by environment.
+5. Body parsers apply limits (`json` and `urlencoded`, `10kb`).
+6. Route middleware executes (`requireAuth`, `validateRequest`, rate limiters).
+7. Controller handles HTTP concerns.
+8. Service applies business rules.
+9. Repository executes Prisma persistence operations.
+10. Response is returned or global error middleware normalizes the error.
 
-## Folder layout
+## Module Topology
 
 ```text
 src/
-  config/         # env, prisma, openapi, docs mount
-  docs/           # openapi registry helpers
-  errors/         # AppError and HTTP subclasses
-  features/       # auth, user, parking, vehicle, booking, review
-  lib/            # logger and openapi extension bootstrap
-  middlewares/    # logger, auth, validation, error handler
-  scripts/        # openapi generation utilities
-  types/          # express type augmentation
-  utils/          # shared helpers
+  config/         env, prisma, openapi, api docs mount, rate limiting
+  docs/           openapi registry and docs registration
+  errors/         AppError base class and HTTP/domain subclasses
+  features/       auth, user, parking, vehicle, booking, review
+  lib/            logger and openapi bootstrap
+  middlewares/    request logger, auth guard, validation, error handler
+  scripts/        quality and smoke verification scripts
+  types/          express type augmentation
+  utils/          shared helpers
 ```
 
-## Error architecture
+Each feature follows:
 
-- Domain and HTTP errors are represented by `AppError` and subclasses.
-- 4xx errors are treated as operational.
-- Unexpected errors are normalized to 500 with safe message.
-- Response contract is always:
+```text
+feature/
+  feature.routes.ts
+  feature.controller.ts
+  feature.service.ts
+  feature.repository.ts
+  feature.schema.ts
+  feature.docs.ts
+```
+
+## Security Baseline
+
+- `helmet()` enabled globally.
+- `trust proxy` set to `1` for Render/proxy environments.
+- CORS policy:
+  - non-production: permissive.
+  - production: allowlist from `CORS_ORIGINS`.
+- Request body limits:
+  - JSON: `10kb`
+  - URL-encoded: `10kb`
+- Auth rate limiting on `/auth/register` and `/auth/login`.
+- Rate limiter configuration:
+  - `AUTH_RATE_LIMIT_MAX`
+  - `AUTH_RATE_LIMIT_WINDOW_MS`
+  - optional `REDIS_URL` for distributed state.
+- Docs exposure policy:
+  - enabled by default in non-production.
+  - in production, enabled only with `ENABLE_API_DOCS=true`.
+
+## Error Model
+
+- Expected HTTP/domain errors use `AppError` subclasses.
+- Operational errors return their declared status (`4xx`) and are logged as warnings.
+- Unexpected errors are normalized to `500` with safe message.
+- Stable error response contract:
 
 ```json
 { "error": true, "message": "..." }
 ```
 
-## Security baseline
+## Observability
 
-- `helmet()` globally enabled.
-- CORS policy by environment:
-  - non-production: permissive
-  - production: only allow `CORS_ORIGINS`
-- Request body limits:
-  - JSON: `10kb`
-  - URL-encoded: `10kb`
-- `trust proxy` enabled for Render/proxy deployments.
-- Auth endpoints (`/auth/register`, `/auth/login`) are rate-limited.
-- Rate-limit configuration via env:
-  - `AUTH_RATE_LIMIT_MAX`
-  - `AUTH_RATE_LIMIT_WINDOW_MS`
-- Optional Redis-backed distributed rate limiting via `REDIS_URL`.
-- API docs exposure policy:
-  - enabled by default in non-production
-  - in production, enabled only when `ENABLE_API_DOCS=true`
+- Structured JSON logging with Pino.
+- Request logs with pino-http.
+- Correlation via `x-request-id`.
+- Unexpected runtime failures logged with stack metadata.
 
-## Observability baseline
-
-- Structured logs with Pino.
-- HTTP access logs through pino-http.
-- Request correlation via `x-request-id`.
-- Error middleware logs operational and unexpected errors.
-
-## Process lifecycle
+## Process Lifecycle
 
 `server.ts` handles:
 
@@ -93,14 +112,15 @@ src/
 - `unhandledRejection`
 - `uncaughtException`
 
-Shutdown flow:
+Shutdown sequence:
 
-1. Stop accepting HTTP traffic.
-2. Disconnect Prisma.
-3. Exit with explicit status code.
-4. Force-exit timeout after 10 seconds.
+1. Stop accepting new connections.
+2. Close HTTP server.
+3. Disconnect Prisma.
+4. Exit explicitly.
+5. Force-exit after 10 seconds if shutdown stalls.
 
-## Known constraints
+## Constraints
 
-1. No automated route-vs-openapi contract tests yet.
-2. End-to-end integration tests are still pending.
+1. Route-vs-OpenAPI drift is not yet fully automated.
+2. End-to-end integration coverage is still pending.

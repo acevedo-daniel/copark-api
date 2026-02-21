@@ -1,57 +1,93 @@
 # AI Workflow
 
-Context and operating rules for AI agents working on this codebase.
+## Purpose
 
-## Read order
+Operational playbook for AI agents and automation contributors.
+This document defines how to work in the repository with predictable quality.
 
-1. `docs/CONVENTIONS.md` - engineering rules
-2. `docs/ARCHITECTURE.md` - system design
-3. `docs/API-DESIGN.md` - API contracts and patterns
-4. `README.md` - public project context and delivery links
+## Required Read Order
+
+1. `docs/CONVENTIONS.md`
+2. `docs/ARCHITECTURE.md`
+3. `docs/API-DESIGN.md`
+4. `README.md`
 
 ## Mission
 
-Build and maintain the API with clean architecture, strict typing, and accurate documentation.
+Maintain a high-signal technical demo API with:
 
-## Non-negotiable rules
+- stable architecture boundaries,
+- strict typing and validation,
+- and synchronized documentation.
 
-1. Respect dependency flow: `controller -> service -> repository`.
-2. Validate all external input with Zod.
-3. Never use `any` or `ts-ignore`.
-4. Update docs in the same change when behavior changes.
-5. Prefer small, verifiable increments over large rewrites.
+## Working Loop
 
-## Runtime truth
+1. Discover:
+   - inspect target module and adjacent dependencies.
+   - verify current runtime behavior in code, not assumptions.
+2. Plan:
+   - define minimal change set.
+   - identify docs and tests affected by the change.
+3. Implement:
+   - keep architecture direction (`routes -> controller -> service -> repository`).
+   - avoid broad rewrites unless explicitly requested.
+4. Verify:
+   - run required quality commands.
+   - confirm no contract regressions.
+5. Document:
+   - update public docs in the same change set.
 
-These facts reflect the actual running system. Prefer code reality over stale docs.
+## Runtime Truth (Source of Record)
 
-- Success responses are raw JSON payloads from controllers.
-- Error responses use `{ error: true, message: string }` from global error middleware.
-- Auth uses Bearer JWT via `requireAuth` middleware.
-- Auth endpoints (`/auth/register`, `/auth/login`) are rate-limited.
-  - Defaults: 15 requests per 15 minutes (configurable via env).
-  - Optional Redis store for distributed deployments.
-- API docs are mounted when `NODE_ENV !== 'production'` or `ENABLE_API_DOCS=true`:
-  - Scalar UI: `/api-docs/docs`
-  - OpenAPI JSON: `/api-docs/openapi.json`
-- OpenAPI servers list is dynamic: development always present, production added when `API_BASE_URL` is set.
+When docs disagree with code, code is authoritative.
 
-## Verification commands
+- Error response contract: `{ error: true, message: string }`.
+- Auth: JWT bearer with `requireAuth` middleware.
+- Auth endpoints are rate-limited:
+  - `/auth/register`
+  - `/auth/login`
+  - defaults: `15` requests per `15` minutes.
+  - optional distributed storage via `REDIS_URL`.
+- Docs mounting policy:
+  - enabled in non-production by default.
+  - enabled in production only when `ENABLE_API_DOCS=true`.
+  - UI: `/api-docs/docs`
+  - JSON: `/api-docs/openapi.json`
+- System endpoints:
+  - `/` -> service status payload.
+  - `/healthz` -> health probe.
+- OpenAPI servers are currently generated with:
+  - `http://localhost:3000` (Development)
+  - `https://copark-api.onrender.com` (Production)
 
-Run these after making changes:
+## Required Verification Commands
+
+Run after any relevant change:
 
 ```bash
-pnpm typecheck         # TypeScript strict check
-pnpm lint              # ESLint + Prettier
-pnpm test              # Vitest unit tests
-pnpm generate:openapi  # Generate OpenAPI spec
-pnpm openapi:check     # Validate OpenAPI document
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm openapi:check
+pnpm release:readiness
 ```
 
-## Working style
+For full CI parity:
 
-1. Before editing a module, inspect its structure in `src/features/<module>/`.
-2. When changing routes, update the matching `*.docs.ts` file.
-3. When adding env vars, update `src/config/env.ts`, `.env.example`, and relevant docs.
-4. If behavior is unclear, prefer code reality over docs, then fix the docs.
-5. Run verification commands before declaring work complete.
+```bash
+pnpm quality:ci
+```
+
+## Change Checklist
+
+1. If env behavior changes, update:
+   - `src/config/env.ts`
+   - `.env.example`
+   - relevant docs in `docs/`
+2. If route behavior changes, update:
+   - corresponding `*.docs.ts`
+   - OpenAPI verification output
+3. If architectural behavior changes, update:
+   - `docs/ARCHITECTURE.md`
+   - `docs/API-DESIGN.md`
+   - `README.md` only if public-facing behavior changed

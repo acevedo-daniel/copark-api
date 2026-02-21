@@ -1,16 +1,18 @@
 # API Design
 
-Contract and pattern documentation for the CoPark API.
+## Purpose
 
-## Error contract
+Defines the API contract conventions, behavior patterns, and consistency rules for `copark-api`.
 
-Every error response follows a stable contract:
+## Error Contract
+
+All error responses use:
 
 ```json
 { "error": true, "message": "Human-readable description" }
 ```
 
-### Error hierarchy
+### Error Hierarchy
 
 ```text
 AppError (base)
@@ -21,60 +23,66 @@ AppError (base)
   `- ConflictError       409
 ```
 
+Rules:
+
 - `4xx` errors are operational and logged as warnings.
-- Unexpected errors normalize to `500` with `Internal Server Error` and no internals leaked.
+- Unexpected failures are normalized to `500 Internal Server Error`.
+- Internal details are never exposed in response bodies.
+- Malformed JSON returns `400 Invalid JSON payload`.
+- Oversized payloads return `413 Payload too large`.
 
-### Global error middleware
+## Authentication Contract
 
-Located at `src/middlewares/error-handler.middleware.ts`. It normalizes all thrown errors into the contract above and also handles:
-
-- `SyntaxError` from malformed JSON -> `400 Invalid JSON payload`
-- Entity too large -> `413 Payload too large`
-
-## Authentication
-
-- Mechanism: JWT Bearer token (HS256 via `jose`).
+- Scheme: Bearer JWT (HS256 via `jose`).
 - Password hashing: Argon2.
-- Middleware: `requireAuth` verifies token and attaches `req.user.id`.
-- Token config: `JWT_SECRET` (min 32 chars), `JWT_EXPIRES_IN` (default `24h`).
+- Guard middleware: `requireAuth`.
+- Auth context: `req.user.id`.
+- Env configuration:
+  - `JWT_SECRET` (minimum 32 chars)
+  - `JWT_EXPIRES_IN` (default `24h`)
 
-## Rate limiting
+## Rate Limiting Contract
 
-Auth endpoints are rate-limited to prevent brute-force attacks:
+Applied to:
 
-| Setting                     | Default         |
-| --------------------------- | --------------- |
-| `AUTH_RATE_LIMIT_MAX`       | 15 requests     |
-| `AUTH_RATE_LIMIT_WINDOW_MS` | 900000 (15 min) |
-| `REDIS_URL`                 | optional        |
+- `POST /auth/register`
+- `POST /auth/login`
 
-- In-memory store by default, Redis store when `REDIS_URL` is set.
-- Limit exceeded response: `429 Too many requests, try again later`.
+Configuration:
 
-## Validation
+| Variable                    | Default  |
+| --------------------------- | -------- |
+| `AUTH_RATE_LIMIT_MAX`       | `15`     |
+| `AUTH_RATE_LIMIT_WINDOW_MS` | `900000` |
+| `REDIS_URL`                 | optional |
 
-All input validation uses Zod with `strictObject` (no unknown keys).
+Behavior:
 
-### Pattern
+- In-memory limiting by default.
+- Redis-backed limiting when `REDIS_URL` is configured.
+- Independent buckets for register and login flows.
+- Standard headers enabled (`draft-8`).
+- Throttle response: `429` with message `Too many requests, try again later`.
+
+## Validation Contract
+
+- All external input must be validated with Zod.
+- Schema mode is strict (`strictObject`) where applicable.
+- `validateRequest({ body?, params?, query? })` is the canonical middleware.
+- Schema types are inferred with `z.infer` and reused in service/controller layers.
+
+Reference pattern:
 
 ```typescript
-// schema definition
 export const createParkingSchema = z.strictObject({ ... }).openapi('CreateParkingRequest');
-
-// type inference
 export type CreateParking = z.infer<typeof createParkingSchema>;
 
-// route-level validation
 router.post('/', requireAuth, validateRequest({ body: createParkingSchema }), controller.create);
 ```
 
-### Validation middleware
+## Pagination Contract
 
-`validateRequest({ body?, params?, query? })` applies Zod parsing to the specified request properties.
-
-## Pagination
-
-Paginated endpoints return a standardized response:
+Paginated resources return:
 
 ```json
 {
@@ -90,32 +98,36 @@ Paginated endpoints return a standardized response:
 }
 ```
 
-Query parameters: `page` (default 1), `limit` (default 10, max 50-100 depending on resource).
+Standard query parameters:
 
-## OpenAPI
+- `page` (default `1`)
+- `limit` (default `10`, resource-specific max)
 
-- Specification: OpenAPI 3.1 generated from Zod schemas via `@asteasolutions/zod-to-openapi`.
-- UI: Scalar at `/api-docs/docs`.
-- JSON spec: `/api-docs/openapi.json`.
-- Docs mounting policy: enabled when `NODE_ENV !== 'production'` or `ENABLE_API_DOCS=true`.
-- Servers list: dynamic from `API_BASE_URL`.
-- Each feature registers paths in `feature.docs.ts`.
-- Global components and system endpoints are registered in `src/docs/`.
+## OpenAPI and Docs Contract
 
-## Response patterns
+- OpenAPI version: `3.1.0`.
+- Generator: `@asteasolutions/zod-to-openapi`.
+- UI endpoint: `/api-docs/docs`.
+- JSON endpoint: `/api-docs/openapi.json`.
+- Production docs are gated by `ENABLE_API_DOCS=true`.
+- Current server entries generated:
+  - `http://localhost:3000` (Development)
+  - `https://copark-api.onrender.com` (Production)
+- Feature endpoints are registered in each `feature.docs.ts`.
+- Global components/system endpoints are registered under `src/docs/`.
 
-### Success responses
+## Response Conventions
 
-Controllers return raw Prisma objects or transformed DTOs. Common patterns:
+Common successful status codes:
 
-| Action | Status | Body                       |
-| ------ | ------ | -------------------------- |
-| Create | `201`  | Created resource           |
-| Read   | `200`  | Resource or paginated list |
-| Update | `200`  | Updated resource           |
-| Delete | `200`  | Deleted or cancelled resource |
+| Action        | Status |
+| ------------- | ------ |
+| Create        | `201`  |
+| Read/List     | `200`  |
+| Update        | `200`  |
+| Delete/Cancel | `200`  |
 
-### Sensitive field stripping
+Data handling:
 
-- User responses strip `passwordHash` via `toUserResponse()`.
-- Booking responses strip `vehicle` and `parking` relations via `toBookingResponse()`.
+- User responses never expose `passwordHash`.
+- Booking responses strip internal relation payloads not required by API consumers.
