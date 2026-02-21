@@ -62,6 +62,13 @@ app.get('/healthz', (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'copark-api',
+  });
+});
+
 app.use('/users', userRouter);
 app.use('/vehicles', vehicleRouter);
 app.use('/parkings', parkingRouter);

@@ -74,6 +74,7 @@ Auth rate limit defaults:
 - Scalar UI: `/api-docs/docs`
 - OpenAPI JSON: `/api-docs/openapi.json`
 - Production API base URL: `https://copark-api.onrender.com`
+- Demo docs URL: `https://copark-api-demo.onrender.com/api-docs/docs`
 
 > API docs are enabled in development by default.
 > For demo/staging in production, set `ENABLE_API_DOCS=true`.
