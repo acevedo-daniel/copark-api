@@ -39,9 +39,14 @@ pnpm dev
 Local services:
 
 - API: `http://localhost:3000`
-- API docs: `http://localhost:3000/api-docs/docs`
+- API docs: `http://localhost:3000/docs`
 - PostgreSQL: `localhost:5432`
 - pgAdmin: `http://localhost:5050`
+
+Production:
+
+- API: <https://parkcore-api.onrender.com/>
+- API docs: <https://parkcore-api.onrender.com/docs>
 
 ## Scripts
 

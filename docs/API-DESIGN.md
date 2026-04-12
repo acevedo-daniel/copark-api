@@ -62,6 +62,6 @@ Configuration:
 
 ## OpenAPI
 
-- UI: `/api-docs/docs`
-- JSON: `/api-docs/openapi.json`
+- UI: `/docs`
+- JSON: `/openapi.json`
 - Production docs require `ENABLE_API_DOCS=true`
