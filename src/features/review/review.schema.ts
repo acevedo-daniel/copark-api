@@ -19,7 +19,7 @@ export const createReviewSchema = z
       .trim()
       .min(2, { error: 'Min 2 chars' })
       .max(50, { error: 'Max 50 chars' })
-      .default('Anonymous')
+      .optional()
       .openapi({ description: 'Author name', example: 'Daniel' }),
   })
   .openapi('CreateReviewRequest');

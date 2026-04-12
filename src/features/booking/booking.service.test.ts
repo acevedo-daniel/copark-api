@@ -18,13 +18,8 @@ vi.mock('../vehicle/vehicle.service.js', () => ({
   create: vi.fn(),
 }));
 
-import {
-  Prisma,
-  type Booking,
-  type BookingStatus,
-  type Parking,
-  type Vehicle,
-} from '../../../prisma/generated/client.js';
+import { Prisma, type BookingStatus } from '../../../prisma/generated/client.js';
+import { buildBooking, buildParking, buildVehicle } from '../../../tests/helpers/builders.js';
 import { ConflictError, ForbiddenError, NotFoundError } from '../../errors/index.js';
 import type { BookingQuery, CheckIn } from './booking.schema.js';
 import * as bookingRepository from './booking.repository.js';
@@ -39,63 +34,6 @@ import {
 } from './booking.service.js';
 import * as parkingService from '../parking/parking.service.js';
 import * as vehicleService from '../vehicle/vehicle.service.js';
-
-const buildBooking = (overrides?: Partial<Booking>): Booking => {
-  const now = new Date('2026-02-21T10:00:00.000Z');
-
-  return {
-    id: 'booking-1',
-    startTime: new Date('2026-02-21T09:00:00.000Z'),
-    endTime: null,
-    totalPrice: null,
-    status: 'CONFIRMED',
-    createdAt: now,
-    updatedAt: now,
-    parkingId: 'parking-1',
-    vehicleId: 'vehicle-1',
-    ...(overrides ?? {}),
-  };
-};
-
-const buildVehicle = (overrides?: Partial<Vehicle>): Vehicle => {
-  const now = new Date('2026-02-21T10:00:00.000Z');
-
-  return {
-    id: 'vehicle-1',
-    plate: 'ABC123',
-    brand: null,
-    model: null,
-    type: 'CAR',
-    customerName: null,
-    customerPhone: null,
-    notes: null,
-    createdAt: now,
-    updatedAt: now,
-    parkingId: 'parking-1',
-    ...(overrides ?? {}),
-  };
-};
-
-const buildParking = (overrides?: Partial<Parking>): Parking => {
-  const now = new Date('2026-02-21T10:00:00.000Z');
-
-  return {
-    id: 'parking-1',
-    title: 'Main Parking',
-    description: null,
-    image: null,
-    address: '123 Test St',
-    pricePerHour: 2000,
-    totalSpaces: 20,
-    lat: -34.6037,
-    lng: -58.3816,
-    isActive: true,
-    createdAt: now,
-    updatedAt: now,
-    ownerId: 'owner-1',
-    ...(overrides ?? {}),
-  };
-};
 
 const buildBookingWithRelations = (
   overrides?: Partial<

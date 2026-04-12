@@ -9,52 +9,13 @@ vi.mock('./vehicle.repository.js', () => ({
   findByPlate: vi.fn(),
 }));
 
-import { Prisma, type Parking, type Vehicle } from '../../../prisma/generated/client.js';
+import { Prisma } from '../../../prisma/generated/client.js';
+import { buildParking, buildVehicle } from '../../../tests/helpers/builders.js';
 import { ConflictError, ForbiddenError, NotFoundError } from '../../errors/index.js';
 import type { CreateVehicle } from './vehicle.schema.js';
 import * as parkingRepository from '../parking/parking.repository.js';
 import * as vehicleRepository from './vehicle.repository.js';
 import { create, findByPlate } from './vehicle.service.js';
-
-const buildParking = (overrides?: Partial<Parking>): Parking => {
-  const now = new Date('2026-02-21T12:00:00.000Z');
-
-  return {
-    id: 'parking-1',
-    title: 'Main Parking',
-    description: null,
-    image: null,
-    address: '123 Test St',
-    pricePerHour: 2000,
-    totalSpaces: 20,
-    lat: 10,
-    lng: 10,
-    isActive: true,
-    ownerId: 'owner-1',
-    createdAt: now,
-    updatedAt: now,
-    ...(overrides ?? {}),
-  };
-};
-
-const buildVehicle = (overrides?: Partial<Vehicle>): Vehicle => {
-  const now = new Date('2026-02-21T12:00:00.000Z');
-
-  return {
-    id: 'vehicle-1',
-    plate: 'ABC123',
-    brand: null,
-    model: null,
-    type: 'CAR',
-    customerName: null,
-    customerPhone: null,
-    notes: null,
-    createdAt: now,
-    updatedAt: now,
-    parkingId: 'parking-1',
-    ...(overrides ?? {}),
-  };
-};
 
 const createDto: CreateVehicle = {
   plate: 'ABC123',

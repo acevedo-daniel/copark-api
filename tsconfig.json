@@ -17,8 +17,7 @@
     "prisma",
     "app.ts",
     "server.ts",
-    "vitest.setup.ts",
-    "src/errors"
+    "vitest.setup.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

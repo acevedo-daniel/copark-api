@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import type { Booking, Parking, Review, Vehicle } from '../../prisma/generated/client.js';
 
 type Mergeable = Record<string, unknown>;
 
@@ -38,52 +39,74 @@ export const buildLoginDto = (
   );
 };
 
-export const buildParking = (
-  overrides?: Partial<{
-    id: string;
-    ownerId: string;
-    pricePerHour: number;
-    title: string;
-    address: string;
-  }>,
-) => {
-  return merge(
-    {
-      id: randomUUID(),
-      ownerId: randomUUID(),
-      pricePerHour: 1000,
-      title: 'Main Parking',
-      address: '123 Test St',
-    },
-    overrides,
-  );
+export const buildParking = (overrides?: Partial<Parking>): Parking => {
+  const now = new Date('2026-02-21T10:00:00.000Z');
+
+  return {
+    id: 'parking-1',
+    title: 'Main Parking',
+    description: null,
+    image: null,
+    address: '123 Test St',
+    pricePerHour: 2000,
+    totalSpaces: 20,
+    lat: -34.6037,
+    lng: -58.3816,
+    isActive: true,
+    createdAt: now,
+    updatedAt: now,
+    ownerId: 'owner-1',
+    ...(overrides ?? {}),
+  };
 };
 
-export const buildVehicle = (
-  overrides?: Partial<{
-    id: string;
-    parkingId: string;
-    plate: string;
-    type: string;
-    brand: string;
-    model: string;
-    customerName: string;
-    customerPhone: string | null;
-    notes: string | null;
-  }>,
-) => {
-  return merge(
-    {
-      id: randomUUID(),
-      parkingId: randomUUID(),
-      plate: 'TEST123',
-      type: 'CAR',
-      brand: 'Toyota',
-      model: 'Corolla',
-      customerName: 'Customer Test',
-      customerPhone: null,
-      notes: null,
-    },
-    overrides,
-  );
+export const buildVehicle = (overrides?: Partial<Vehicle>): Vehicle => {
+  const now = new Date('2026-02-21T10:00:00.000Z');
+
+  return {
+    id: 'vehicle-1',
+    plate: 'ABC123',
+    brand: null,
+    model: null,
+    type: 'CAR',
+    customerName: null,
+    customerPhone: null,
+    notes: null,
+    createdAt: now,
+    updatedAt: now,
+    parkingId: 'parking-1',
+    ...(overrides ?? {}),
+  };
+};
+
+export const buildBooking = (overrides?: Partial<Booking>): Booking => {
+  const now = new Date('2026-02-21T10:00:00.000Z');
+
+  return {
+    id: 'booking-1',
+    startTime: new Date('2026-02-21T09:00:00.000Z'),
+    endTime: null,
+    totalPrice: null,
+    status: 'CONFIRMED',
+    createdAt: now,
+    updatedAt: now,
+    parkingId: 'parking-1',
+    vehicleId: 'vehicle-1',
+    ...(overrides ?? {}),
+  };
+};
+
+export const buildReview = (overrides?: Partial<Review>): Review => {
+  const now = new Date('2026-02-21T12:00:00.000Z');
+
+  return {
+    id: 'review-1',
+    rating: 5,
+    comment: 'Great parking',
+    authorName: 'Daniel',
+    parkingId: 'parking-1',
+    createdAt: now,
+    updatedAt: now,
+    ...(overrides ?? {}),
+  };
 };
