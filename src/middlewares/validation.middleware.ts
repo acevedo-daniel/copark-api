@@ -38,7 +38,12 @@ export function validateRequest(schemas: ValidateRequestSchemas): RequestHandler
         return;
       }
 
-      req.query = result.data as typeof req.query;
+      Object.defineProperty(req, 'query', {
+        value: result.data,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
     }
 
     next();

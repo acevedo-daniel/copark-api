@@ -31,7 +31,6 @@ const envSchema = z
       .int()
       .positive()
       .default(15 * 60 * 1000),
-    REDIS_URL: z.url({ error: 'Invalid REDIS_URL' }).optional(),
   })
   .superRefine((value, ctx) => {
     if (value.NODE_ENV !== 'production') {

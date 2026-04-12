@@ -12,7 +12,7 @@ const loginControllerMock = vi.fn((_req: Request, res: Response) => {
 });
 
 const validBody = {
-  email: 'rate-limit@copark.test',
+  email: 'rate-limit@parkcore.test',
   password: 'Passw0rd!123',
 };
 

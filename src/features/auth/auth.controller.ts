@@ -1,31 +1,19 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import * as authService from './auth.service.js';
 import type { Register, Login } from './auth.schema.js';
 
 export const register = async (
   req: Request<unknown, unknown, Register>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const dto = req.body;
-    const result = await authService.register(dto);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await authService.register(req.body);
+  res.status(201).json(result);
 };
 
 export const login = async (
   req: Request<unknown, unknown, Login>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const dto = req.body;
-    const result = await authService.login(dto);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await authService.login(req.body);
+  res.status(200).json(result);
 };

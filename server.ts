@@ -6,7 +6,7 @@ import { prisma } from './src/config/prisma.js';
 import { logger } from './src/lib/logger.js';
 
 const server = app.listen(env.PORT, () => {
-  logger.info({ port: env.PORT }, 'CoPark API running');
+  logger.info({ port: env.PORT }, 'ParkCore API running');
   logger.info({ env: env.NODE_ENV }, 'Runtime environment');
 });
 

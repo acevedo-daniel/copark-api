@@ -2,7 +2,34 @@
 
 ## Purpose
 
-Defines the API contract conventions, behavior patterns, and consistency rules for `copark-api`.
+Defines the API contract conventions, behavior patterns, and consistency rules for `parkcore-api`.
+
+## Endpoint Surface
+
+| Area     | Method | Path                                  | Auth |
+| -------- | ------ | ------------------------------------- | ---- |
+| System   | GET    | `/`                                   | No   |
+| System   | GET    | `/healthz`                            | No   |
+| Auth     | POST   | `/auth/register`                      | No   |
+| Auth     | POST   | `/auth/login`                         | No   |
+| Users    | GET    | `/users/me`                           | Yes  |
+| Users    | PATCH  | `/users/me`                           | Yes  |
+| Parkings | GET    | `/parkings`                           | No   |
+| Parkings | GET    | `/parkings/me`                        | Yes  |
+| Parkings | GET    | `/parkings/:id`                       | No   |
+| Parkings | POST   | `/parkings`                           | Yes  |
+| Parkings | PATCH  | `/parkings/:id`                       | Yes  |
+| Vehicles | POST   | `/vehicles/:parkingId`                | Yes  |
+| Vehicles | GET    | `/vehicles/:parkingId/plate/:plate`   | Yes  |
+| Bookings | POST   | `/parkings/:parkingId/bookings/check-in` | Yes |
+| Bookings | GET    | `/parkings/:parkingId/bookings/active`   | Yes |
+| Bookings | GET    | `/parkings/:parkingId/bookings`          | Yes |
+| Bookings | POST   | `/bookings/:bookingId/check-out`         | Yes |
+| Bookings | GET    | `/bookings/:bookingId`                   | Yes |
+| Bookings | PATCH  | `/bookings/:bookingId/cancel`            | Yes |
+| Reviews  | POST   | `/reviews/parking/:parkingId`            | No  |
+| Reviews  | GET    | `/reviews/parking/:parkingId`            | No  |
+| Reviews  | GET    | `/reviews/parking/:parkingId/stats`      | No  |
 
 ## Error Contract
 
@@ -33,13 +60,14 @@ Rules:
 
 ## Authentication Contract
 
-- Scheme: Bearer JWT (HS256 via `jose`).
+- Scheme: Bearer JWT using HS256 via `jose`.
 - Password hashing: Argon2.
 - Guard middleware: `requireAuth`.
 - Auth context: `req.user.id`.
+- Auth-required controllers call `requireUser(req)` before accessing `req.user`.
 - Env configuration:
-  - `JWT_SECRET` (minimum 32 chars)
-  - `JWT_EXPIRES_IN` (default `24h`)
+  - `JWT_SECRET` minimum 32 chars.
+  - `JWT_EXPIRES_IN` default `24h`.
 
 ## Rate Limiting Contract
 
@@ -54,14 +82,12 @@ Configuration:
 | --------------------------- | -------- |
 | `AUTH_RATE_LIMIT_MAX`       | `15`     |
 | `AUTH_RATE_LIMIT_WINDOW_MS` | `900000` |
-| `REDIS_URL`                 | optional |
 
 Behavior:
 
-- In-memory limiting by default.
-- Redis-backed limiting when `REDIS_URL` is configured.
-- Independent buckets for register and login flows.
-- Standard headers enabled (`draft-8`).
+- In-memory limiting is used for auth endpoints.
+- Independent buckets are used for register and login flows.
+- Standard rate-limit headers are enabled with `draft-8`.
 - Throttle response: `429` with message `Too many requests, try again later`.
 
 ## Validation Contract
@@ -100,8 +126,8 @@ Paginated resources return:
 
 Standard query parameters:
 
-- `page` (default `1`)
-- `limit` (default `10`, resource-specific max)
+- `page` default `1`
+- `limit` default `10`, with resource-specific max values
 
 ## OpenAPI and Docs Contract
 
@@ -111,10 +137,10 @@ Standard query parameters:
 - JSON endpoint: `/api-docs/openapi.json`.
 - Production docs are gated by `ENABLE_API_DOCS=true`.
 - Current server entries generated:
-  - `http://localhost:3000` (Development)
-  - `https://copark-api.onrender.com` (Production)
+  - `http://localhost:3000` for development.
+  - `https://parkcore-api.onrender.com` for production.
 - Feature endpoints are registered in each `feature.docs.ts`.
-- Global components/system endpoints are registered under `src/docs/`.
+- Global components and system endpoints are registered under `src/docs/`.
 
 ## Response Conventions
 
@@ -130,4 +156,5 @@ Common successful status codes:
 Data handling:
 
 - User responses never expose `passwordHash`.
-- Booking responses strip internal relation payloads not required by API consumers.
+- Booking responses use `toBookingResponse()` to strip loaded relation payloads and return public booking fields.
+- Paginated list responses use the shared pagination metadata contract.

@@ -57,6 +57,15 @@ if (!reviewsPath?.responses?.['404']) {
   errors.push('Missing 404 response in GET /reviews/parking/{parkingId}.');
 }
 
+const createReviewPath = doc.paths?.['/reviews/parking/{parkingId}']?.post;
+if (!createReviewPath?.responses?.['201']) {
+  errors.push('Missing 201 response in POST /reviews/parking/{parkingId}.');
+}
+
+if (!createReviewPath?.responses?.['404']) {
+  errors.push('Missing 404 response in POST /reviews/parking/{parkingId}.');
+}
+
 const statsPath = doc.paths?.['/reviews/parking/{parkingId}/stats']?.get;
 if (!statsPath?.responses?.['404']) {
   errors.push('Missing 404 response in GET /reviews/parking/{parkingId}/stats.');

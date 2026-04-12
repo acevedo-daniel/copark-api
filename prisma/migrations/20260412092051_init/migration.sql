@@ -75,7 +75,7 @@ CREATE TABLE "Review" (
     "id" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "comment" TEXT,
-    "authorName" TEXT NOT NULL DEFAULT 'Anónimo',
+    "authorName" TEXT NOT NULL DEFAULT 'Anonimo',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "parkingId" TEXT NOT NULL,
@@ -97,6 +97,12 @@ CREATE INDEX "Parking_ownerId_idx" ON "Parking"("ownerId");
 
 -- CreateIndex
 CREATE INDEX "Booking_parkingId_status_idx" ON "Booking"("parkingId", "status");
+
+-- CreateIndex
+CREATE INDEX "Booking_vehicleId_status_idx" ON "Booking"("vehicleId", "status");
+
+-- CreateIndex
+CREATE INDEX "Review_parkingId_idx" ON "Review"("parkingId");
 
 -- AddForeignKey
 ALTER TABLE "Vehicle" ADD CONSTRAINT "Vehicle_parkingId_fkey" FOREIGN KEY ("parkingId") REFERENCES "Parking"("id") ON DELETE CASCADE ON UPDATE CASCADE;

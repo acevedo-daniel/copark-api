@@ -1,10 +1,11 @@
-import { NotFoundError, ForbiddenError, ConflictError } from '../../errors/index.js';
-import * as bookingRepository from './booking.repository.js';
+import { Booking, Prisma } from '../../../prisma/generated/client.js';
+import { ConflictError, ForbiddenError, NotFoundError } from '../../errors/index.js';
+import { type PaginationResult, createPaginatedResult } from '../../utils/pagination.js';
 import * as parkingService from '../parking/parking.service.js';
 import * as vehicleService from '../vehicle/vehicle.service.js';
-import { Booking, Prisma } from '../../../prisma/generated/client.js';
-import type { CheckIn, BookingQuery } from './booking.schema.js';
-import { type PaginationResult, createPaginatedResult } from '../../utils/pagination.js';
+import * as bookingRepository from './booking.repository.js';
+import type { BookingQuery, CheckIn } from './booking.schema.js';
+import { toBookingResponse } from './booking.schema.js';
 
 export const checkIn = async (
   ownerId: string,
@@ -59,31 +60,23 @@ export const checkIn = async (
 
 export const checkOut = async (ownerId: string, bookingId: string): Promise<Booking> => {
   const booking = await bookingRepository.findById(bookingId);
-  if (!booking) {
-    throw new NotFoundError('Booking not found');
-  }
-
-  if (booking.parking.ownerId !== ownerId) {
+  if (!booking) throw new NotFoundError('Booking not found');
+  if (booking.parking.ownerId !== ownerId)
     throw new ForbiddenError("You don't have access to this booking");
-  }
 
   const endTime = new Date();
-  const diffMs = endTime.getTime() - booking.startTime.getTime();
-  const diffHours = diffMs / (1000 * 60 * 60);
+  const diffHours = (endTime.getTime() - booking.startTime.getTime()) / (1000 * 60 * 60);
   const hoursToCharge = Math.max(1, Math.ceil(diffHours));
   const totalPrice = hoursToCharge * booking.parking.pricePerHour;
 
-  const updated = await bookingRepository.completeIfConfirmed(bookingId, endTime, totalPrice);
-  if (!updated) {
-    throw new ConflictError('This booking is not active');
-  }
+  const completedBooking = await bookingRepository.completeIfConfirmed(
+    bookingId,
+    endTime,
+    totalPrice,
+  );
+  if (!completedBooking) throw new ConflictError('This booking is not active');
 
-  const updatedBooking = await bookingRepository.findById(bookingId);
-  if (!updatedBooking) {
-    throw new NotFoundError('Booking not found');
-  }
-  const { vehicle: _vehicle, parking: _parking, ...bookingData } = updatedBooking;
-  return bookingData;
+  return toBookingResponse(completedBooking);
 };
 
 export const getActiveBookingsByParking = async (
@@ -122,37 +115,21 @@ export const getBookingsByParking = async (
 
 export const getBookingById = async (ownerId: string, bookingId: string): Promise<Booking> => {
   const booking = await bookingRepository.findById(bookingId);
-  if (!booking) {
-    throw new NotFoundError('Booking not found');
-  }
-
-  if (booking.parking.ownerId !== ownerId) {
+  if (!booking) throw new NotFoundError('Booking not found');
+  if (booking.parking.ownerId !== ownerId)
     throw new ForbiddenError("You don't have access to this booking");
-  }
 
-  const { vehicle: _vehicle, parking: _parking, ...bookingData } = booking;
-  return bookingData;
+  return toBookingResponse(booking);
 };
 
 export const cancelBooking = async (ownerId: string, bookingId: string): Promise<Booking> => {
   const booking = await bookingRepository.findById(bookingId);
-  if (!booking) {
-    throw new NotFoundError('Booking not found');
-  }
-
-  if (booking.parking.ownerId !== ownerId) {
+  if (!booking) throw new NotFoundError('Booking not found');
+  if (booking.parking.ownerId !== ownerId)
     throw new ForbiddenError("You don't have access to this booking");
-  }
 
-  const cancelled = await bookingRepository.cancelIfConfirmed(bookingId);
-  if (!cancelled) {
-    throw new ConflictError('This booking is not active');
-  }
+  const cancelledBooking = await bookingRepository.cancelIfConfirmed(bookingId);
+  if (!cancelledBooking) throw new ConflictError('This booking is not active');
 
-  const cancelledBooking = await bookingRepository.findById(bookingId);
-  if (!cancelledBooking) {
-    throw new NotFoundError('Booking not found');
-  }
-  const { vehicle: _vehicle, parking: _parking, ...bookingData } = cancelledBooking;
-  return bookingData;
+  return toBookingResponse(cancelledBooking);
 };

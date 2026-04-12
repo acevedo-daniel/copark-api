@@ -1,4 +1,4 @@
-# CoPark API
+# ParkCore API
 
 <p align="center">
   <img src="https://img.shields.io/badge/typescript-strict-111111?style=flat-square&logo=typescript&logoColor=white" />
@@ -6,49 +6,53 @@
   <img src="https://img.shields.io/badge/express-5-111111?style=flat-square&logo=express&logoColor=white" />
   <img src="https://img.shields.io/badge/postgresql-prisma-111111?style=flat-square&logo=postgresql&logoColor=white" />
   <img src="https://img.shields.io/badge/openapi-3.1-111111?style=flat-square&logo=openapiinitiative&logoColor=white" />
-  <img src="https://img.shields.io/github/actions/workflow/status/acevedo-daniel/copark-api/ci.yml?style=flat-square&label=CI" />
+  <img src="https://img.shields.io/github/actions/workflow/status/acevedo-daniel/parkcore-api/ci.yml?style=flat-square&label=CI" />
 </p>
 
-Backend API for a **SaaS parking management platform**. Technical demo focused on clean architecture, strict typing, and production-aware delivery.
+Backend API for parking facility management. Built with TypeScript, Express 5, Prisma, and PostgreSQL.
 
 ---
 
 ## Technical Highlights
 
-- **Layered architecture**: `controller -> service -> repository` across all modules
-- **Validation-first contracts**: Zod schemas power runtime validation and OpenAPI generation
-- **Unified error contract**: every error returns `{ "error": true, "message": "..." }`
-- **JWT authentication** with Argon2 password hashing and rate-limited auth endpoints
-- **Graceful shutdown** with signal handling and forced timeout
-- **Structured logging** with Pino, pino-http, and request correlation via `x-request-id`
-- **CI pipeline**: lint, typecheck, test, OpenAPI validation, and build checks
-- **Security baseline**: Helmet, environment-based CORS policy, and body size limits
-- **Configurable auth throttling** via env vars, with optional Redis-backed distributed limits
+- Strict TypeScript across application, scripts, and tests
+- Layered feature modules: `routes -> controller -> service -> repository`
+- Zod validation schemas reused for OpenAPI generation
+- OpenAPI 3.1 documentation served with Scalar
+- JWT authentication with Argon2 password hashing
+- In-memory auth rate limiting
+- Serializable transaction for check-in race protection
+- Express 5 async error handling through a global error middleware
+- Structured Pino logging with `x-request-id` correlation
+- Graceful shutdown for HTTP and Prisma
 
 ---
 
 ## Functional Coverage
 
-| Module   | Capabilities                     |
-| -------- | -------------------------------- |
-| Auth     | Register, login, JWT tokens      |
-| Parkings | CRUD, owner-scoped management    |
-| Vehicles | Registry per parking lot         |
-| Bookings | Check-in/out, cancel, pagination |
-| Reviews  | Rating and feedback per parking  |
-| Users    | Profile management               |
+| Module   | Capabilities                              |
+| -------- | ----------------------------------------- |
+| Auth     | Register, login, JWT access tokens        |
+| Users    | Current user profile read/update          |
+| Parkings | Create, list, read, update, owner listing |
+| Vehicles | Create and lookup by plate per parking    |
+| Bookings | Check-in, check-out, cancel, pagination   |
+| Reviews  | Create, list, and parking rating stats    |
+| System   | Health check and service metadata         |
 
 ---
 
 ## Stack
 
-- Node.js + TypeScript (strict)
+- Node.js 22
+- TypeScript strict mode
 - Express 5
 - Prisma + PostgreSQL
-- Zod (validation contracts)
+- Zod
 - OpenAPI 3.1 + Scalar
-- Pino (structured logging)
+- Pino + pino-http
 - Vitest + Supertest
+- Docker Compose for local PostgreSQL and pgAdmin
 
 ---
 
@@ -62,10 +66,37 @@ pnpm db:setup
 pnpm dev
 ```
 
+Default local services:
+
+- API: `http://localhost:3000`
+- PostgreSQL: `localhost:5432` (`parkcore-db`)
+- pgAdmin: `http://localhost:5050`
+
 Auth rate limit defaults:
+
 - `AUTH_RATE_LIMIT_MAX=15`
-- `AUTH_RATE_LIMIT_WINDOW_MS=900000` (15 minutes)
-- `REDIS_URL` optional (enables a shared rate-limit store across instances)
+- `AUTH_RATE_LIMIT_WINDOW_MS=900000`
+
+---
+
+## Design Decisions
+
+Zod is used for validation and OpenAPI metadata so runtime input checks and generated API contracts share the same source of truth.
+
+Argon2 is used for password hashing because it is memory-hard and better suited for password storage than fast general-purpose hashes.
+
+Booking check-in uses a serializable Prisma transaction to prevent concurrent active bookings for the same vehicle.
+
+Controllers rely on Express 5 native async error forwarding. Expected domain failures are thrown from controllers or services and normalized by the global error middleware.
+
+---
+
+## Testing Strategy
+
+- Unit tests cover service-level business rules and error cases.
+- Supertest smoke tests cover app wiring, health, route errors, and auth rate limiting.
+- TypeScript and ESLint run as mandatory quality gates.
+- OpenAPI generation and build artifact checks run in CI readiness commands.
 
 ---
 
@@ -73,42 +104,42 @@ Auth rate limit defaults:
 
 - Scalar UI: `/api-docs/docs`
 - OpenAPI JSON: `/api-docs/openapi.json`
-- Production API base URL: `https://copark-api.onrender.com`
-- Demo docs URL: `https://copark-api-demo.onrender.com/api-docs/docs`
+- Production API base URL: `https://parkcore-api.onrender.com`
 
-> API docs are enabled in development and test by default.
-> For demo/staging in production, set `ENABLE_API_DOCS=true`.
+API docs are enabled in development and test by default. In production, set `ENABLE_API_DOCS=true` to expose them.
 
 ---
 
 ## Quality & Verification
 
 ```bash
-pnpm lint              # ESLint strict + Prettier
-pnpm typecheck         # TypeScript strict mode
-pnpm test              # Vitest unit tests
-pnpm quality:ci        # Full pipeline check
-pnpm release:readiness # OpenAPI + build validation
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm quality:ci
+pnpm release:readiness
 ```
 
 ---
 
 ## Architecture
 
-```
-controller -> service -> repository
+```text
+routes -> controller -> service -> repository
 ```
 
-- Controllers handle HTTP concerns
-- Services enforce business rules
-- Repositories isolate Prisma operations
-- Errors flow through a global handler with a unified contract
+- Routes compose middleware and controller handlers.
+- Controllers handle HTTP concerns only.
+- Services enforce business rules and authorization checks.
+- Repositories isolate Prisma persistence.
+- Errors flow through a global handler with a stable response contract.
 
-See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), [AI-WORKFLOW.md](docs/AI-WORKFLOW.md), and [API-DESIGN.md](docs/API-DESIGN.md) for details.
+See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), and [API-DESIGN.md](docs/API-DESIGN.md) for details.
 
 ---
 
 ## CI
 
 - Workflow: `.github/workflows/ci.yml`
-- Gate: `quality-and-readiness` (lint + typecheck + test + openapi + build)
+- Gate: `quality-and-readiness`
+- Checks: lint, typecheck, test coverage, OpenAPI generation, and build readiness

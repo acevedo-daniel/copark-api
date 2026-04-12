@@ -260,7 +260,7 @@ export type ParkingGroupByOutputType = {
   _max: ParkingMaxAggregateOutputType | null
 }
 
-type GetParkingGroupByPayload<T extends ParkingGroupByArgs> = Prisma.PrismaPromise<
+export type GetParkingGroupByPayload<T extends ParkingGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ParkingGroupByOutputType, T['by']> &
       {
@@ -1889,6 +1889,11 @@ export type ParkingFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Skip the first `n` Parkings.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Parkings.
+   */
   distinct?: Prisma.ParkingScalarFieldEnum | Prisma.ParkingScalarFieldEnum[]
 }
 

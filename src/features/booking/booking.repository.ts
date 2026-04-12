@@ -1,11 +1,15 @@
+import {
+  Booking,
+  Parking,
+  Prisma,
+  Vehicle,
+  type BookingStatus,
+} from '../../../prisma/generated/client.js';
 import { prisma } from '../../config/prisma.js';
-import { Booking, Prisma, type BookingStatus } from '../../../prisma/generated/client.js';
-import { BookingWithRelations } from './booking.types.js';
 
-export const create = async (data: Prisma.BookingCreateInput): Promise<Booking> => {
-  return await prisma.booking.create({
-    data,
-  });
+export type BookingWithRelations = Booking & {
+  vehicle: Vehicle;
+  parking: Pick<Parking, 'id' | 'title' | 'pricePerHour' | 'ownerId'>;
 };
 
 export const findById = async (id: string): Promise<BookingWithRelations | null> => {
@@ -17,13 +21,6 @@ export const findById = async (id: string): Promise<BookingWithRelations | null>
         select: { id: true, title: true, pricePerHour: true, ownerId: true },
       },
     },
-  });
-};
-
-export const update = async (id: string, data: Prisma.BookingUpdateInput): Promise<Booking> => {
-  return await prisma.booking.update({
-    where: { id },
-    data,
   });
 };
 
@@ -61,15 +58,6 @@ export const findByParking = async (
   return { data, total };
 };
 
-export const findActiveByVehicle = async (vehicleId: string): Promise<Booking | null> => {
-  return await prisma.booking.findFirst({
-    where: {
-      vehicleId,
-      status: 'CONFIRMED',
-    },
-  });
-};
-
 export const createConfirmedIfNoActive = async (
   parkingId: string,
   vehicleId: string,
@@ -104,39 +92,30 @@ export const completeIfConfirmed = async (
   id: string,
   endTime: Date,
   totalPrice: number,
-): Promise<boolean> => {
-  const result = await prisma.booking.updateMany({
-    where: {
-      id,
-      status: 'CONFIRMED',
-    },
-    data: {
-      endTime,
-      totalPrice,
-      status: 'COMPLETED',
-    },
-  });
+): Promise<Booking | null> => {
+  return await prisma.$transaction(async (tx) => {
+    const activeBooking = await tx.booking.findFirst({
+      where: { id, status: 'CONFIRMED' },
+    });
 
-  return result.count === 1;
-};
-
-export const cancel = async (id: string): Promise<Booking> => {
-  return await prisma.booking.update({
-    where: { id },
-    data: { status: 'CANCELLED' },
+    if (!activeBooking) return null;
+    return await tx.booking.update({
+      where: { id },
+      data: { endTime, totalPrice, status: 'COMPLETED' },
+    });
   });
 };
 
-export const cancelIfConfirmed = async (id: string): Promise<boolean> => {
-  const result = await prisma.booking.updateMany({
-    where: {
-      id,
-      status: 'CONFIRMED',
-    },
-    data: {
-      status: 'CANCELLED',
-    },
-  });
+export const cancelIfConfirmed = async (id: string): Promise<Booking | null> => {
+  return await prisma.$transaction(async (tx) => {
+    const activeBooking = await tx.booking.findFirst({
+      where: { id, status: 'CONFIRMED' },
+    });
 
-  return result.count === 1;
+    if (!activeBooking) return null;
+    return await tx.booking.update({
+      where: { id },
+      data: { status: 'CANCELLED' },
+    });
+  });
 };

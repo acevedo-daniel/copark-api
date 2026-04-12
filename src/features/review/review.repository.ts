@@ -1,6 +1,10 @@
 import { prisma } from '../../config/prisma.js';
-import type { Review } from '../../../prisma/generated/client.js';
+import type { Prisma, Review } from '../../../prisma/generated/client.js';
 import { createPaginatedResult, type PaginationResult } from '../../utils/pagination.js';
+
+export const create = async (data: Prisma.ReviewCreateInput): Promise<Review> => {
+  return await prisma.review.create({ data });
+};
 
 export const findByParkingId = async (
   parkingId: string,

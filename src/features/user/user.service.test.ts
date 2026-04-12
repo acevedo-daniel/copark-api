@@ -17,7 +17,7 @@ const buildUser = (overrides?: Partial<User>): User => {
 
   return {
     id: 'user-1',
-    email: 'user@copark.test',
+    email: 'user@parkcore.test',
     passwordHash: 'hashed-secret',
     name: 'John',
     lastName: 'Doe',
@@ -87,7 +87,7 @@ describe('user.service', () => {
 
     it('throws NotFoundError when email does not exist', async () => {
       vi.mocked(userRepository.findByEmail).mockResolvedValue(null);
-      const promise = getByEmail('missing@copark.test');
+      const promise = getByEmail('missing@parkcore.test');
 
       await expect(promise).rejects.toBeInstanceOf(NotFoundError);
       await expect(promise).rejects.toThrow('User not found');

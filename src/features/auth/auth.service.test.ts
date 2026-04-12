@@ -27,7 +27,7 @@ const buildUser = (overrides?: Partial<User>): User => {
 
   return {
     id: 'user-1',
-    email: 'user@copark.test',
+    email: 'user@parkcore.test',
     passwordHash: 'hash-1',
     name: 'Test',
     lastName: null,
@@ -45,7 +45,7 @@ describe('auth.service', () => {
   });
 
   it('registers a user and returns access token', async () => {
-    const dto = buildRegisterDto({ email: 'new@copark.test', password: 'Passw0rd!123' });
+    const dto = buildRegisterDto({ email: 'new@parkcore.test', password: 'Passw0rd!123' });
     const createdUser = buildUser({ email: dto.email, name: dto.name });
 
     vi.mocked(userRepository.findByEmail).mockResolvedValue(null);
@@ -72,7 +72,7 @@ describe('auth.service', () => {
   });
 
   it('throws ConflictError when email already exists on register', async () => {
-    const dto = buildRegisterDto({ email: 'existing@copark.test' });
+    const dto = buildRegisterDto({ email: 'existing@parkcore.test' });
 
     vi.mocked(userRepository.findByEmail).mockResolvedValue(buildUser({ email: dto.email }));
 
@@ -87,7 +87,7 @@ describe('auth.service', () => {
   });
 
   it('throws ConflictError when register hits unique email constraint', async () => {
-    const dto = buildRegisterDto({ email: 'race@copark.test' });
+    const dto = buildRegisterDto({ email: 'race@parkcore.test' });
     const uniqueEmailError = Object.assign(
       Object.create(Prisma.PrismaClientKnownRequestError.prototype),
       { code: 'P2002', meta: { target: ['email'] } },
@@ -106,7 +106,7 @@ describe('auth.service', () => {
   });
 
   it('logs in and returns access token', async () => {
-    const dto = buildLoginDto({ email: 'user@copark.test', password: 'Passw0rd!123' });
+    const dto = buildLoginDto({ email: 'user@parkcore.test', password: 'Passw0rd!123' });
     const existingUser = buildUser({ email: dto.email, passwordHash: 'hash-2' });
 
     vi.mocked(userRepository.findByEmail).mockResolvedValue(existingUser);
@@ -126,7 +126,7 @@ describe('auth.service', () => {
   });
 
   it('throws UnauthorizedError when user does not exist on login', async () => {
-    const dto = buildLoginDto({ email: 'missing@copark.test' });
+    const dto = buildLoginDto({ email: 'missing@parkcore.test' });
 
     vi.mocked(userRepository.findByEmail).mockResolvedValue(null);
 
@@ -140,7 +140,7 @@ describe('auth.service', () => {
   });
 
   it('throws UnauthorizedError when password is invalid on login', async () => {
-    const dto = buildLoginDto({ email: 'user@copark.test', password: 'wrong-password' });
+    const dto = buildLoginDto({ email: 'user@parkcore.test', password: 'wrong-password' });
     const existingUser = buildUser({ email: dto.email, passwordHash: 'hash-3' });
 
     vi.mocked(userRepository.findByEmail).mockResolvedValue(existingUser);

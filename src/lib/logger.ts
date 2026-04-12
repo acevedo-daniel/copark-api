@@ -6,7 +6,7 @@ const isPretty = env.NODE_ENV !== 'production' && env.LOG_PRETTY;
 export const logger = pino({
   level: env.LOG_LEVEL,
   base: {
-    service: 'copark-api',
+    service: 'parkcore-api',
     env: env.NODE_ENV,
   },
   redact: {

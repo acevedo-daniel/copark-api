@@ -18,16 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     services:
-      postgres:
+      parkcore-db:
         image: postgres:16
         env:
-          POSTGRES_USER: copark
-          POSTGRES_PASSWORD: copark
-          POSTGRES_DB: copark_ci
+          POSTGRES_USER: parkcore
+          POSTGRES_PASSWORD: parkcore
+          POSTGRES_DB: parkcore-db
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U copark -d copark_ci"
+          --health-cmd "pg_isready -U parkcore -d parkcore-db"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
@@ -50,7 +50,7 @@ jobs:
 
       - name: Database bootstrap check
         env:
-          DATABASE_URL: postgresql://copark:copark@localhost:5432/copark_ci
+          DATABASE_URL: postgresql://parkcore:parkcore@localhost:5432/parkcore-db
         run: pnpm db:setup
 
       - name: Pipeline checks

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Booking } from '../../../prisma/generated/client.js';
 import { paginationMetaSchema } from '../../utils/pagination.schema.js';
 import { createVehicleSchema } from '../vehicle/vehicle.schema.js';
 
@@ -66,3 +67,17 @@ export type ParkingParams = z.infer<typeof parkingParamsSchema>;
 export type BookingParams = z.infer<typeof bookingParamsSchema>;
 export type BookingResponse = z.infer<typeof bookingResponseSchema>;
 export type BookingListResponse = z.infer<typeof bookingListResponseSchema>;
+
+export function toBookingResponse(booking: Booking): BookingResponse {
+  return {
+    id: booking.id,
+    startTime: booking.startTime,
+    endTime: booking.endTime,
+    totalPrice: booking.totalPrice,
+    status: booking.status,
+    parkingId: booking.parkingId,
+    vehicleId: booking.vehicleId,
+    createdAt: booking.createdAt,
+    updatedAt: booking.updatedAt,
+  };
+}

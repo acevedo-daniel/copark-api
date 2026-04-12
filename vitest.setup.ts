@@ -5,7 +5,7 @@ const defaultEnv: Record<string, string> = {
   PORT: '3001',
   API_BASE_URL: 'http://localhost:3001',
   CORS_ORIGINS: 'http://localhost:3000',
-  DATABASE_URL: 'postgresql://test:test@localhost:5432/copark_test',
+  DATABASE_URL: 'postgresql://test:test@localhost:5432/parkcore_test',
   JWT_SECRET: 'test-secret-test-secret-test-secret-32',
   JWT_EXPIRES_IN: '1h',
   LOG_LEVEL: 'error',
