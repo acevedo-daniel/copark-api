@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import type { RequestHandler } from 'express';
 import { requireAuth } from '../../middlewares/auth.middleware.js';
 import { validateRequest } from '../../middlewares/validation.middleware.js';
-import { typedHandler } from '../../utils/typed-handler.js';
 import * as bookingController from './booking.controller.js';
 import {
   bookingParamsSchema,
@@ -28,7 +28,7 @@ parkingBookingsRouter.get(
 parkingBookingsRouter.get(
   '/',
   validateRequest({ params: parkingParamsSchema, query: bookingQuerySchema }),
-  typedHandler(bookingController.findAll),
+  bookingController.findAll as unknown as RequestHandler,
 );
 
 export const bookingRouter = Router();

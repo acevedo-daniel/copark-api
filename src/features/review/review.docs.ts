@@ -6,6 +6,8 @@ import {
   reviewQuerySchema,
   reviewListResponseSchema,
   reviewStatsResponseSchema,
+  createReviewSchema,
+  reviewResponseSchema,
 } from './review.schema.js';
 
 export function registerReviewDocs(registry: OpenAPIRegistry): void {
@@ -25,6 +27,36 @@ export function registerReviewDocs(registry: OpenAPIRegistry): void {
         content: {
           'application/json': {
             schema: reviewListResponseSchema,
+          },
+        },
+      },
+      400: errorResponse('Validation error'),
+      404: errorResponse('Parking not found'),
+    },
+  });
+
+  registry.registerPath({
+    method: 'post',
+    path: '/reviews/parking/{parkingId}',
+    tags: ['Reviews'],
+    summary: 'Create Review',
+    description: 'Creates a new review for an existing parking spot.',
+    request: {
+      params: reviewParkingParamsSchema,
+      body: {
+        content: {
+          'application/json': {
+            schema: createReviewSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      201: {
+        description: 'Review created successfully',
+        content: {
+          'application/json': {
+            schema: reviewResponseSchema,
           },
         },
       },

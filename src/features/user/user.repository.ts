@@ -24,9 +24,3 @@ export const findByEmail = async (email: string): Promise<User | null> => {
   });
 };
 
-export const existsByEmail = async (email: string): Promise<boolean> => {
-  const count = await prisma.user.count({
-    where: { email },
-  });
-  return count > 0;
-};

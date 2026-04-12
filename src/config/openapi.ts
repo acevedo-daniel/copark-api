@@ -19,10 +19,10 @@ export function generateOpenApiDocument() {
   return generator.generateDocument({
     openapi: '3.1.0',
     info: {
-      title: 'CoPark API',
+      title: 'ParkCore API',
       version: '1.0.0',
       description:
-        'Parking Management System for Administrators. API-first solution with strict typing and validation.',
+        'Backend API for parking facility management. API-first solution with strict typing and validation.',
       contact: {
         name: 'Daniel Acevedo',
         url: 'https://github.com/acevedo-daniel',
@@ -34,7 +34,7 @@ export function generateOpenApiDocument() {
         description: 'Development',
       },
       {
-        url: 'https://copark-api.onrender.com',
+        url: 'https://parkcore-api.onrender.com',
         description: 'Production',
       },
     ],

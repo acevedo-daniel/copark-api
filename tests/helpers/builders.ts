@@ -15,7 +15,7 @@ export const buildRegisterDto = (
 ) => {
   return merge(
     {
-      email: `user-${randomUUID()}@copark.test`,
+      email: `user-${randomUUID()}@parkcore.test`,
       password: 'Passw0rd!123',
       name: 'Test User',
     },
@@ -31,7 +31,7 @@ export const buildLoginDto = (
 ) => {
   return merge(
     {
-      email: 'user@copark.test',
+      email: 'user@parkcore.test',
       password: 'Passw0rd!123',
     },
     overrides,

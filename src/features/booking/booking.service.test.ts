@@ -18,10 +18,17 @@ vi.mock('../vehicle/vehicle.service.js', () => ({
   create: vi.fn(),
 }));
 
-import { Prisma, type Booking, type BookingStatus, type Vehicle } from '../../../prisma/generated/client.js';
+import {
+  Prisma,
+  type Booking,
+  type BookingStatus,
+  type Parking,
+  type Vehicle,
+} from '../../../prisma/generated/client.js';
 import { ConflictError, ForbiddenError, NotFoundError } from '../../errors/index.js';
 import type { BookingQuery, CheckIn } from './booking.schema.js';
 import * as bookingRepository from './booking.repository.js';
+import type { BookingWithRelations } from './booking.repository.js';
 import {
   cancelBooking,
   checkIn,
@@ -30,7 +37,6 @@ import {
   getBookingById,
   getBookingsByParking,
 } from './booking.service.js';
-import type { BookingWithRelations } from './booking.types.js';
 import * as parkingService from '../parking/parking.service.js';
 import * as vehicleService from '../vehicle/vehicle.service.js';
 
@@ -66,6 +72,27 @@ const buildVehicle = (overrides?: Partial<Vehicle>): Vehicle => {
     createdAt: now,
     updatedAt: now,
     parkingId: 'parking-1',
+    ...(overrides ?? {}),
+  };
+};
+
+const buildParking = (overrides?: Partial<Parking>): Parking => {
+  const now = new Date('2026-02-21T10:00:00.000Z');
+
+  return {
+    id: 'parking-1',
+    title: 'Main Parking',
+    description: null,
+    image: null,
+    address: '123 Test St',
+    pricePerHour: 2000,
+    totalSpaces: 20,
+    lat: -34.6037,
+    lng: -58.3816,
+    isActive: true,
+    createdAt: now,
+    updatedAt: now,
+    ownerId: 'owner-1',
     ...(overrides ?? {}),
   };
 };
@@ -115,11 +142,11 @@ describe('booking.service', () => {
 
   describe('checkIn', () => {
     it('throws ForbiddenError when parking owner does not match', async () => {
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-2',
         isActive: true,
         totalSpaces: 20,
-      } as never);
+      }));
 
       await expect(checkIn('owner-1', 'parking-1', checkInDto)).rejects.toBeInstanceOf(ForbiddenError);
       expect(vehicleService.findByPlate).not.toHaveBeenCalled();
@@ -127,11 +154,11 @@ describe('booking.service', () => {
     });
 
     it('throws ConflictError when parking is inactive', async () => {
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-1',
         isActive: false,
         totalSpaces: 20,
-      } as never);
+      }));
 
       await expect(checkIn('owner-1', 'parking-1', checkInDto)).rejects.toThrow('Parking is inactive');
       expect(bookingRepository.findActiveByParking).not.toHaveBeenCalled();
@@ -139,11 +166,11 @@ describe('booking.service', () => {
     });
 
     it('throws ConflictError when parking is full', async () => {
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-1',
         isActive: true,
         totalSpaces: 1,
-      } as never);
+      }));
       vi.mocked(bookingRepository.findActiveByParking).mockResolvedValue([buildBooking()]);
 
       await expect(checkIn('owner-1', 'parking-1', checkInDto)).rejects.toThrow('Parking is full');
@@ -155,11 +182,11 @@ describe('booking.service', () => {
       const createdVehicle = buildVehicle({ id: 'vehicle-2' });
       const createdBooking = buildBooking({ id: 'booking-2', vehicleId: createdVehicle.id });
 
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-1',
         isActive: true,
         totalSpaces: 20,
-      } as never);
+      }));
       vi.mocked(bookingRepository.findActiveByParking).mockResolvedValue([]);
       vi.mocked(vehicleService.findByPlate).mockRejectedValue(new NotFoundError('Vehicle not found'));
       vi.mocked(vehicleService.create).mockResolvedValue(createdVehicle);
@@ -181,11 +208,11 @@ describe('booking.service', () => {
     });
 
     it('throws ConflictError when booking already exists as active', async () => {
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-1',
         isActive: true,
         totalSpaces: 20,
-      } as never);
+      }));
       vi.mocked(bookingRepository.findActiveByParking).mockResolvedValue([]);
       vi.mocked(vehicleService.findByPlate).mockResolvedValue(buildVehicle());
       vi.mocked(bookingRepository.createConfirmedIfNoActive).mockResolvedValue(null);
@@ -201,11 +228,11 @@ describe('booking.service', () => {
         { code: 'P2034' },
       ) as Prisma.PrismaClientKnownRequestError;
 
-      vi.mocked(parkingService.findById).mockResolvedValue({
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({
         ownerId: 'owner-1',
         isActive: true,
         totalSpaces: 20,
-      } as never);
+      }));
       vi.mocked(bookingRepository.findActiveByParking).mockResolvedValue([]);
       vi.mocked(vehicleService.findByPlate).mockResolvedValue(buildVehicle());
       vi.mocked(bookingRepository.createConfirmedIfNoActive).mockRejectedValue(prismaP2034);
@@ -235,10 +262,8 @@ describe('booking.service', () => {
         totalPrice: 3000,
       });
 
-      vi.mocked(bookingRepository.findById)
-        .mockResolvedValueOnce(activeBooking)
-        .mockResolvedValueOnce(completedBooking);
-      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(true);
+      vi.mocked(bookingRepository.findById).mockResolvedValue(activeBooking);
+      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(completedBooking);
 
       const result = await checkOut('owner-1', bookingId);
 
@@ -272,7 +297,7 @@ describe('booking.service', () => {
       });
 
       vi.mocked(bookingRepository.findById).mockResolvedValue(activeBooking);
-      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(false);
+      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(null);
 
       await expect(checkOut('owner-1', bookingId)).rejects.toThrow('This booking is not active');
       expect(bookingRepository.completeIfConfirmed).toHaveBeenCalledWith(
@@ -288,7 +313,7 @@ describe('booking.service', () => {
       });
 
       vi.mocked(bookingRepository.findById).mockResolvedValue(booking);
-      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(false);
+      vi.mocked(bookingRepository.completeIfConfirmed).mockResolvedValue(null);
 
       await expect(checkOut('owner-1', booking.id)).rejects.toBeInstanceOf(ConflictError);
     });
@@ -296,7 +321,7 @@ describe('booking.service', () => {
 
   describe('getActiveBookingsByParking', () => {
     it('throws ForbiddenError when owner does not match', async () => {
-      vi.mocked(parkingService.findById).mockResolvedValue({ ownerId: 'other-owner' } as never);
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({ ownerId: 'other-owner' }));
 
       await expect(getActiveBookingsByParking('owner-1', 'parking-1')).rejects.toBeInstanceOf(
         ForbiddenError,
@@ -306,7 +331,7 @@ describe('booking.service', () => {
     it('returns active bookings for owner parking', async () => {
       const bookings = [buildBooking({ id: 'booking-10' }), buildBooking({ id: 'booking-11' })];
 
-      vi.mocked(parkingService.findById).mockResolvedValue({ ownerId: 'owner-1' } as never);
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({ ownerId: 'owner-1' }));
       vi.mocked(bookingRepository.findActiveByParking).mockResolvedValue(bookings);
 
       const result = await getActiveBookingsByParking('owner-1', 'parking-1');
@@ -319,7 +344,7 @@ describe('booking.service', () => {
   describe('getBookingsByParking', () => {
     it('throws ForbiddenError when owner does not match', async () => {
       const query: BookingQuery = { page: 1, limit: 10, status: 'CONFIRMED' };
-      vi.mocked(parkingService.findById).mockResolvedValue({ ownerId: 'owner-2' } as never);
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({ ownerId: 'owner-2' }));
 
       await expect(getBookingsByParking('owner-1', 'parking-1', query)).rejects.toBeInstanceOf(
         ForbiddenError,
@@ -330,7 +355,7 @@ describe('booking.service', () => {
       const data = [buildBooking({ id: 'booking-20' }), buildBooking({ id: 'booking-21' })];
       const query: BookingQuery = { page: 2, limit: 2, status: 'COMPLETED' };
 
-      vi.mocked(parkingService.findById).mockResolvedValue({ ownerId: 'owner-1' } as never);
+      vi.mocked(parkingService.findById).mockResolvedValue(buildParking({ ownerId: 'owner-1' }));
       vi.mocked(bookingRepository.findByParking).mockResolvedValue({
         data,
         total: 5,
@@ -415,18 +440,9 @@ describe('booking.service', () => {
 
     it('throws ConflictError when booking is not active', async () => {
       vi.mocked(bookingRepository.findById).mockResolvedValue(buildBookingWithRelations());
-      vi.mocked(bookingRepository.cancelIfConfirmed).mockResolvedValue(false);
+      vi.mocked(bookingRepository.cancelIfConfirmed).mockResolvedValue(null);
 
       await expect(cancelBooking('owner-1', 'booking-41')).rejects.toBeInstanceOf(ConflictError);
-    });
-
-    it('throws NotFoundError when booking disappears after cancel', async () => {
-      vi.mocked(bookingRepository.findById)
-        .mockResolvedValueOnce(buildBookingWithRelations())
-        .mockResolvedValueOnce(null);
-      vi.mocked(bookingRepository.cancelIfConfirmed).mockResolvedValue(true);
-
-      await expect(cancelBooking('owner-1', 'booking-42')).rejects.toBeInstanceOf(NotFoundError);
     });
 
     it('returns cancelled booking without relation fields', async () => {
@@ -435,10 +451,10 @@ describe('booking.service', () => {
         status: 'CANCELLED' as BookingStatus,
       });
 
-      vi.mocked(bookingRepository.findById)
-        .mockResolvedValueOnce(buildBookingWithRelations({ id: 'booking-43' }))
-        .mockResolvedValueOnce(cancelled);
-      vi.mocked(bookingRepository.cancelIfConfirmed).mockResolvedValue(true);
+      vi.mocked(bookingRepository.findById).mockResolvedValue(
+        buildBookingWithRelations({ id: 'booking-43' }),
+      );
+      vi.mocked(bookingRepository.cancelIfConfirmed).mockResolvedValue(cancelled);
 
       const result = await cancelBooking('owner-1', 'booking-43');
 

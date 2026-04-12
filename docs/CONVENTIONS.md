@@ -14,10 +14,17 @@ These rules are normative and apply to all changes.
 ## Architecture Rules
 
 1. Respect dependency flow: `routes -> controller -> service -> repository`.
-2. Controllers handle HTTP only.
-3. Services own business rules and orchestration.
-4. Repositories contain persistence logic only.
-5. Route files compose middleware and controller wiring only.
+2. Route files compose middleware and controller wiring only.
+3. Controllers handle HTTP only.
+4. Services own business rules, authorization checks, and orchestration.
+5. Repositories contain persistence logic only.
+
+## Controller Rules
+
+1. Controllers do not use local `try/catch` wrappers for async errors.
+2. Let Express 5 forward rejected promises to the global error middleware.
+3. Use `requireUser(req)` in auth-required controllers before reading `req.user.id`.
+4. Public controllers must not assume an authenticated request.
 
 ## Type Safety Rules
 
@@ -25,6 +32,7 @@ These rules are normative and apply to all changes.
 2. `any` and `@ts-ignore` are prohibited.
 3. Prefer explicit function signatures for handlers and services.
 4. Treat caught errors as `unknown` and normalize before branching on shape.
+5. Use type guards or assertion helpers instead of unsafe casts where practical.
 
 ## Validation Rules
 
@@ -32,6 +40,13 @@ These rules are normative and apply to all changes.
 2. Use `validateRequest` middleware for validated endpoints.
 3. Keep schema definitions close to their feature module.
 4. Reuse schema fragments to avoid divergence.
+
+## Response Rules
+
+1. User responses must never expose `passwordHash`.
+2. Response shaping belongs in schema files when a model needs a public DTO.
+3. Use `toXxxResponse()` helpers for model-to-response transformations.
+4. Do not destructure relation payloads ad hoc in services when a response helper exists.
 
 ## Error Handling Rules
 
@@ -59,13 +74,13 @@ These rules are normative and apply to all changes.
 3. Preserve body size limits unless there is a justified product requirement.
 4. In production, require explicit `CORS_ORIGINS`.
 5. Keep auth rate limiting active and configuration-driven.
+6. Auth rate limiting must stay active and use explicit window and limit configuration.
 
 ## Documentation Rules
 
 1. Public docs in this repository are the root files in `docs/`:
    - `ARCHITECTURE.md`
    - `CONVENTIONS.md`
-   - `AI-WORKFLOW.md`
    - `API-DESIGN.md`
 2. `docs/` subfolders are local reference material and are not part of the public surface.
 3. Documentation changes must ship in the same change set as behavior changes.

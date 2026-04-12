@@ -13,7 +13,7 @@ const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 async function main(): Promise<void> {
-  const ownerEmail = process.env.SEED_OWNER_EMAIL ?? 'owner@copark.dev';
+  const ownerEmail = process.env.SEED_OWNER_EMAIL ?? 'owner@parkcore.dev';
   const ownerPassword = process.env.SEED_OWNER_PASSWORD ?? 'OwnerPassw0rd!123';
   const passwordHash = await argon2.hash(ownerPassword);
 

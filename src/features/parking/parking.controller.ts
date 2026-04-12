@@ -1,79 +1,47 @@
 import * as parkingService from './parking.service.js';
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response } from 'express';
 import { ParkingParams, ParkingQuery, CreateParking, UpdateParking } from './parking.schema.js';
-import { UnauthorizedError } from '../../errors/index.js';
+import { requireUser } from '../../utils/require-user.js';
 
 export const create = async (
   req: Request<unknown, unknown, CreateParking>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    if (!req.user) throw new UnauthorizedError();
-    const ownerId = req.user.id;
-    const dto = req.body;
-    const parking = await parkingService.create(ownerId, dto);
-    res.status(201).json(parking);
-  } catch (error) {
-    next(error);
-  }
+  requireUser(req);
+  const parking = await parkingService.create(req.user.id, req.body);
+  res.status(201).json(parking);
 };
 
 export const findAll = async (
   req: Request<unknown, unknown, unknown, ParkingQuery>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const result = await parkingService.findAll(req.query);
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await parkingService.findAll(req.query);
+  res.json(result);
 };
 
 export const findById = async (
   req: Request<ParkingParams>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    const { id } = req.params;
-    const parking = await parkingService.findById(id);
-    res.json(parking);
-  } catch (error) {
-    next(error);
-  }
+  const parking = await parkingService.findById(req.params.id);
+  res.json(parking);
 };
 
 export const findOwned = async (
   req: Request<unknown, unknown, unknown, unknown>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    if (!req.user) throw new UnauthorizedError();
-    const ownerId = req.user.id;
-    const parkings = await parkingService.findOwned(ownerId);
-    res.json(parkings);
-  } catch (error) {
-    next(error);
-  }
+  requireUser(req);
+  const parkings = await parkingService.findOwned(req.user.id);
+  res.json(parkings);
 };
 
 export const update = async (
   req: Request<ParkingParams, unknown, UpdateParking>,
   res: Response,
-  next: NextFunction,
 ): Promise<void> => {
-  try {
-    if (!req.user) throw new UnauthorizedError();
-    const ownerId = req.user.id;
-    const { id } = req.params;
-    const dto = req.body;
-    const parking = await parkingService.update(ownerId, id, dto);
-    res.json(parking);
-  } catch (error) {
-    next(error);
-  }
+  requireUser(req);
+  const parking = await parkingService.update(req.user.id, req.params.id, req.body);
+  res.json(parking);
 };

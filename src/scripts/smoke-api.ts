@@ -83,7 +83,7 @@ async function checkDocs(): Promise<void> {
 }
 
 async function checkAuthFlow(): Promise<void> {
-  const email = `smoke-${String(Date.now())}@copark.test`;
+  const email = `smoke-${String(Date.now())}@parkcore.test`;
   const password = 'Passw0rd!123';
 
   const register = await requestJson('/auth/register', {

@@ -29,7 +29,7 @@ describe('app smoke', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       status: 'ok',
-      service: 'copark-api',
+      service: 'parkcore-api',
     });
   });
 
