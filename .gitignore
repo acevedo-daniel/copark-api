@@ -7,9 +7,6 @@ node_modules/
 # Allow env
 !.env.example
 
-# Prisma
-/src/generated/prisma
-
 # Logs
 npm-debug.log*
 pnpm-debug.log*
@@ -29,9 +26,8 @@ Thumbs.db
 dist/
 coverage/
 
-# Agent and local context
+# Legacy agent context
 .agent/
-CLAUDE.md
 
 # Local docs (do not publish)
 docs/local/

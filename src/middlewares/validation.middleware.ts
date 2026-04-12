@@ -38,6 +38,7 @@ export function validateRequest(schemas: ValidateRequestSchemas): RequestHandler
         return;
       }
 
+      // Express 5 exposes req.query through a getter, so replace it with the validated data.
       Object.defineProperty(req, 'query', {
         value: result.data,
         writable: true,

@@ -8,32 +8,11 @@ vi.mock('./parking.repository.js', () => ({
   findAll: vi.fn(),
 }));
 
-import type { Parking } from '../../../prisma/generated/client.js';
+import { buildParking } from '../../../tests/helpers/builders.js';
 import { ForbiddenError, NotFoundError } from '../../errors/index.js';
 import type { CreateParking, ParkingQuery, UpdateParking } from './parking.schema.js';
 import * as parkingRepository from './parking.repository.js';
 import { create, findAll, findById, findOwned, update } from './parking.service.js';
-
-const buildParking = (overrides?: Partial<Parking>): Parking => {
-  const now = new Date('2026-02-21T12:00:00.000Z');
-
-  return {
-    id: 'parking-1',
-    title: 'Main Parking',
-    description: null,
-    image: null,
-    address: '123 Test St',
-    pricePerHour: 2000,
-    totalSpaces: 20,
-    lat: 10,
-    lng: 10,
-    isActive: true,
-    ownerId: 'owner-1',
-    createdAt: now,
-    updatedAt: now,
-    ...(overrides ?? {}),
-  };
-};
 
 const createDto: CreateParking = {
   title: 'Main Parking',

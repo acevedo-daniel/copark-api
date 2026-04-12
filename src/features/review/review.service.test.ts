@@ -10,48 +10,13 @@ vi.mock('./review.repository.js', () => ({
   getStats: vi.fn(),
 }));
 
-import type { Parking, Review } from '../../../prisma/generated/client.js';
+import type { Review } from '../../../prisma/generated/client.js';
+import { buildParking, buildReview } from '../../../tests/helpers/builders.js';
 import { NotFoundError } from '../../errors/index.js';
 import type { PaginationResult } from '../../utils/pagination.js';
 import * as parkingRepository from '../parking/parking.repository.js';
 import * as reviewRepository from './review.repository.js';
 import { createReview, getParkingReviews, getParkingStats } from './review.service.js';
-
-const buildReview = (overrides?: Partial<Review>): Review => {
-  const now = new Date('2026-02-21T12:00:00.000Z');
-
-  return {
-    id: 'review-1',
-    rating: 5,
-    comment: 'Great parking',
-    authorName: 'Daniel',
-    parkingId: 'parking-1',
-    createdAt: now,
-    updatedAt: now,
-    ...(overrides ?? {}),
-  };
-};
-
-const buildParking = (overrides?: Partial<Parking>): Parking => {
-  const now = new Date('2026-02-21T12:00:00.000Z');
-
-  return {
-    id: 'parking-1',
-    title: 'Main Parking',
-    description: null,
-    image: null,
-    address: '123 Test St',
-    pricePerHour: 2000,
-    totalSpaces: 20,
-    lat: -34.6037,
-    lng: -58.3816,
-    isActive: true,
-    createdAt: now,
-    updatedAt: now,
-    ownerId: 'owner-1',
-    ...(overrides ?? {}),
-  };
-};
 
 describe('review.service', () => {
   beforeEach(() => {
@@ -76,6 +41,29 @@ describe('review.service', () => {
     const result = await createReview('parking-1', dto);
 
     expect(parkingRepository.findById).toHaveBeenCalledWith('parking-1');
+    expect(reviewRepository.create).toHaveBeenCalledWith({
+      ...dto,
+      parking: { connect: { id: 'parking-1' } },
+    });
+    expect(result).toEqual(createdReview);
+  });
+
+  it('omits authorName so Prisma can apply its database default', async () => {
+    const dto = {
+      rating: 5,
+      comment: 'Clean parking spot',
+    };
+    const createdReview = buildReview({
+      rating: dto.rating,
+      comment: dto.comment,
+      authorName: 'Anonimo',
+    });
+
+    vi.mocked(parkingRepository.findById).mockResolvedValue(buildParking({ id: 'parking-1' }));
+    vi.mocked(reviewRepository.create).mockResolvedValue(createdReview);
+
+    const result = await createReview('parking-1', dto);
+
     expect(reviewRepository.create).toHaveBeenCalledWith({
       ...dto,
       parking: { connect: { id: 'parking-1' } },
