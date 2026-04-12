@@ -3,18 +3,6 @@
   "compilerOptions": {
     "noEmit": false
   },
-  "include": [
-    "app.ts",
-    "server.ts",
-    "src/**/*.ts",
-    "prisma/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "coverage",
-    "tests",
-    "src/**/*.test.ts",
-    "vitest.setup.ts"
-  ]
+  "include": ["app.ts", "server.ts", "src/**/*.ts", "prisma/**/*.ts"],
+  "exclude": ["node_modules", "dist", "coverage", "tests", "src/**/*.test.ts", "vitest.setup.ts"]
 }

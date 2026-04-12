@@ -23,4 +23,3 @@ export const findByEmail = async (email: string): Promise<User | null> => {
     where: { email },
   });
 };
-

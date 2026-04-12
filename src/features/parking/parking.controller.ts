@@ -20,10 +20,7 @@ export const findAll = async (
   res.json(result);
 };
 
-export const findById = async (
-  req: Request<ParkingParams>,
-  res: Response,
-): Promise<void> => {
+export const findById = async (req: Request<ParkingParams>, res: Response): Promise<void> => {
   const parking = await parkingService.findById(req.params.id);
   res.json(parking);
 };

@@ -56,7 +56,7 @@ describe('review.service', () => {
     const createdReview = buildReview({
       rating: dto.rating,
       comment: dto.comment,
-      authorName: 'Anonimo',
+      authorName: 'Anonymous',
     });
 
     vi.mocked(parkingRepository.findById).mockResolvedValue(buildParking({ id: 'parking-1' }));

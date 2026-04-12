@@ -52,7 +52,9 @@ describe('vehicle.service', () => {
     it('throws ForbiddenError when owner is not parking owner', async () => {
       vi.mocked(parkingRepository.findById).mockResolvedValue(buildParking({ ownerId: 'owner-2' }));
 
-      await expect(create('owner-1', 'parking-1', createDto)).rejects.toBeInstanceOf(ForbiddenError);
+      await expect(create('owner-1', 'parking-1', createDto)).rejects.toBeInstanceOf(
+        ForbiddenError,
+      );
       expect(vehicleRepository.create).not.toHaveBeenCalled();
     });
 
@@ -68,9 +70,7 @@ describe('vehicle.service', () => {
       const promise = create('owner-1', 'parking-1', createDto);
 
       await expect(promise).rejects.toBeInstanceOf(ConflictError);
-      await expect(promise).rejects.toThrow(
-        'Vehicle plate already exists in this parking',
-      );
+      await expect(promise).rejects.toThrow('Vehicle plate already exists in this parking');
     });
 
     it('rethrows unknown repository error', async () => {
@@ -98,13 +98,17 @@ describe('vehicle.service', () => {
       vi.mocked(parkingRepository.findById).mockResolvedValue(buildParking());
       vi.mocked(vehicleRepository.findByPlate).mockResolvedValue(null);
 
-      await expect(findByPlate('owner-1', 'ABC123', 'parking-1')).rejects.toBeInstanceOf(NotFoundError);
+      await expect(findByPlate('owner-1', 'ABC123', 'parking-1')).rejects.toBeInstanceOf(
+        NotFoundError,
+      );
     });
 
     it('throws ForbiddenError when owner is not parking owner', async () => {
       vi.mocked(parkingRepository.findById).mockResolvedValue(buildParking({ ownerId: 'owner-2' }));
 
-      await expect(findByPlate('owner-1', 'ABC123', 'parking-1')).rejects.toBeInstanceOf(ForbiddenError);
+      await expect(findByPlate('owner-1', 'ABC123', 'parking-1')).rejects.toBeInstanceOf(
+        ForbiddenError,
+      );
       expect(vehicleRepository.findByPlate).not.toHaveBeenCalled();
     });
   });

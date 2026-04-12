@@ -11,13 +11,6 @@
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true
   },
-  "include": [
-    "src",
-    "tests",
-    "prisma",
-    "app.ts",
-    "server.ts",
-    "vitest.setup.ts"
-  ],
+  "include": ["src", "tests", "prisma", "app.ts", "server.ts", "vitest.setup.ts"],
   "exclude": ["node_modules", "dist"]
 }

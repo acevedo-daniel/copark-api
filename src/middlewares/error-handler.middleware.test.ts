@@ -65,7 +65,12 @@ describe('errorHandler middleware', () => {
     res.headersSent = false;
     const next = vi.fn<(error?: unknown) => void>();
 
-    errorHandler(new Error('boom'), req, res as unknown as Response, next as unknown as NextFunction);
+    errorHandler(
+      new Error('boom'),
+      req,
+      res as unknown as Response,
+      next as unknown as NextFunction,
+    );
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({

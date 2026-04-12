@@ -44,6 +44,7 @@ export function registerReviewDocs(registry: OpenAPIRegistry): void {
     request: {
       params: reviewParkingParamsSchema,
       body: {
+        required: true,
         content: {
           'application/json': {
             schema: createReviewSchema,
@@ -62,6 +63,7 @@ export function registerReviewDocs(registry: OpenAPIRegistry): void {
       },
       400: errorResponse('Validation error'),
       404: errorResponse('Parking not found'),
+      429: errorResponse('Too many requests'),
     },
   });
 

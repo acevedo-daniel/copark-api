@@ -101,7 +101,8 @@ export const parkingQuerySchema = z
     ownerId: z.uuid().optional().openapi({ description: 'Filter by owner ID' }),
   })
   .refine(
-    ({ minPrice, maxPrice }) => minPrice === undefined || maxPrice === undefined || minPrice <= maxPrice,
+    ({ minPrice, maxPrice }) =>
+      minPrice === undefined || maxPrice === undefined || minPrice <= maxPrice,
     {
       message: 'minPrice must be less than or equal to maxPrice',
       path: ['minPrice'],
