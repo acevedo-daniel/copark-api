@@ -75,7 +75,10 @@ async function checkDocs(): Promise<void> {
     }
   }
 
-  assert(result !== null, 'OpenAPI endpoint not reachable (checked /api-docs/openapi.json and /openapi.json)');
+  assert(
+    result !== null,
+    'OpenAPI endpoint not reachable (checked /api-docs/openapi.json and /openapi.json)',
+  );
   const json = result.json;
   assert(json !== null, 'OpenAPI document body is not JSON');
   assert(typeof json.openapi === 'string', 'OpenAPI document missing "openapi" field');

@@ -2,6 +2,9 @@ import { generateOpenApiDocument } from '../config/openapi.js';
 
 interface OpenApiOperation {
   responses?: Record<string, unknown>;
+  requestBody?: {
+    required?: boolean;
+  };
 }
 
 interface OpenApiPathItem {
@@ -64,6 +67,14 @@ if (!createReviewPath?.responses?.['201']) {
 
 if (!createReviewPath?.responses?.['404']) {
   errors.push('Missing 404 response in POST /reviews/parking/{parkingId}.');
+}
+
+if (createReviewPath?.requestBody?.required !== true) {
+  errors.push('POST /reviews/parking/{parkingId} request body must be required.');
+}
+
+if (!createReviewPath?.responses?.['429']) {
+  errors.push('Missing 429 response in POST /reviews/parking/{parkingId}.');
 }
 
 const statsPath = doc.paths?.['/reviews/parking/{parkingId}/stats']?.get;

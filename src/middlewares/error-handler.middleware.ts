@@ -75,11 +75,14 @@ export const errorHandler = (err: unknown, req: Request, res: Response, next: Ne
   }
 
   if (normalizedError instanceof AppError && normalizedError.isOperational) {
-    logger.warn({
-      message: normalizedError.message,
-      statusCode: normalizedError.statusCode,
-      path: req.path,
-    }, 'Operational error');
+    logger.warn(
+      {
+        message: normalizedError.message,
+        statusCode: normalizedError.statusCode,
+        path: req.path,
+      },
+      'Operational error',
+    );
 
     return res.status(normalizedError.statusCode).json({
       error: true,
@@ -87,11 +90,14 @@ export const errorHandler = (err: unknown, req: Request, res: Response, next: Ne
     });
   }
 
-  logger.error({
-    err: normalizedError,
-    error: normalizedError.message,
-    path: req.path,
-  }, 'Unexpected error');
+  logger.error(
+    {
+      err: normalizedError,
+      error: normalizedError.message,
+      path: req.path,
+    },
+    'Unexpected error',
+  );
 
   return res.status(500).json({
     error: true,

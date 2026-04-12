@@ -12,19 +12,13 @@ export const checkIn = async (
   res.status(201).json(booking);
 };
 
-export const checkOut = async (
-  req: Request<BookingParams>,
-  res: Response,
-): Promise<void> => {
+export const checkOut = async (req: Request<BookingParams>, res: Response): Promise<void> => {
   requireUser(req);
   const booking = await bookingService.checkOut(req.user.id, req.params.bookingId);
   res.json(booking);
 };
 
-export const listActive = async (
-  req: Request<ParkingParams>,
-  res: Response,
-): Promise<void> => {
+export const listActive = async (req: Request<ParkingParams>, res: Response): Promise<void> => {
   requireUser(req);
   const bookings = await bookingService.getActiveBookingsByParking(
     req.user.id,
@@ -46,19 +40,13 @@ export const findAll = async (
   res.json(result);
 };
 
-export const findById = async (
-  req: Request<BookingParams>,
-  res: Response,
-): Promise<void> => {
+export const findById = async (req: Request<BookingParams>, res: Response): Promise<void> => {
   requireUser(req);
   const booking = await bookingService.getBookingById(req.user.id, req.params.bookingId);
   res.json(booking);
 };
 
-export const cancel = async (
-  req: Request<BookingParams>,
-  res: Response,
-): Promise<void> => {
+export const cancel = async (req: Request<BookingParams>, res: Response): Promise<void> => {
   requireUser(req);
   const booking = await bookingService.cancelBooking(req.user.id, req.params.bookingId);
   res.json(booking);

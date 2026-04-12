@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import type { RequestHandler } from 'express';
+import { createReviewRateLimiter } from '../../config/rate-limit.js';
 import { validateRequest } from '../../middlewares/validation.middleware.js';
 import * as reviewController from './review.controller.js';
 import {
@@ -9,9 +10,11 @@ import {
 } from './review.schema.js';
 
 const reviewRouter = Router();
+const reviewLimiter = createReviewRateLimiter();
 
 reviewRouter.post(
   '/parking/:parkingId',
+  reviewLimiter,
   validateRequest({
     params: reviewParkingParamsSchema,
     body: createReviewSchema,

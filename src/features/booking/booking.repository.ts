@@ -12,6 +12,8 @@ export type BookingWithRelations = Booking & {
   parking: Pick<Parking, 'id' | 'title' | 'pricePerHour' | 'ownerId'>;
 };
 
+export type CheckInBlockedReason = 'parking-full' | 'vehicle-active';
+
 export const findById = async (id: string): Promise<BookingWithRelations | null> => {
   return await prisma.booking.findUnique({
     where: { id },
@@ -58,12 +60,24 @@ export const findByParking = async (
   return { data, total };
 };
 
-export const createConfirmedIfNoActive = async (
+export const createConfirmedIfAvailable = async (
   parkingId: string,
   vehicleId: string,
-): Promise<Booking | null> => {
+  totalSpaces: number,
+): Promise<Booking | CheckInBlockedReason> => {
   return await prisma.$transaction(
     async (tx) => {
+      const activeCount = await tx.booking.count({
+        where: {
+          parkingId,
+          status: 'CONFIRMED',
+        },
+      });
+
+      if (activeCount >= totalSpaces) {
+        return 'parking-full';
+      }
+
       const activeBooking = await tx.booking.findFirst({
         where: {
           vehicleId,
@@ -72,7 +86,7 @@ export const createConfirmedIfNoActive = async (
       });
 
       if (activeBooking) {
-        return null;
+        return 'vehicle-active';
       }
 
       return await tx.booking.create({

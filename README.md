@@ -1,62 +1,32 @@
 # ParkCore API
 
-<p align="center">
-  <img src="https://img.shields.io/badge/typescript-strict-111111?style=flat-square&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/node.js-22-111111?style=flat-square&logo=nodedotjs&logoColor=white" />
-  <img src="https://img.shields.io/badge/express-5-111111?style=flat-square&logo=express&logoColor=white" />
-  <img src="https://img.shields.io/badge/postgresql-prisma-111111?style=flat-square&logo=postgresql&logoColor=white" />
-  <img src="https://img.shields.io/badge/openapi-3.1-111111?style=flat-square&logo=openapiinitiative&logoColor=white" />
-  <img src="https://img.shields.io/github/actions/workflow/status/acevedo-daniel/parkcore-api/ci.yml?style=flat-square&label=CI" />
-</p>
+Backend API for parking operations. Built with TypeScript, Express 5, Prisma, PostgreSQL, JWT auth, Zod validation, and OpenAPI documentation.
 
-Backend API for parking facility management. Built with TypeScript, Express 5, Prisma, and PostgreSQL.
+## Highlights
 
----
-
-## Technical Highlights
-
-- Strict TypeScript across application, scripts, and tests
-- Layered feature modules: `routes -> controller -> service -> repository`
-- Zod validation schemas reused for OpenAPI generation
-- OpenAPI 3.1 documentation served with Scalar
+- Layered architecture: routes, controllers, services, repositories
+- Strict TypeScript across app code, scripts, and tests
+- Zod schemas reused for request validation and OpenAPI generation
 - JWT authentication with Argon2 password hashing
-- In-memory auth rate limiting
-- Serializable transaction for check-in race protection
-- Express 5 async error handling through a global error middleware
-- Structured Pino logging with `x-request-id` correlation
-- Graceful shutdown for HTTP and Prisma
-
----
-
-## Functional Coverage
-
-| Module   | Capabilities                              |
-| -------- | ----------------------------------------- |
-| Auth     | Register, login, JWT access tokens        |
-| Users    | Current user profile read/update          |
-| Parkings | Create, list, read, update, owner listing |
-| Vehicles | Create and lookup by plate per parking    |
-| Bookings | Check-in, check-out, cancel, pagination   |
-| Reviews  | Create, list, and parking rating stats    |
-| System   | Health check and service metadata         |
-
----
+- Transactional check-in flow with concurrent capacity protection
+- Public review creation with rate limiting
+- Global error handler with a stable JSON error contract
+- CI gate for lint, typecheck, coverage, OpenAPI, and build readiness
 
 ## Stack
 
-- Node.js 22
-- TypeScript strict mode
-- Express 5
-- Prisma + PostgreSQL
-- Zod
-- OpenAPI 3.1 + Scalar
-- Pino + pino-http
-- Vitest + Supertest
-- Docker Compose for local PostgreSQL and pgAdmin
+| Area       | Choice               |
+| ---------- | -------------------- |
+| Runtime    | Node.js 22           |
+| API        | Express 5            |
+| Database   | PostgreSQL           |
+| ORM        | Prisma               |
+| Validation | Zod                  |
+| Auth       | JWT + Argon2         |
+| Docs       | OpenAPI 3.1 + Scalar |
+| Tests      | Vitest + Supertest   |
 
----
-
-## Quick Start
+## Local Setup
 
 ```bash
 pnpm install
@@ -66,51 +36,14 @@ pnpm db:setup
 pnpm dev
 ```
 
-Default local services:
+Local services:
 
 - API: `http://localhost:3000`
-- PostgreSQL: `localhost:5432` (`parkcore-db`)
+- API docs: `http://localhost:3000/api-docs/docs`
+- PostgreSQL: `localhost:5432`
 - pgAdmin: `http://localhost:5050`
 
-Auth rate limit defaults:
-
-- `AUTH_RATE_LIMIT_MAX=15`
-- `AUTH_RATE_LIMIT_WINDOW_MS=900000`
-
----
-
-## Design Decisions
-
-Zod is used for validation and OpenAPI metadata so runtime input checks and generated API contracts share the same source of truth.
-
-Argon2 is used for password hashing because it is memory-hard and better suited for password storage than fast general-purpose hashes.
-
-Booking check-in uses a serializable Prisma transaction to prevent concurrent active bookings for the same vehicle.
-
-Controllers rely on Express 5 native async error forwarding. Expected domain failures are thrown from controllers or services and normalized by the global error middleware.
-
----
-
-## Testing Strategy
-
-- Unit tests cover service-level business rules and error cases.
-- Supertest smoke tests cover app wiring, health, route errors, and auth rate limiting.
-- TypeScript and ESLint run as mandatory quality gates.
-- OpenAPI generation and build artifact checks run in CI readiness commands.
-
----
-
-## API Documentation
-
-- Scalar UI: `/api-docs/docs`
-- OpenAPI JSON: `/api-docs/openapi.json`
-- Production API base URL: `https://parkcore-api.onrender.com`
-
-API docs are enabled in development and test by default. In production, set `ENABLE_API_DOCS=true` to expose them.
-
----
-
-## Quality & Verification
+## Scripts
 
 ```bash
 pnpm lint
@@ -120,26 +53,28 @@ pnpm quality:ci
 pnpm release:readiness
 ```
 
----
+## API Surface
 
-## Architecture
+| Module   | Endpoints                                      |
+| -------- | ---------------------------------------------- |
+| System   | `GET /`, `GET /healthz`                        |
+| Auth     | `POST /auth/register`, `POST /auth/login`      |
+| Users    | `GET /users/me`, `PATCH /users/me`             |
+| Parkings | create, list, read, update, owner listing      |
+| Vehicles | create and lookup by plate per parking         |
+| Bookings | check-in, check-out, cancel, list, active list |
+| Reviews  | create, list, rating stats                     |
 
-```text
-routes -> controller -> service -> repository
-```
+## Design Notes
 
-- Routes compose middleware and controller handlers.
-- Controllers handle HTTP concerns only.
-- Services enforce business rules and authorization checks.
-- Repositories isolate Prisma persistence.
-- Errors flow through a global handler with a stable response contract.
+Check-in uses a serializable transaction to keep active vehicle and parking capacity checks in the same write path.
 
-See [ARCHITECTURE.md](docs/ARCHITECTURE.md), [CONVENTIONS.md](docs/CONVENTIONS.md), and [API-DESIGN.md](docs/API-DESIGN.md) for details.
+Input validation happens at route boundaries with Zod. Response schemas are used for OpenAPI contract generation.
 
----
+Production CORS requires an explicit `CORS_ORIGINS` allowlist. API docs are hidden in production unless `ENABLE_API_DOCS=true`.
 
-## CI
+## Project Docs
 
-- Workflow: `.github/workflows/ci.yml`
-- Gate: `quality-and-readiness`
-- Checks: lint, typecheck, test coverage, OpenAPI generation, and build readiness
+- [Architecture](docs/ARCHITECTURE.md)
+- [API Design](docs/API-DESIGN.md)
+- [Conventions](docs/CONVENTIONS.md)

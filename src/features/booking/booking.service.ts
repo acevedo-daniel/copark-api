@@ -21,11 +21,6 @@ export const checkIn = async (
     throw new ConflictError('Parking is inactive');
   }
 
-  const activeBookings = await bookingRepository.findActiveByParking(parkingId);
-  if (activeBookings.length >= parking.totalSpaces) {
-    throw new ConflictError('Parking is full');
-  }
-
   let vehicle;
   try {
     vehicle = await vehicleService.findByPlate(ownerId, dto.plate, parkingId);
@@ -45,14 +40,24 @@ export const checkIn = async (
     });
   }
   try {
-    const booking = await bookingRepository.createConfirmedIfNoActive(parkingId, vehicle.id);
-    if (!booking) {
+    const booking = await bookingRepository.createConfirmedIfAvailable(
+      parkingId,
+      vehicle.id,
+      parking.totalSpaces,
+    );
+
+    if (booking === 'parking-full') {
+      throw new ConflictError('Parking is full');
+    }
+
+    if (booking === 'vehicle-active') {
       throw new ConflictError('Vehicle is already in the parking');
     }
+
     return booking;
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2034') {
-      throw new ConflictError('Vehicle is already in the parking');
+      throw new ConflictError('Check-in conflict, try again');
     }
     throw error;
   }

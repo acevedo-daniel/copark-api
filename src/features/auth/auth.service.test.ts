@@ -117,7 +117,10 @@ describe('auth.service', () => {
     const { passwordHash: _passwordHash, ...expectedUser } = existingUser;
 
     expect(userRepository.findByEmail).toHaveBeenCalledWith(dto.email);
-    expect(authPassword.verifyPassword).toHaveBeenCalledWith(existingUser.passwordHash, dto.password);
+    expect(authPassword.verifyPassword).toHaveBeenCalledWith(
+      existingUser.passwordHash,
+      dto.password,
+    );
     expect(authJwt.signAccessToken).toHaveBeenCalledWith({ sub: existingUser.id });
     expect(result).toEqual({
       user: expectedUser,

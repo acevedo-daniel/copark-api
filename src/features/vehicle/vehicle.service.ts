@@ -25,7 +25,11 @@ const isUniquePlateByParkingError = (error: unknown): boolean => {
   return Array.isArray(target) && target.includes('plate') && target.includes('parkingId');
 };
 
-export const create = async (ownerId: string, parkingId: string, dto: CreateVehicle): Promise<Vehicle> => {
+export const create = async (
+  ownerId: string,
+  parkingId: string,
+  dto: CreateVehicle,
+): Promise<Vehicle> => {
   await ensureParkingOwnership(ownerId, parkingId);
 
   try {
@@ -41,7 +45,11 @@ export const create = async (ownerId: string, parkingId: string, dto: CreateVehi
   }
 };
 
-export const findByPlate = async (ownerId: string, plate: string, parkingId: string): Promise<Vehicle> => {
+export const findByPlate = async (
+  ownerId: string,
+  plate: string,
+  parkingId: string,
+): Promise<Vehicle> => {
   await ensureParkingOwnership(ownerId, parkingId);
 
   const vehicle = await vehicleRepository.findByPlate(plate, parkingId);
