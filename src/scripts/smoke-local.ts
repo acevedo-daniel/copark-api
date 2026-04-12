@@ -35,12 +35,9 @@ async function main(): Promise<void> {
   assert(health.status === 200, `GET /healthz expected 200, got ${String(health.status)}`);
   assert(healthBody.status === 'ok', 'GET /healthz expected body.status === "ok"');
 
-  const docs = await request(app).get('/api-docs/openapi.json');
+  const docs = await request(app).get('/openapi.json');
   const docsBody = parseJsonBody(docs);
-  assert(
-    docs.status === 200,
-    `GET /api-docs/openapi.json expected 200, got ${String(docs.status)}`,
-  );
+  assert(docs.status === 200, `GET /openapi.json expected 200, got ${String(docs.status)}`);
   assert(typeof docsBody.openapi === 'string', 'OpenAPI document missing "openapi" field');
   assert(typeof docsBody.info === 'object', 'OpenAPI document missing "info" field');
 

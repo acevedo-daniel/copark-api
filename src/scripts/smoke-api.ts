@@ -64,7 +64,7 @@ async function checkHealth(): Promise<void> {
 }
 
 async function checkDocs(): Promise<void> {
-  const docsPaths = ['/api-docs/openapi.json', '/openapi.json'];
+  const docsPaths = ['/openapi.json', '/api-docs/openapi.json'];
   let result: HttpResult | null = null;
 
   for (const path of docsPaths) {
@@ -77,7 +77,7 @@ async function checkDocs(): Promise<void> {
 
   assert(
     result !== null,
-    'OpenAPI endpoint not reachable (checked /api-docs/openapi.json and /openapi.json)',
+    'OpenAPI endpoint not reachable (checked /openapi.json and /api-docs/openapi.json)',
   );
   const json = result.json;
   assert(json !== null, 'OpenAPI document body is not JSON');

@@ -21,9 +21,11 @@ const docsHelmet = helmet({
   },
 });
 
-export const docsBasePath = '/api-docs';
-export const docsUiPath = `${docsBasePath}/docs`;
-export const docsSpecPath = `${docsBasePath}/openapi.json`;
+export const docsUiPath = '/docs';
+export const docsSpecPath = '/openapi.json';
+
+const legacyDocsUiPath = '/api-docs/docs';
+const legacyDocsSpecPath = '/api-docs/openapi.json';
 
 export function mountApiDocs(app: Express, openApiSpec: object): void {
   app.use(
@@ -41,11 +43,11 @@ export function mountApiDocs(app: Express, openApiSpec: object): void {
     res.json(openApiSpec);
   });
 
-  app.get('/docs', (_req, res) => {
+  app.get(legacyDocsUiPath, (_req, res) => {
     res.redirect(308, docsUiPath);
   });
 
-  app.get('/openapi.json', (_req, res) => {
+  app.get(legacyDocsSpecPath, (_req, res) => {
     res.redirect(308, docsSpecPath);
   });
 }
